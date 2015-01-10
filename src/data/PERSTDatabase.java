@@ -19,16 +19,29 @@ public class PERSTDatabase{
 		db_ = new Database(storage_, false); 
 		instance_ = this;
 	}
-	private class DatabaseElement extends Persistent {
-		
+	private Database getDB() {
+		return db_;
 	}
-	
+	private Storage getStorage() {
+		return storage_;
+	}
+	private class DatabaseElement extends Persistent {
+		private char classification_;
+		//private char pixels_ = new
+		public DatabaseElement(char classification){
+			this.classification_ = classification;
+		}
+	}
 	public static PERSTDatabase getInstance(){
 		if(instance_ == null){
 			instance_ = new PERSTDatabase(defaultDatabaseName_);
 		}
 		return instance_;
 	}
-
-	
+	public void createDatabaseElement(char classification){
+		DatabaseElement DatabaseElement = new DatabaseElement(classification/*TODO*/);
+	}
+	public void closeDB() {
+		//TODO
+	}
 }
