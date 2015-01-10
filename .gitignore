@@ -2,3 +2,5 @@ bin
 ImageData
 .checkstyle
 .settings
+sample.dbs
+perstdatabase.dbs
