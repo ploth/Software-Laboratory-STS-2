@@ -9,13 +9,17 @@ import javax.swing.*;
 
 public class Workbench extends JFrame implements ActionListener {
 	
+	private static final int WIDTH = 1152;
+	private static final int HEIGHT = 864;
+	
 	private DataloadingPanel dataLoadingPanel_;
 	private DatabasePanel databasePanel_;
 	private AlgorithmsPanel algorithmsPanel_;
 	
-	public Workbench(String title, int width, int height) {
+	public Workbench(String title) {
+		setResizable(false);
 		setTitle(title);
-		setSize(width, height);
+		setSize(WIDTH, HEIGHT);
 		setLocationRelativeTo(null); //Set initial window position to center of screen
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
@@ -54,7 +58,7 @@ public class Workbench extends JFrame implements ActionListener {
 	private void displayAboutInfo() {
 		JDialog aboutDialog = new JDialog();
 		aboutDialog.setTitle("About this program");
-		aboutDialog.setLayout(new GridBagLayout());
+		aboutDialog.getContentPane().setLayout(new GridBagLayout());
 		aboutDialog.setSize(300, 200);
 		aboutDialog.setLocationRelativeTo(this);
 		aboutDialog.setResizable(false);
