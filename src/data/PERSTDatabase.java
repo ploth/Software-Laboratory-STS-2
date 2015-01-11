@@ -39,6 +39,7 @@ public class PERSTDatabase {
 	}
 
 	public class DatabaseElement extends Persistent {
+
 		private int classification; // int to make query search possible
 		private char[] pixels;
 
