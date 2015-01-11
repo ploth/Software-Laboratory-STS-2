@@ -27,9 +27,17 @@ public class PERSTDatabase{
 	}
 	private class DatabaseElement extends Persistent {
 		private char classification_;
-		//private char pixels_ = new
-		public DatabaseElement(char classification){
+		private char[][] pixels_;
+		public DatabaseElement(char classification, char[][] pixels){
 			this.classification_ = classification;
+			this.pixels_ = pixels;
+			PERSTDatabase.getInstance().getDB().addRecord(this);
+		}
+		public char getClassification_() {
+			return classification_;
+		}
+		public char[][] getPixels_() {
+			return pixels_;
 		}
 	}
 	public static PERSTDatabase getInstance(){
@@ -38,8 +46,8 @@ public class PERSTDatabase{
 		}
 		return instance_;
 	}
-	public void createDatabaseElement(char classification){
-		DatabaseElement DatabaseElement = new DatabaseElement(classification/*TODO*/);
+	public void createDatabaseElement(char classification, char[][] pixels){
+		DatabaseElement DatabaseElement = new DatabaseElement(classification, pixels);
 	}
 	public void closeDB() {
 		//TODO

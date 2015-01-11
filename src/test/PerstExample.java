@@ -78,7 +78,7 @@ public class PerstExample {
 	private Storage storage;
 	private Database db;
 	private static PerstExample instance;
-	private static String defaultDatabase = "sample.dbs";
+	private static String defaultDatabase = "src/test/sample.dbs";
 
 	// should also have a default path, otherwise will be created in the eclipse
 	// project root
