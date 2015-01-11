@@ -111,12 +111,12 @@ public class PerstExample {
 	}
 
 	private Category createCategory(String name, Category superCategory) {
-		Category category = new Category(name);
+		Category Category = new Category(name);
 		if (superCategory != null) {
-			category.setSuperCategory(superCategory);
-			superCategory.addSubCategory(category);
+			Category.setSuperCategory(superCategory);
+			superCategory.addSubCategory(Category);
 		}
-		return category;
+		return Category;
 	}
 
 	private void createSampleCategory() {

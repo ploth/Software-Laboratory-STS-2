@@ -60,7 +60,7 @@ public class PERSTDatabase{
 		//IterableIterator<DatabaseElement> iterator = db_.<DatabaseElement> select(DatabaseElement.class, "classification="+classification);
 	}
 	public void closeDB() {
-		//db_.commitTransaction();
-		//storage_.close();
+		db_.commitTransaction();
+		storage_.close();
 	}
 }
