@@ -1,13 +1,9 @@
 package io;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import data.PERSTDatabase;
 
@@ -35,13 +31,16 @@ public class PERST_MNIST_Converter {
 	}
 
 	public void readMNIST() throws IOException {
-		Charset encoding = Charset.defaultCharset();
-		File file = new File(readLabelPath_);
-		InputStream in = new FileInputStream(file);
-		Reader reader = new InputStreamReader(in, encoding);
-		Reader buffer = new BufferedReader(reader);
-		char bla = (char) reader.read();
-		System.out.println(bla);
+		// Charset encoding = Charset.defaultCharset();
+		// // Charset encoding = Charset.forName("UTF-8");
+		// File file = new File(readLabelPath_);
+		// InputStream in = new FileInputStream(file);
+		// Reader reader = new InputStreamReader(in, encoding);
+		// Reader buffer = new BufferedReader(reader);
+		// char bla = (char) reader.read();
+		// System.out.println(bla);
+		//
+		//
 		// FileReader frLabels = new FileReader(readLabelPath_);
 		// FileReader frImages = new FileReader(readImagePath_);
 		// BufferedReader brLabels = new BufferedReader(frLabels);
@@ -60,6 +59,28 @@ public class PERST_MNIST_Converter {
 		// System.out.println(test);
 		// StringTokenizer imageTokens = new
 		// StringTokenizer(brImages.readLine());
+		// File f = new File(readLabelPath_);
+		// f.renameTo(new File("dick"));
+		//
+		//
+		// Path path = FileSystems.getDefault().getPath("ImageData", "dick"); //
+		// train-images.idx3-ubyte
+		// BufferedReader reader = Files.newBufferedReader(path,
+		// StandardCharsets.UTF_8);
+		// System.out.println(reader.read());
+		//
+		//
+		// Path path = FileSystems.getDefault().getPath("ImageData", "dick"); //
+		// train-images.idx3-ubyte
+		// Stream<String> stream = Files.lines(path);
+		// System.out.println(stream.count());
+		//
+		//
+		Path path = Paths.get(readLabelPath_);
+		byte[] data = Files.readAllBytes(path);
+		System.out.println(data[0]);
+		// System.out.println(stream.toString());
+		// Stream<String> string = lines(readLabelPath_);
 	}
 
 	public void writeMNIST() {
