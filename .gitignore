@@ -2,5 +2,6 @@ bin
 ImageData
 .checkstyle
 .settings
+.settings/org.eclipse.jdt.core.prefs
 sample.dbs
 perstdatabase.dbs
