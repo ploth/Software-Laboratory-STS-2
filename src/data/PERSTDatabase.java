@@ -10,6 +10,7 @@ public class PERSTDatabase {
 
 	private Storage storage_;
 	private Database db_;
+	private long numberOfDatabaseElements_ = 0;
 	private static PERSTDatabase instance_;
 	private static String defaultDatabaseName_ = "perstdatabase.dbs";
 
@@ -21,10 +22,11 @@ public class PERSTDatabase {
 													// (40kbytes)
 		db_ = new Database(storage_, false);
 		instance_ = this;
-		if (getDatabaseInfos() == null) {
-			System.out.println("entered");
-			createDatabaseInfos();
-			System.out.println("database infos object created");
+		// count database object
+		IterableIterator<DatabaseElement> iter = this.getDatabaseIterator();
+		while (iter.hasNext()) {
+			iter.next();
+			numberOfDatabaseElements_++;
 		}
 	}
 
@@ -32,28 +34,8 @@ public class PERSTDatabase {
 		return db_;
 	}
 
-	public static class DatabaseInfos extends Persistent {
-		private static DatabaseInfos instance_;
-		private long numberOfDatabaseElements;
-
-		private DatabaseInfos() {
-			PERSTDatabase.getInstance().getDB().addRecord(this);
-		}
-
-		public static DatabaseInfos getInstance() {
-			if (instance_ == null) {
-				instance_ = new DatabaseInfos();
-			}
-			return instance_;
-		}
-
-		public long getNumberOfDatabaseElements() {
-			return numberOfDatabaseElements;
-		}
-
-		public void setNumberOfDatabaseElements(long numberOfDatabaseElements) {
-			this.numberOfDatabaseElements = numberOfDatabaseElements;
-		}
+	public long getNumberOfDatabaseElements_() {
+		return numberOfDatabaseElements_;
 	}
 
 	public class DatabaseElement extends Persistent {
@@ -85,12 +67,7 @@ public class PERSTDatabase {
 	public void createDatabaseElement(char classification, char[] pixels) {
 		DatabaseElement DatabaseElement = new DatabaseElement(classification,
 				pixels);
-		getDatabaseInfos().setNumberOfDatabaseElements(
-				getDatabaseInfos().getNumberOfDatabaseElements() + 1);
-	}
-
-	private void createDatabaseInfos() {
-		DatabaseInfos DatabaseInfos = new DatabaseInfos();
+		numberOfDatabaseElements_++;
 	}
 
 	public IterableIterator<DatabaseElement> getDatabaseIterator() {
@@ -104,15 +81,6 @@ public class PERSTDatabase {
 		IterableIterator<DatabaseElement> iterator = db_
 				.<DatabaseElement> select(DatabaseElement.class, query);
 		return iterator;
-	}
-
-	public DatabaseInfos getDatabaseInfos() {
-		if (db_.<DatabaseInfos> getRecords(DatabaseInfos.class).hasNext()) {
-			System.out.println("es gibt ein database info object");
-			return db_.<DatabaseInfos> getRecords(DatabaseInfos.class).first();
-		} else
-			System.out.println("kein info object da");
-		return null;
 	}
 
 	public void closeDB() {
