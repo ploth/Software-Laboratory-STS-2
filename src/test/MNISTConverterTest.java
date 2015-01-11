@@ -1,5 +1,7 @@
 package test;
 
+import io.PERST_MNIST_Converter;
+
 import java.io.IOException;
 
 import data.PERSTDatabase;
@@ -26,10 +28,11 @@ public class MNISTConverterTest {
 		//
 		// get number of database entries
 		PERSTDatabase db = PERSTDatabase.getInstance();
-		// PERST_MNIST_Converter mnistconv = new
-		// PERST_MNIST_Converter("writeLabelPath", "writeImagePath");
-		// mnistconv.readMNIST();
-		System.out.println(db.getDatabaseInfos().getNumberOfDatabaseElements());
+		PERST_MNIST_Converter mnistconv = new PERST_MNIST_Converter(
+				"writeLabelPath", "writeImagePath");
+		mnistconv.readMNIST();
+		// System.out.println(db.getDatabaseInfos().getNumberOfDatabaseElements());
+		System.out.println(db.getNumberOfDatabaseElements_());
 		db.closeDB();
 	}
 }

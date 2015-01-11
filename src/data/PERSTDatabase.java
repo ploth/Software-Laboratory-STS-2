@@ -10,6 +10,7 @@ public class PERSTDatabase {
 
 	private Storage storage_;
 	private Database db_;
+	private long numberOfDatabaseElements_ = 0;
 	private static PERSTDatabase instance_;
 	private static String defaultDatabaseName_ = "perstdatabase.dbs";
 
@@ -21,15 +22,26 @@ public class PERSTDatabase {
 													// (40kbytes)
 		db_ = new Database(storage_, false);
 		instance_ = this;
-		if (getDatabaseInfos() == null) {
-			System.out.println("entered");
-			createDatabaseInfos();
-			System.out.println("database infos object created");
+		// if (getDatabaseInfos() == null) {
+		// System.out.println("entered");
+		// createDatabaseInfos();
+		// System.out.println("database infos object created");
+		// }
+		//
+		// count database objects
+		IterableIterator<DatabaseElement> iter = this.getDatabaseIterator();
+		while (iter.hasNext()) {
+			iter.next();
+			numberOfDatabaseElements_++;
 		}
 	}
 
 	private Database getDB() {
 		return db_;
+	}
+
+	public long getNumberOfDatabaseElements_() {
+		return numberOfDatabaseElements_;
 	}
 
 	public static class DatabaseInfos extends Persistent {
@@ -85,8 +97,9 @@ public class PERSTDatabase {
 	public void createDatabaseElement(char classification, char[] pixels) {
 		DatabaseElement DatabaseElement = new DatabaseElement(classification,
 				pixels);
-		getDatabaseInfos().setNumberOfDatabaseElements(
-				getDatabaseInfos().getNumberOfDatabaseElements() + 1);
+		numberOfDatabaseElements_++;
+		// getDatabaseInfos().setNumberOfDatabaseElements(
+		// getDatabaseInfos().getNumberOfDatabaseElements() + 1);
 	}
 
 	private void createDatabaseInfos() {
@@ -107,12 +120,21 @@ public class PERSTDatabase {
 	}
 
 	public DatabaseInfos getDatabaseInfos() {
-		if (db_.<DatabaseInfos> getRecords(DatabaseInfos.class).hasNext()) {
-			System.out.println("es gibt ein database info object");
-			return db_.<DatabaseInfos> getRecords(DatabaseInfos.class).first();
+		DatabaseInfos object = null;
+		for (DatabaseInfos di : db_
+				.<DatabaseInfos> getRecords(DatabaseInfos.class)) {
+			object = di;
+		}
+		if (object != null) {
+			return object;
 		} else
-			System.out.println("kein info object da");
-		return null;
+			return null;
+		// if (db_.<DatabaseInfos> getRecords(DatabaseInfos.class).hasNext()) {
+		// System.out.println("es gibt ein database info object");
+		// return db_.<DatabaseInfos> getRecords(DatabaseInfos.class).first();
+		// } else
+		// System.out.println("kein info object da");
+		// return null;
 	}
 
 	public void closeDB() {
