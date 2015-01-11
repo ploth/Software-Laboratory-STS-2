@@ -1,6 +1,7 @@
 package data;
 
 import org.garret.perst.Database;
+import org.garret.perst.IterableIterator;
 import org.garret.perst.Persistent;
 import org.garret.perst.Storage;
 import org.garret.perst.StorageFactory;
@@ -25,16 +26,17 @@ public class PERSTDatabase{
 	private Storage getStorage() {
 		return storage_;
 	}
-	private class DatabaseElement extends Persistent {
-		private char classification_;
+	public class DatabaseElement extends Persistent {
+		private char classification;
 		private char[][] pixels_;
+		private String name = "dick"; //TODO
 		public DatabaseElement(char classification, char[][] pixels){
-			this.classification_ = classification;
+			this.classification = classification;
 			this.pixels_ = pixels;
 			PERSTDatabase.getInstance().getDB().addRecord(this);
 		}
 		public char getClassification_() {
-			return classification_;
+			return classification;
 		}
 		public char[][] getPixels_() {
 			return pixels_;
@@ -49,7 +51,16 @@ public class PERSTDatabase{
 	public void createDatabaseElement(char classification, char[][] pixels){
 		DatabaseElement DatabaseElement = new DatabaseElement(classification, pixels);
 	}
+	public void getDatabaseElement(char classification){
+		String string = String.valueOf(classification);
+		for (DatabaseElement e : db_.<DatabaseElement> select(DatabaseElement.class, "name = 'dick'")) {
+			int out = (int)e.getPixels_()[2][2];
+			System.out.println(out);
+		}
+		//IterableIterator<DatabaseElement> iterator = db_.<DatabaseElement> select(DatabaseElement.class, "classification="+classification);
+	}
 	public void closeDB() {
-		//TODO
+		//db_.commitTransaction();
+		//storage_.close();
 	}
 }
