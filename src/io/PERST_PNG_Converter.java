@@ -20,7 +20,7 @@ public class PERST_PNG_Converter {
 		for (int x = 0; x < dim; x++) {
 			for (int y = 0; y < dim; y++) {
 				WritableRaster raster = image.getRaster();
-				raster.setSample(x, y, 0, 255 - pixels[i]);
+				raster.setSample(y, x, 0, 255 - pixels[i]);
 				i++;
 			}
 		}
