@@ -52,9 +52,9 @@ public class PERSTDatabase {
 
 		private int classification; // int to make query search possible
 		private char[] pixels;
-		private Integer index;
+		private int index;
 
-		public DatabaseElement(char classification, char[] pixels, Integer index) {
+		public DatabaseElement(char classification, char[] pixels, int index) {
 			this.classification = (int) classification;
 			this.pixels = pixels;
 			this.index = index;
@@ -96,7 +96,8 @@ public class PERSTDatabase {
 		return iterator;
 	}
 
-	public DatabaseElement getDatabaseElement(Integer index) {
+	public DatabaseElement getDatabaseElement(int index) {
+		// Integer to 2 factor index
 		String indexString = "index = " + String.valueOf(index);
 		return db_.<DatabaseElement> select(DatabaseElement.class, indexString)
 				.first();
