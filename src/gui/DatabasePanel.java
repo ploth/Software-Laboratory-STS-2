@@ -1,12 +1,17 @@
 package gui;
 
+import java.awt.DisplayMode;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class DatabasePanel extends JPanel {
 	public DatabasePanel() {
@@ -50,6 +55,11 @@ public class DatabasePanel extends JPanel {
 		add(btnDeleteImages, gbc_btnDeleteImages);
 		
 		JButton btnShowData = new JButton("Show data");
+		btnShowData.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new DataDisplayDialog();
+			}
+		});
 		GridBagConstraints gbc_btnShowData = new GridBagConstraints();
 		gbc_btnShowData.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnShowData.gridwidth = 3;

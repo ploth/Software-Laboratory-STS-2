@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -60,22 +61,11 @@ public class Workbench extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 
-	private void displayAboutInfo() {
-		JDialog aboutDialog = new JDialog();
-		aboutDialog.setTitle("About this program");
-		aboutDialog.getContentPane().setLayout(new GridBagLayout());
-		aboutDialog.setSize(300, 200);
-		aboutDialog.setLocationRelativeTo(this);
-		aboutDialog.setResizable(false);
-		aboutDialog.setModal(true);
-		aboutDialog.setVisible(true);
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "about":
-			displayAboutInfo();
+			JOptionPane.showMessageDialog(this, "Programmed: by\nPascal Loth\nThomas Schattschneider\n\n2015");
 			break;
 		default:
 			System.err.println("Unknown action: " + e.getActionCommand());
