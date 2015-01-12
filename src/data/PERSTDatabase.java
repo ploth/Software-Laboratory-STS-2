@@ -97,7 +97,6 @@ public class PERSTDatabase {
 	}
 
 	public DatabaseElement getDatabaseElement(int index) {
-		// Integer to 2 factor index
 		String indexString = "index = " + String.valueOf(index);
 		return db_.<DatabaseElement> select(DatabaseElement.class, indexString)
 				.first();
