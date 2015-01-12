@@ -1,7 +1,5 @@
 package test;
 
-import io.PERST_MNIST_Converter;
-
 import java.io.IOException;
 
 import data.PERSTDatabase;
@@ -25,11 +23,11 @@ public class DatabaseTest {
 		//
 		//
 		PERSTDatabase pdb = PERSTDatabase.getInstance();
-		PERST_MNIST_Converter conv = new PERST_MNIST_Converter(
-				"writeLabelPath", "writeImagePath");
+		// PERST_MNIST_Converter conv = new PERST_MNIST_Converter(
+		// "writeLabelPath", "writeImagePath");
 		// conv.read();
-		System.out.println("database elements: "
-				+ pdb.getNumberOfDatabaseElements_());
+		// System.out.println("database elements: "
+		// + pdb.getNumberOfDatabaseElements_());
 		System.out.println("classification: "
 				+ (int) pdb.getDatabaseElement(120000).getClassification());
 		pdb.closeDB();
