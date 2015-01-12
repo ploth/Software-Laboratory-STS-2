@@ -30,7 +30,7 @@ public class MNISTConverterTest {
 		PERSTDatabase db = PERSTDatabase.getInstance();
 		PERST_MNIST_Converter mnistconv = new PERST_MNIST_Converter(
 				"writeLabelPath", "writeImagePath");
-		mnistconv.readMNIST();
+		mnistconv.read();
 		// System.out.println(db.getDatabaseInfos().getNumberOfDatabaseElements());
 		System.out.println(db.getNumberOfDatabaseElements_());
 		db.closeDB();

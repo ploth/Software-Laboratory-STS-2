@@ -29,7 +29,7 @@ public class PERST_MNIST_Converter {
 		this.writeImagePath_ = writeImagePath;
 	}
 
-	public void readMNIST() throws IOException {
+	public void read() throws IOException {
 		DataInputStream labels = new DataInputStream(new FileInputStream(
 				readLabelPath_));
 		DataInputStream images = new DataInputStream(new FileInputStream(
@@ -70,7 +70,7 @@ public class PERST_MNIST_Converter {
 		}
 	}
 
-	public void writeMNIST() {
+	public void write() {
 
 	}
 }
