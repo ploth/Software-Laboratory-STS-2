@@ -68,6 +68,14 @@ public class PERSTDatabase {
 		public char[] getPixels() {
 			return pixels;
 		}
+
+		public double[] getPixelsAsDouble() {
+			double[] pixelsAsDouble = new double[pixels.length];
+			for (int i = 0; i < pixels.length; i++) {
+				pixelsAsDouble[i] = pixels[i];
+			}
+			return pixelsAsDouble;
+		}
 	}
 
 	public static PERSTDatabase getInstance() {

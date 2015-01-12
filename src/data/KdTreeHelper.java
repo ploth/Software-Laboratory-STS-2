@@ -25,20 +25,18 @@ public class KdTreeHelper {
 		return instance_;
 	}
 
-	public void createSqrEuclidKdTreeFromDatabase() {
+	public SqrEuclid<Character> createSqrEuclidKdTreeFromDatabase() {
 		IterableIterator<DatabaseElement> iter = db_.getDatabaseIterator();
 		seTree_ = new SqrEuclid<Character>(db_.getDim_(), sizeLimit_);
 		while (iter.hasNext()) {
 			DatabaseElement e = iter.next();
-			double[] pixels = new double[e.getPixels().length];
-			for (int i = 0; i < pixels.length; i++) {
-				pixels[i] = e.getPixels()[i];
-			}
+
 			seTree_.addPoint(pixels, e.getClassification());
 		}
+		return seTree_;
 	}
 
-	public void createManhattenKdTreeFromDatabase() {
+	public Manhattan<Character> createManhattenKdTreeFromDatabase() {
 		IterableIterator<DatabaseElement> iter = db_.getDatabaseIterator();
 		mTree_ = new Manhattan<Character>(db_.getDim_(), sizeLimit_);
 		while (iter.hasNext()) {
@@ -49,5 +47,6 @@ public class KdTreeHelper {
 			}
 			mTree_.addPoint(pixels, e.getClassification());
 		}
+		return mTree_;
 	}
 }
