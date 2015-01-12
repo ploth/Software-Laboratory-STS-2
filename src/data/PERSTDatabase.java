@@ -40,6 +40,7 @@ public class PERSTDatabase {
 	}
 
 	public int getDim_() {
+		// 28! not 28*28!
 		if (dim_ == 0) {
 			dim_ = (int) Math.sqrt(this.getDatabaseIterator().first()
 					.getPixels().length);
@@ -71,7 +72,7 @@ public class PERSTDatabase {
 
 		public double[] getPixelsAsDouble() {
 			double[] pixelsAsDouble = new double[pixels.length];
-			for (int i = 0; i < pixels.length; i++) {
+			for (int i = 0; i < pixelsAsDouble.length; i++) {
 				pixelsAsDouble[i] = pixels[i];
 			}
 			return pixelsAsDouble;
