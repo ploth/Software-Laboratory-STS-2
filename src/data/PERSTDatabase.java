@@ -11,6 +11,7 @@ public class PERSTDatabase {
 	private Storage storage_;
 	private Database db_;
 	private long numberOfDatabaseElements_ = 0;
+	private int dim_ = 0;
 	private static PERSTDatabase instance_;
 	private static String defaultDatabaseName_ = "perstdatabase.dbs";
 
@@ -36,6 +37,15 @@ public class PERSTDatabase {
 
 	public long getNumberOfDatabaseElements_() {
 		return numberOfDatabaseElements_;
+	}
+
+	public int getDim_() {
+		if (dim_ == 0) {
+			dim_ = (int) Math.sqrt(this.getDatabaseIterator().first()
+					.getPixels().length);
+			return dim_;
+		} else
+			return dim_;
 	}
 
 	public class DatabaseElement extends Persistent {
