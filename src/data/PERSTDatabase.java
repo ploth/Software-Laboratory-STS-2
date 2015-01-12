@@ -10,7 +10,7 @@ public class PERSTDatabase {
 
 	private Storage storage_;
 	private Database db_;
-	private long numberOfDatabaseElements_ = 0;
+	private Integer numberOfDatabaseElements_ = 0;
 	private int dim_ = 0;
 	private static PERSTDatabase instance_;
 	private static String defaultDatabaseName_ = "perstdatabase.dbs";
@@ -35,7 +35,7 @@ public class PERSTDatabase {
 		return db_;
 	}
 
-	public long getNumberOfDatabaseElements_() {
+	public Integer getNumberOfDatabaseElements_() {
 		return numberOfDatabaseElements_;
 	}
 
@@ -52,10 +52,12 @@ public class PERSTDatabase {
 
 		private int classification; // int to make query search possible
 		private char[] pixels;
+		private Integer index;
 
-		public DatabaseElement(char classification, char[] pixels) {
+		public DatabaseElement(char classification, char[] pixels, Integer index) {
 			this.classification = (int) classification;
 			this.pixels = pixels;
+			this.index = index;
 			PERSTDatabase.getInstance().getDB().addRecord(this);
 		}
 
@@ -76,9 +78,9 @@ public class PERSTDatabase {
 	}
 
 	public void createDatabaseElement(char classification, char[] pixels) {
-		DatabaseElement DatabaseElement = new DatabaseElement(classification,
-				pixels);
 		numberOfDatabaseElements_++;
+		DatabaseElement DatabaseElement = new DatabaseElement(classification,
+				pixels, numberOfDatabaseElements_);
 	}
 
 	public IterableIterator<DatabaseElement> getDatabaseIterator() {
@@ -92,6 +94,12 @@ public class PERSTDatabase {
 		IterableIterator<DatabaseElement> iterator = db_
 				.<DatabaseElement> select(DatabaseElement.class, query);
 		return iterator;
+	}
+
+	public DatabaseElement getDatabaseElement(Integer index) {
+		String indexString = "index = " + String.valueOf(index);
+		return db_.<DatabaseElement> select(DatabaseElement.class, indexString)
+				.first();
 	}
 
 	public void closeDB() {
