@@ -14,7 +14,7 @@ public class PNGConverterTest {
 	public static void main(String[] args) throws IOException {
 		PERSTDatabase db = PERSTDatabase.getInstance();
 		System.out.println("numberOfDatabaseElements: "
-				+ db.getNumberOfDatabaseElements_());
+				+ db.getNumberOfDatabaseElements());
 		PERST_PNG_Converter png = new PERST_PNG_Converter();
 		IterableIterator<DatabaseElement> iter = db.getDatabaseIterator();
 		DatabaseElement e = iter.next();

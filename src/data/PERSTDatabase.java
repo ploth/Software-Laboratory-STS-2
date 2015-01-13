@@ -20,7 +20,6 @@ public class PERSTDatabase {
 
 	private PERSTDatabase(String databaseName) {
 		storage_ = StorageFactory.getInstance().createStorage();
-		// TODO: too big?
 		// 1GB
 		storage_.open(databaseName, 1024000000); // minimum 40000 bytes
 													// (40kbytes)
@@ -32,7 +31,7 @@ public class PERSTDatabase {
 		return db_;
 	}
 
-	public Integer getNumberOfDatabaseElements_() {
+	public Integer getNumberOfDatabaseElements() {
 		if (numberOfDatabaseElements_ == 0) {
 			IterableIterator<DatabaseElement> iter = this.getDatabaseIterator();
 			while (iter.hasNext()) {
@@ -43,7 +42,7 @@ public class PERSTDatabase {
 		return numberOfDatabaseElements_;
 	}
 
-	public Integer getNumberOfCorrectDatabaseElements_() {
+	public Integer getNumberOfCorrectDatabaseElements() {
 		if (numberOfCorrectDatabaseElements_ == 0) {
 			IterableIterator<DatabaseElement> iter = this
 					.getCorrectDatabaseIterator();
@@ -55,7 +54,7 @@ public class PERSTDatabase {
 		return numberOfCorrectDatabaseElements_;
 	}
 
-	public int getDim_() {
+	public int getDim() {
 		// 28! not 28*28!
 		if (dim_ == 0) {
 			dim_ = (int) Math.sqrt(this.getDatabaseIterator().first()
@@ -84,6 +83,10 @@ public class PERSTDatabase {
 			PERSTDatabase.getInstance().getDB().addRecord(this);
 		}
 
+		public int getIndex() {
+			return index;
+		}
+
 		public char getCorrectClassification() {
 			return (char) correctClassification;
 		}
@@ -97,15 +100,23 @@ public class PERSTDatabase {
 		}
 
 		public double[] getPixelsAsDouble() {
+			// long time1 = 0, time2 = 0;
+			// time1 = System.currentTimeMillis();
 			double[] pixelsAsDouble = new double[pixels.length];
 			for (int i = 0; i < pixelsAsDouble.length; i++) {
 				pixelsAsDouble[i] = pixels[i];
 			}
+			// time2 = System.currentTimeMillis();
+			// System.out.println((time2 - time1));
 			return pixelsAsDouble;
 		}
 
 		public boolean isTrainingdata() {
 			return trainingdata;
+		}
+
+		public void setTrainingdata(boolean trainingdata) {
+			this.trainingdata = trainingdata;
 		}
 
 		public void setCorrectClassification(char correctClassification) {
@@ -115,11 +126,16 @@ public class PERSTDatabase {
 		public void setAlgoClassification(char algoClassification) {
 			this.algoClassification = (int) algoClassification;
 		}
+	}
 
-		public void convertToCorrect(char correctClassification) {
-			this.trainingdata = true;
-			this.correctClassification = correctClassification;
+	public void convertToCorrect(int index, char correctClassification) {
+		DatabaseElement e = getDatabaseElement(index);
+		if (e.isTrainingdata() == false) {
+			e.setTrainingdata(true);
+			e.setCorrectClassification(correctClassification);
+			// System.out.println("debug: " + numberOfCorrectDatabaseElements_);
 			numberOfCorrectDatabaseElements_++;
+			// System.out.println("debug: " + numberOfCorrectDatabaseElements_);
 		}
 	}
 
