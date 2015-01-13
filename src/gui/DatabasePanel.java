@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.Graphics;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -16,6 +17,7 @@ import net.miginfocom.swing.MigLayout;
 import java.awt.Color;
 
 import javax.swing.border.BevelBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 
 import data.PERSTDatabase;
@@ -30,6 +32,8 @@ import java.awt.Font;
 
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.MatteBorder;
 
 public class DatabasePanel extends JPanel {
 	
@@ -79,7 +83,7 @@ public class DatabasePanel extends JPanel {
 		
 		JPanel panelRight = new JPanel();
 		panelLeft.add(panelRight, "cell 0 4 2 1,grow");
-		panelRight.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		panelRight.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelRight.setLayout(new MigLayout("", "[grow][grow][grow]", "[170.00,grow][grow]"));
 		
 		JPanel panelImageOuter = new JPanel();
@@ -107,7 +111,7 @@ public class DatabasePanel extends JPanel {
 		panelClassificationInner.add(lblClassification, "cell 0 0,alignx center,aligny center");
 		
 		graphicsPanel = new GraphicsPanel();
-		graphicsPanel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		graphicsPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 		panelImageInner.add(graphicsPanel, "cell 0 0,grow");
 	}
 	
@@ -117,7 +121,6 @@ public class DatabasePanel extends JPanel {
 		
 		public GraphicsPanel() {
 			setBackground(Color.WHITE);
-			setBorder(BorderFactory.createLineBorder(Color.black));
 			index_ = 0;
 			paintNumber_ = false;
 		}
@@ -144,10 +147,9 @@ public class DatabasePanel extends JPanel {
 					i++;
 				}
 			}
-			
-			BufferedImage scaledImage = new BufferedImage(140, 140, BufferedImage.TYPE_BYTE_GRAY);
+			BufferedImage scaledImage = new BufferedImage(145, 145, BufferedImage.TYPE_BYTE_GRAY);
 			AffineTransform transform = new AffineTransform();
-			transform.scale(4.0, 4.0);
+			transform.scale(4.1, 4.1);
 			AffineTransformOp scaleOp = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
 			scaledImage = scaleOp.filter(image, scaledImage);
 			
