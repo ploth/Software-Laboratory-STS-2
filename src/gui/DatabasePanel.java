@@ -54,12 +54,12 @@ public class DatabasePanel extends JPanel {
 	
 	public DatabasePanel() {
 		db_ = PERSTDatabase.getInstance();
-		setLayout(new MigLayout("", "[332.00][grow,center]", "[335.00,grow]"));
+		setLayout(new MigLayout("", "[332.00,grow]", "[335.00,grow]"));
 		
 		JPanel panelLeft = new JPanel();
 		panelLeft.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Controls"));
 		add(panelLeft, "cell 0 0,grow");
-		panelLeft.setLayout(new MigLayout("", "[184.00,grow][grow]", "[][][][][]"));
+		panelLeft.setLayout(new MigLayout("", "[184.00,grow][grow]", "[][][][][grow]"));
 		
 		JLabel lblNumberOfDataelements = new JLabel("Number of data lements in database:");
 		panelLeft.add(lblNumberOfDataelements, "cell 0 0");
@@ -93,9 +93,9 @@ public class DatabasePanel extends JPanel {
 		indexChooserPanel.add(spinner, "cell 1 0,growx");
 		
 		JPanel panelRight = new JPanel();
+		panelLeft.add(panelRight, "cell 0 4 2 1,grow");
 		panelRight.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		add(panelRight, "cell 1 0,grow");
-		panelRight.setLayout(new MigLayout("", "[grow][grow][grow]", "[228.00][grow]"));
+		panelRight.setLayout(new MigLayout("", "[grow][grow][grow]", "[170.00,grow][grow]"));
 		
 		JPanel panelImageOuter = new JPanel();
 		panelRight.add(panelImageOuter, "cell 1 0,alignx center,aligny bottom");

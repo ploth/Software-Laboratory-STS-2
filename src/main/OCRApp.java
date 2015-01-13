@@ -7,7 +7,6 @@ import gui.Workbench;
 
 public class OCRApp {
 	public static void main(String[] args) {
-		
 		 try {
 	        UIManager.setLookAndFeel(
 	            UIManager.getSystemLookAndFeelClassName());
@@ -24,7 +23,6 @@ public class OCRApp {
 	    catch (IllegalAccessException e) {
 	       // TODO handle exception
 	    }
-	       
 		
 		new Workbench("OCR Workbench");
 	}
