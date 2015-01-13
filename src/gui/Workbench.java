@@ -31,7 +31,7 @@ public class Workbench extends JFrame implements ActionListener {
 		setTitle(title);
 		setSize(WIDTH, HEIGHT);
 		setLocationRelativeTo(null); // Set initial window position to center of
-										// screen
+									 // screen
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		// -----------------------

@@ -78,14 +78,18 @@ public class DatabasePanel extends JPanel {
 		JButton btnDelete = new JButton("Delete database");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				try {
-					db_.deleteDatabase();
-					updateDatabaseState();
-				} catch (IOException e) {
-					JOptionPane.showMessageDialog(new JFrame(),
-						    e.getMessage(),
-						    "IOException",
-						    JOptionPane.ERROR_MESSAGE);
+				if(numOfDatabaseElements_ > 0) {
+					try {
+						db_.deleteDatabase();
+						lblClassification.setText("-");
+						spnIndex.setModel(new SpinnerNumberModel(0, 0, 0, 0));
+						spnIndex.setEnabled(false);
+					} catch (IOException e) {
+						JOptionPane.showMessageDialog(new JFrame(),
+							    e.getMessage(),
+							    "IOException",
+							    JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			}
 		});

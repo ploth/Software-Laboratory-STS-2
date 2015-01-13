@@ -1,26 +1,52 @@
 package gui;
 
 import java.awt.Font;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import net.miginfocom.swing.MigLayout;
-import java.awt.Color;
 
-public class AlgorithmsPanel extends JPanel {
+import net.miginfocom.swing.MigLayout;
+
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.border.TitledBorder;
+import javax.swing.border.EtchedBorder;
+
+public class AlgorithmsPanel extends JPanel implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
 
 	public AlgorithmsPanel() {
-		setLayout(new MigLayout("", "[grow]", "[grow][grow]"));
+		setLayout(new MigLayout("", "[grow]", "[][]"));
 		
-		JButton btnKnn = new JButton("KNN");
-		btnKnn.setFont(new Font("Tahoma", Font.PLAIN, 36));
-		btnKnn.setBackground(Color.GRAY);
-		add(btnKnn, "cell 0 0,grow");
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "k-nearest neighbors", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		add(panel, "cell 0 0,grow");
+		panel.setLayout(new MigLayout("", "[grow]", "[]"));
 		
-		JButton btnKmeans = new JButton("KMeans");
-		btnKmeans.setFont(new Font("Tahoma", Font.PLAIN, 36));
-		btnKmeans.setBackground(Color.GRAY);
-		add(btnKmeans, "cell 0 1,grow");
+		JButton btnStartKnearestneighborAlgorithm = new JButton("Start k-NN algorithm");
+		panel.add(btnStartKnearestneighborAlgorithm, "cell 0 0,growx");
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "k-means clustering", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		add(panel_1, "cell 0 1,grow");
+		panel_1.setLayout(new MigLayout("", "[grow]", "[]"));
+		
+		JButton btnStartKmeansclusteringAlgorithm = new JButton("Start k-means clustering algorithm");
+		panel_1.add(btnStartKmeansclusteringAlgorithm, "cell 0 0,growx");
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		switch (e.getActionCommand()) {
+		case "startKNN":
+			
+			break;
+		case "startKMEANS":
+			break;
+		}
+		
 	}
 }

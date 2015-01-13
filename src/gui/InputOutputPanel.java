@@ -1,5 +1,6 @@
 package gui;
 
+import io.ConverterException;
 import io.PERST_MNIST_Converter;
 
 import javax.swing.JButton;
@@ -64,6 +65,7 @@ public class InputOutputPanel extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				String imagesPath = "";
 				String labelsPath = "";
+				lblNumOfTrainingDataElements.setText("Loading...");
 				
 				JFileChooser fc = new JFileChooser("ImageData/");
 				FileNameExtensionFilter filterIDX3 = new FileNameExtensionFilter(
@@ -83,8 +85,6 @@ public class InputOutputPanel extends JPanel {
 						labelsPath = fc.getSelectedFile().getPath();
 						
 						try {
-							lblNumOfTrainingDataElements.setText("Loading...");
-							JOptionPane.showMessageDialog(new JFrame(), "Loading, please wait...");
 							PERST_MNIST_Converter.read(labelsPath, imagesPath);
 							updateDataCounters();
 						} catch (IOException e) {
@@ -92,6 +92,12 @@ public class InputOutputPanel extends JPanel {
 							JOptionPane.showMessageDialog(btnImportMnistData.getParent().getParent(),
 								    e.getMessage(),
 								    "IOException",
+								    JOptionPane.ERROR_MESSAGE);
+						} catch (ConverterException e) {
+							lblNumOfTrainingDataElements.setText("Error");
+							JOptionPane.showMessageDialog(btnImportMnistData.getParent().getParent(),
+								    e.getMessage(),
+								    "Error during conversion",
 								    JOptionPane.ERROR_MESSAGE);
 						}
 					}

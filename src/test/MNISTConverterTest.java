@@ -1,5 +1,6 @@
 package test;
 
+import io.ConverterException;
 import io.PERST_MNIST_Converter;
 
 import java.io.IOException;
@@ -28,8 +29,13 @@ public class MNISTConverterTest {
 		//
 		// get number of database entries
 		PERSTDatabase db = PERSTDatabase.getInstance();
-		PERST_MNIST_Converter.read("ImageData/train-labels.idx1-ubyte",
-				"ImageData/train-images.idx3-ubyte");
+		try {
+			PERST_MNIST_Converter.read("ImageData/train-labels.idx1-ubyte",
+					"ImageData/train-images.idx3-ubyte");
+		} catch (ConverterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// System.out.println(db.getDatabaseInfos().getNumberOfDatabaseElements());
 		System.out.println(db.getNumberOfDatabaseElements_());
 		db.closeDB();
