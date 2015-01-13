@@ -15,7 +15,7 @@ import javax.swing.JTabbedPane;
 
 public class Workbench extends JFrame implements ActionListener {
 
-	private static final int WIDTH = 1152;
+	private static final int WIDTH = 340;
 	private static final int HEIGHT = 600;
 
 	private JPanel dataLoadingPanel_;
@@ -47,13 +47,13 @@ public class Workbench extends JFrame implements ActionListener {
 		algorithmsPanel_ = new AlgorithmsPanel();
 
 		JTabbedPane tabbedPane = new JTabbedPane();
-
-		// -----------------------
-		// TABS
-		// -----------------------
-
-		dataLoadingPanel_ = new DataloadingPanel();
-		tabbedPane.addTab("Input/Output Data", dataLoadingPanel_);
+		
+				// -----------------------
+				// TABS
+				// -----------------------
+		
+				dataLoadingPanel_ = new InputOutputPanel();
+				tabbedPane.addTab("Input/Output Data", dataLoadingPanel_);
 		tabbedPane.addTab("Database", databasePanel_);
 		tabbedPane.addTab("Algorithms", algorithmsPanel_);
 		this.getContentPane().add(tabbedPane); // Add tabs to workbench
