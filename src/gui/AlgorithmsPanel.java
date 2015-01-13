@@ -7,6 +7,9 @@ import net.miginfocom.swing.MigLayout;
 import java.awt.Color;
 
 public class AlgorithmsPanel extends JPanel {
+
+	private static final long serialVersionUID = 1L;
+
 	public AlgorithmsPanel() {
 		setLayout(new MigLayout("", "[grow]", "[grow][grow]"));
 		

@@ -4,7 +4,9 @@ import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import java.awt.geom.AffineTransform;
@@ -26,37 +28,67 @@ import data.PERSTDatabase.DatabaseElement;
 import javax.swing.JSeparator;
 import javax.swing.border.TitledBorder;
 import javax.swing.JSpinner;
-import javax.swing.border.SoftBevelBorder;
 
 import java.awt.Font;
 
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.MatteBorder;
+import javax.swing.SpinnerNumberModel;
+
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 public class DatabasePanel extends JPanel {
 	
+	private static final long serialVersionUID = 1L;
 	private GraphicsPanel graphicsPanel;
 	private JLabel lblClassification;
+	private JLabel lblDatacounter;
+	private JSpinner spnIndex;
 	private PERSTDatabase db_;
+	private int numOfDatabaseElements_;
 	
 	public DatabasePanel() {
 		db_ = PERSTDatabase.getInstance();
 		setLayout(new MigLayout("", "[332.00,grow]", "[335.00,grow]"));
+		
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent arg0) {
+				updateDatabaseState();
+			}
+		});
 		
 		JPanel panelLeft = new JPanel();
 		panelLeft.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Controls"));
 		add(panelLeft, "cell 0 0,grow");
 		panelLeft.setLayout(new MigLayout("", "[184.00,grow][grow]", "[][][][][grow]"));
 		
-		JLabel lblNumberOfDataelements = new JLabel("Number of data lements in database:");
+		JLabel lblNumberOfDataelements = new JLabel("Number of data elements in database:");
 		panelLeft.add(lblNumberOfDataelements, "cell 0 0");
 		
-		JLabel lblDatacounter = new JLabel(String.valueOf(db_.getNumberOfDatabaseElements_()));
+		lblDatacounter = new JLabel("-");
 		panelLeft.add(lblDatacounter, "cell 1 0,alignx center");
 		
 		JButton btnDelete = new JButton("Delete database");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					db_.deleteDatabase();
+					updateDatabaseState();
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(new JFrame(),
+						    e.getMessage(),
+						    "IOException",
+						    JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 		panelLeft.add(btnDelete, "cell 0 1 2 1,growx");
 		
 		JSeparator separator = new JSeparator();
@@ -70,16 +102,21 @@ public class DatabasePanel extends JPanel {
 		JLabel lblIndex = new JLabel("Index:");
 		indexChooserPanel.add(lblIndex, "cell 0 0");
 		
-		final JSpinner spinner = new JSpinner();
-		spinner.addChangeListener(new ChangeListener() {
+		spnIndex = new JSpinner();
+		if(numOfDatabaseElements_ <= 0) {
+			spnIndex.setModel(new SpinnerNumberModel(0, 0, 0, 0));
+			spnIndex.setEnabled(false);
+		} else {
+			spnIndex.setModel(new SpinnerNumberModel(1, 1, numOfDatabaseElements_, 1));
+		}
+		spnIndex.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				int value = (int) spinner.getValue();
+				int value = (int) spnIndex.getValue();
 				graphicsPanel.update(value); 
-				int classification = db_.getDatabaseElement(value).getCorrectClassification();
-				lblClassification.setText(String.valueOf(classification));
+				updateClassificationLabel(value);
 			}
 		});
-		indexChooserPanel.add(spinner, "cell 1 0,growx");
+		indexChooserPanel.add(spnIndex, "cell 1 0,growx");
 		
 		JPanel panelRight = new JPanel();
 		panelLeft.add(panelRight, "cell 0 4 2 1,grow");
@@ -113,28 +150,45 @@ public class DatabasePanel extends JPanel {
 		graphicsPanel = new GraphicsPanel();
 		graphicsPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 		panelImageInner.add(graphicsPanel, "cell 0 0,grow");
+		
+		//updateDatabaseState();
+	}
+	
+	private void updateClassificationLabel(int value) {
+		int classification = db_.getDatabaseElement(value).getCorrectClassification();
+		lblClassification.setText(String.valueOf(classification));
+	}
+	
+	private void updateDatabaseState() {
+		numOfDatabaseElements_ = db_.getNumberOfDatabaseElements_();
+		lblDatacounter.setText(String.valueOf(numOfDatabaseElements_));
+		if(numOfDatabaseElements_ > 0) {
+			spnIndex.setModel(new SpinnerNumberModel(1, 1, numOfDatabaseElements_, 1));
+			spnIndex.setEnabled(true);
+			updateClassificationLabel(1);
+		}
 	}
 	
 	class GraphicsPanel extends JPanel {
+
+		private static final long serialVersionUID = 1L;
 		private int index_;
-		private boolean paintNumber_;
 		
 		public GraphicsPanel() {
 			setBackground(Color.WHITE);
-			index_ = 0;
-			paintNumber_ = false;
+			index_ = 1;
 		}
 		
 		public void update(int index) {
-			if(!paintNumber_) {
-				paintNumber_ = true;
-			}
 			index_ = index;
 			repaint();
 		}
 		
 		private void paintNumber(Graphics g) {
 			DatabaseElement e = db_.getDatabaseElement(index_);
+			if(e == null) {
+				return;
+			}
 			char[] pixels = e.getPixels();
 			
 			BufferedImage image = new BufferedImage(28, 28,
@@ -159,9 +213,7 @@ public class DatabasePanel extends JPanel {
 		@Override
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			if(paintNumber_) {
-				paintNumber(g);
-			}
+			paintNumber(g);
 		}
 	}
 }

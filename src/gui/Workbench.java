@@ -11,10 +11,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import data.PERSTDatabase;
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 public class Workbench extends JFrame implements ActionListener {
 
+	private static final long serialVersionUID = 1L;
 	private static final int WIDTH = 340;
-	private static final int HEIGHT = 600;
+	private static final int HEIGHT = 620;
 
 	private JPanel dataLoadingPanel_;
 	private JPanel databasePanel_;
@@ -46,16 +52,26 @@ public class Workbench extends JFrame implements ActionListener {
 
 		JTabbedPane tabbedPane = new JTabbedPane();
 		
-				// -----------------------
-				// TABS
-				// -----------------------
-		
-				dataLoadingPanel_ = new InputOutputPanel();
-				tabbedPane.addTab("Input/Output Data", dataLoadingPanel_);
+		// -----------------------
+		// TABS
+		// -----------------------
+
+		dataLoadingPanel_ = new InputOutputPanel();
+		tabbedPane.addTab("Input/Output Data", dataLoadingPanel_);
 		tabbedPane.addTab("Database", databasePanel_);
 		tabbedPane.addTab("Algorithms", algorithmsPanel_);
 		this.getContentPane().add(tabbedPane); // Add tabs to workbench
 
+		addWindowListener(new WindowAdapter()
+        {
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                PERSTDatabase.getInstance().closeDB();
+                e.getWindow().dispose();
+            }
+        });
+		
 		setVisible(true);
 	}
 
