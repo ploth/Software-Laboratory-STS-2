@@ -83,6 +83,10 @@ public class PERSTDatabase {
 			PERSTDatabase.getInstance().getDB().addRecord(this);
 		}
 
+		public int getIndex() {
+			return index;
+		}
+
 		public char getCorrectClassification() {
 			return (char) correctClassification;
 		}
@@ -96,10 +100,14 @@ public class PERSTDatabase {
 		}
 
 		public double[] getPixelsAsDouble() {
+			// long time1 = 0, time2 = 0;
+			// time1 = System.currentTimeMillis();
 			double[] pixelsAsDouble = new double[pixels.length];
 			for (int i = 0; i < pixelsAsDouble.length; i++) {
 				pixelsAsDouble[i] = pixels[i];
 			}
+			// time2 = System.currentTimeMillis();
+			// System.out.println((time2 - time1));
 			return pixelsAsDouble;
 		}
 

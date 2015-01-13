@@ -24,17 +24,25 @@ public class KNN extends AbstractAlgorithm {
 				.createSqrEuclidKdTreeFromDatabase();
 		IterableIterator<DatabaseElement> uOI = getDb_()
 				.getUnCorrectDatabaseIterator();
+		DatabaseElement e;
+		List<Entry<Character>> list;
+		int[] predictArray = new int[numberOfPossibleClassifications];
+		int greatestValue = 0;
+		int prediction = 0; // array position
+		double[] pixels;
+		long time1 = 0, time2 = 0;
 		while (uOI.hasNext()) {
-			DatabaseElement e = uOI.next();
-			List<Entry<Character>> list = SETree.nearestNeighbor(
-					e.getPixelsAsDouble(), k, true);
-			int[] predictArray = new int[numberOfPossibleClassifications];
+			e = uOI.next();
+			pixels = e.getPixelsAsDouble();
+
+			time1 = System.currentTimeMillis();
+			list = SETree.nearestNeighbor(pixels, k, false);
+			time2 = System.currentTimeMillis();
+
 			Arrays.fill(predictArray, 0);
 			for (int i = list.size() - 1; i >= 0; i--) {
 				predictArray[(int) list.get(i).value]++;
 			}
-			int greatestValue = 0;
-			int prediction = 0; // array position
 			for (int i = 0; i < predictArray.length; i++) {
 				if (predictArray[i] > greatestValue) {
 					greatestValue = predictArray[i];
@@ -42,6 +50,9 @@ public class KNN extends AbstractAlgorithm {
 				}
 			}
 			e.setAlgoClassification((char) prediction);
+			greatestValue = 0;
+			prediction = 0;
+			System.out.println((time2 - time1));
 		}
 	}
 
