@@ -8,10 +8,12 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class PERST_PNG_Converter {
-	public PERST_PNG_Converter() {
+
+	public static void read() {
+		// TODO
 	}
 
-	public void write(char classification, char[] pixels, String path) {
+	public static void write(char classification, char[] pixels, String path) {
 		File file = new File(path);
 		int i = 0;
 		int dim = (int) Math.sqrt(pixels.length);

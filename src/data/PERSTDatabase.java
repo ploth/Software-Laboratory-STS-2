@@ -204,7 +204,6 @@ public class PERSTDatabase {
 	}
 
 	public void deleteDatabase() throws IOException {
-		this.closeDB();
-		// Files.delete(FileSystems.getDefault().getPath(defaultDatabaseName_));
+		db_.dropTable(DatabaseElement.class);
 	}
 }

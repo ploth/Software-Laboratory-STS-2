@@ -4,36 +4,14 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import data.PERSTDatabase;
+public class PERST_MNIST_Converter extends AbstractConverter {
 
-public class PERST_MNIST_Converter {
-	private PERSTDatabase db_;
-	private String readLabelPath_ = "ImageData/train-labels.idx1-ubyte";
-	private String readImagePath_ = "ImageData/train-images.idx3-ubyte";
-	private String writeLabelPath_;
-	private String writeImagePath_;
-
-	// read from standard path
-	public PERST_MNIST_Converter(String writeLabelPath, String writeImagePath) {
-		this.db_ = PERSTDatabase.getInstance();
-		this.writeLabelPath_ = writeLabelPath;
-		this.writeImagePath_ = writeImagePath;
-	}
-
-	public PERST_MNIST_Converter(String writeLabelPath, String writeImagePath,
-			String readLabelPath, String readImagePath) {
-		this.db_ = PERSTDatabase.getInstance();
-		this.readLabelPath_ = readLabelPath;
-		this.readImagePath_ = readImagePath;
-		this.writeLabelPath_ = writeLabelPath;
-		this.writeImagePath_ = writeImagePath;
-	}
-
-	public int read() throws IOException {
+	public static int read(String readLabelPath, String readImagePath)
+			throws IOException {
 		DataInputStream labels = new DataInputStream(new FileInputStream(
-				readLabelPath_));
+				readLabelPath));
 		DataInputStream images = new DataInputStream(new FileInputStream(
-				readImagePath_));
+				readImagePath));
 		int magicNumber = labels.readInt();
 		if (magicNumber != 2049) {
 			System.err.println("Label file has wrong magic number: "
@@ -66,12 +44,12 @@ public class PERST_MNIST_Converter {
 			for (int i = 0; i < numPixels; i++) {
 				pixels[i] = (char) images.readUnsignedByte();
 			}
-			db_.createCorrectDatabaseElement(classification, pixels, true);
+			getDb_().createCorrectDatabaseElement(classification, pixels, true);
 		}
 		return numberOfImages;
 	}
 
-	public void write() {
+	public void write(String writeLabelPath, String writeImagePath) {
 
 	}
 }
