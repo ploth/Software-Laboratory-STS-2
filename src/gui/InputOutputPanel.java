@@ -88,7 +88,7 @@ public class InputOutputPanel extends JPanel {
 						int endIndex = Integer.parseInt(JOptionPane.showInputDialog(new JFrame(), "Enter end index"));
 						
 						try {
-							PERST_MNIST_Converter.read(labelsPath, imagesPath, startIndex, endIndex);
+							PERST_MNIST_Converter.read(labelsPath, imagesPath, startIndex, endIndex, true);
 							updateDataCounters();
 						} catch (IOException e) {
 							lblNumOfTrainingDataElements.setText("Error");
