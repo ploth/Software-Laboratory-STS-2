@@ -3,9 +3,9 @@ package io;
 import data.PERSTDatabase;
 
 public abstract class AbstractConverter {
-	private PERSTDatabase db_ = PERSTDatabase.getInstance();
+	private static PERSTDatabase db_ = PERSTDatabase.getInstance();
 
-	public PERSTDatabase getDb_() {
+	public static PERSTDatabase getDb_() {
 		return db_;
 	}
 }

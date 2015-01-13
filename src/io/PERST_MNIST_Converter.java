@@ -5,31 +5,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class PERST_MNIST_Converter extends AbstractConverter {
-	private String readLabelPath_ = "ImageData/train-labels.idx1-ubyte";
-	private String readImagePath_ = "ImageData/train-images.idx3-ubyte";
-	private String writeLabelPath_;
-	private String writeImagePath_;
 
-	// read from standard path
-	// TODO: remove as soon as the gui doesn't use this anymore
-	public PERST_MNIST_Converter(String writeLabelPath, String writeImagePath) {
-		this.writeLabelPath_ = writeLabelPath;
-		this.writeImagePath_ = writeImagePath;
-	}
-
-	public PERST_MNIST_Converter(String writeLabelPath, String writeImagePath,
-			String readLabelPath, String readImagePath) {
-		this.readLabelPath_ = readLabelPath;
-		this.readImagePath_ = readImagePath;
-		this.writeLabelPath_ = writeLabelPath;
-		this.writeImagePath_ = writeImagePath;
-	}
-
-	public int read() throws IOException {
+	public static int read(String readLabelPath, String readImagePath)
+			throws IOException {
 		DataInputStream labels = new DataInputStream(new FileInputStream(
-				readLabelPath_));
+				readLabelPath));
 		DataInputStream images = new DataInputStream(new FileInputStream(
-				readImagePath_));
+				readImagePath));
 		int magicNumber = labels.readInt();
 		if (magicNumber != 2049) {
 			System.err.println("Label file has wrong magic number: "
@@ -67,7 +49,7 @@ public class PERST_MNIST_Converter extends AbstractConverter {
 		return numberOfImages;
 	}
 
-	public void write() {
+	public void write(String writeLabelPath, String writeImagePath) {
 
 	}
 }
