@@ -11,6 +11,7 @@ import data.PERSTDatabase.DatabaseElement;
 
 public class KdTreeTest {
 
+	// KNN tests
 	public static void main(String[] args) {
 		long time01 = System.currentTimeMillis();
 		KdTreeHelper treeHelper = KdTreeHelper.getInstance();
@@ -60,4 +61,9 @@ public class KdTreeTest {
 		System.out.println("Time nearest SqrEuclid: " + (time2 - time1));
 		System.out.println("Time nearest Manhattan: " + (time4 - time3));
 	}
+
+	// KMean tests
+	// public static void main(String[] args) {
+	//
+	// }
 }

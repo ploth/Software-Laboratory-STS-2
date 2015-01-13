@@ -20,7 +20,6 @@ public class PERSTDatabase {
 
 	private PERSTDatabase(String databaseName) {
 		storage_ = StorageFactory.getInstance().createStorage();
-		// TODO: too big?
 		// 1GB
 		storage_.open(databaseName, 1024000000); // minimum 40000 bytes
 													// (40kbytes)
