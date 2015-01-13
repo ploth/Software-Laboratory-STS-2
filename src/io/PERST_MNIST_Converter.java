@@ -4,25 +4,21 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import data.PERSTDatabase;
-
-public class PERST_MNIST_Converter {
-	private PERSTDatabase db_;
+public class PERST_MNIST_Converter extends AbstractConverter {
 	private String readLabelPath_ = "ImageData/train-labels.idx1-ubyte";
 	private String readImagePath_ = "ImageData/train-images.idx3-ubyte";
 	private String writeLabelPath_;
 	private String writeImagePath_;
 
 	// read from standard path
+	// TODO: remove as soon as the gui doesn't use this anymore
 	public PERST_MNIST_Converter(String writeLabelPath, String writeImagePath) {
-		this.db_ = PERSTDatabase.getInstance();
 		this.writeLabelPath_ = writeLabelPath;
 		this.writeImagePath_ = writeImagePath;
 	}
 
 	public PERST_MNIST_Converter(String writeLabelPath, String writeImagePath,
 			String readLabelPath, String readImagePath) {
-		this.db_ = PERSTDatabase.getInstance();
 		this.readLabelPath_ = readLabelPath;
 		this.readImagePath_ = readImagePath;
 		this.writeLabelPath_ = writeLabelPath;
@@ -66,7 +62,7 @@ public class PERST_MNIST_Converter {
 			for (int i = 0; i < numPixels; i++) {
 				pixels[i] = (char) images.readUnsignedByte();
 			}
-			db_.createCorrectDatabaseElement(classification, pixels, true);
+			getDb_().createCorrectDatabaseElement(classification, pixels, true);
 		}
 		return numberOfImages;
 	}
