@@ -1,20 +1,11 @@
 package gui;
 
-import java.awt.Dimension;
-import java.awt.DisplayMode;
 import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -22,14 +13,10 @@ import java.awt.image.WritableRaster;
 
 import net.miginfocom.swing.MigLayout;
 
-import javax.swing.border.LineBorder;
-
 import java.awt.Color;
 
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
-
-import com.jgoodies.forms.factories.Borders;
 
 import data.PERSTDatabase;
 import data.PERSTDatabase.DatabaseElement;
@@ -37,8 +24,6 @@ import data.PERSTDatabase.DatabaseElement;
 import javax.swing.JSeparator;
 import javax.swing.border.TitledBorder;
 import javax.swing.JSpinner;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.MatteBorder;
 import javax.swing.border.SoftBevelBorder;
 
 import java.awt.Font;
