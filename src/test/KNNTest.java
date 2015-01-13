@@ -14,7 +14,7 @@ public class KNNTest {
 		PERSTDatabase db = PERSTDatabase.getInstance();
 		// init a database
 		PERST_MNIST_Converter.read("ImageData/train-labels.idx1-ubyte",
-				"ImageData/train-images.idx3-ubyte", 10000, 29999);
+				"ImageData/train-images.idx3-ubyte", 10000, 30000, true);
 		System.out.println(db.getNumberOfDatabaseElements());
 		// System.out.println();
 		// System.out.println(db.getNumberOfDatabaseElements());

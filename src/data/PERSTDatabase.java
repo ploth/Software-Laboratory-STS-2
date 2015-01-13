@@ -150,7 +150,9 @@ public class PERSTDatabase {
 	public int createCorrectDatabaseElement(char correctClassification,
 			char[] pixels, boolean trainingdata) {
 		numberOfDatabaseElements_++;
-		numberOfCorrectDatabaseElements_++;
+		if (trainingdata) {
+			numberOfCorrectDatabaseElements_++;
+		}
 		DatabaseElement DatabaseElement = new DatabaseElement(pixels,
 				numberOfDatabaseElements_, trainingdata);
 		DatabaseElement.setCorrectClassification(correctClassification);
