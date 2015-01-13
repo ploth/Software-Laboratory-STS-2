@@ -132,7 +132,6 @@ public class DatabasePanel extends JPanel {
 		
 		private void paintNumber(Graphics g) {
 			DatabaseElement e = db_.getDatabaseElement(index_);
-			//int label = e.getClassification();
 			char[] pixels = e.getPixels();
 			
 			BufferedImage image = new BufferedImage(28, 28,
