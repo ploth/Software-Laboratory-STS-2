@@ -117,9 +117,11 @@ public class PERSTDatabase {
 		}
 
 		public void convertToCorrect(char correctClassification) {
-			this.trainingdata = true;
-			this.correctClassification = correctClassification;
-			numberOfCorrectDatabaseElements_++;
+			if (trainingdata == false) {
+				this.trainingdata = true;
+				this.correctClassification = correctClassification;
+				numberOfCorrectDatabaseElements_++;
+			}
 		}
 	}
 

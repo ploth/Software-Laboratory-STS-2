@@ -1,7 +1,5 @@
 package test;
 
-import io.PERST_MNIST_Converter;
-
 import java.io.IOException;
 
 import data.PERSTDatabase;
@@ -28,10 +26,15 @@ public class MNISTConverterTest {
 		//
 		// get number of database entries
 		PERSTDatabase db = PERSTDatabase.getInstance();
-		PERST_MNIST_Converter.read("ImageData/train-labels.idx1-ubyte",
-				"ImageData/train-images.idx3-ubyte");
+		// PERST_MNIST_Converter.read("ImageData/train-labels.idx1-ubyte",
+		// "ImageData/train-images.idx3-ubyte");
 		// System.out.println(db.getDatabaseInfos().getNumberOfDatabaseElements());
 		System.out.println(db.getNumberOfDatabaseElements_());
+		System.out.println((int) db.getDatabaseElement(1)
+				.getCorrectClassification());
+		System.out.println((int) db.getDatabaseElement(1)
+				.getAlgoClassification());
+		System.out.println(db.getDatabaseElement(1).isTrainingdata());
 		db.closeDB();
 	}
 }
