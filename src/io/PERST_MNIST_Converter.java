@@ -46,6 +46,8 @@ public class PERST_MNIST_Converter extends AbstractConverter {
 			}
 			getDb_().createCorrectDatabaseElement(classification, pixels, true);
 		}
+		labels.close();
+		images.close();
 		return numberOfImages;
 	}
 
