@@ -12,7 +12,7 @@ public class KMeanTest {
 		PERSTDatabase db = PERSTDatabase.getInstance();
 		// init a database
 		PERST_MNIST_Converter.read("ImageData/train-labels.idx1-ubyte",
-				"ImageData/train-images.idx3-ubyte");
+				"ImageData/train-images.idx3-ubyte", 0, 60000);
 		// create unclassified object
 		db.createUnclassifiedDatabaseElement(db.getDatabaseElement(1)
 				.getPixels());

@@ -6,8 +6,13 @@ import java.io.IOException;
 
 public class PERST_MNIST_Converter extends AbstractConverter {
 
-	public static int read(String readLabelPath, String readImagePath)
-			throws IOException {
+	public static int read(String readLabelPath, String readImagePath,
+			int rangeStart, int rangeEnd) throws IOException {
+		if (rangeStart < 0) {
+			rangeStart = 0;
+			System.err.println("Hey, what are you doing? (lower limit set to  "
+					+ rangeStart + ".");
+		}
 		DataInputStream labels = new DataInputStream(new FileInputStream(
 				readLabelPath));
 		DataInputStream images = new DataInputStream(new FileInputStream(
@@ -30,6 +35,12 @@ public class PERST_MNIST_Converter extends AbstractConverter {
 		int numberOfImages = images.readInt();
 		int numberOfRows = images.readInt();
 		int numberOfColumns = images.readInt();
+		if (numberOfLabels < rangeEnd) {
+			rangeEnd = numberOfLabels;
+			System.err
+					.println("Range is greater than MNIST database (upper limit set to "
+							+ rangeEnd + ".");
+		}
 		if (numberOfLabels != numberOfImages) {
 			System.err
 					.println("Image file and label file do not contain the same number of entries.");
@@ -38,13 +49,18 @@ public class PERST_MNIST_Converter extends AbstractConverter {
 			System.exit(0);
 		}
 		int numPixels = numberOfRows * numberOfColumns;
+		int readIn = 0;
 		while (labels.available() > 0) {
 			char classification = (char) labels.readByte();
 			char[] pixels = new char[numPixels];
 			for (int i = 0; i < numPixels; i++) {
 				pixels[i] = (char) images.readUnsignedByte();
 			}
-			getDb_().createCorrectDatabaseElement(classification, pixels, true);
+			if (rangeStart <= readIn && readIn <= rangeEnd) {
+				getDb_().createCorrectDatabaseElement(classification, pixels,
+						true);
+			}
+			readIn++;
 		}
 		labels.close();
 		images.close();

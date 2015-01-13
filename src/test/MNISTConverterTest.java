@@ -30,7 +30,7 @@ public class MNISTConverterTest {
 		// get number of database entries
 		PERSTDatabase db = PERSTDatabase.getInstance();
 		PERST_MNIST_Converter.read("ImageData/train-labels.idx1-ubyte",
-				"ImageData/train-images.idx3-ubyte");
+				"ImageData/train-images.idx3-ubyte", 0, 60000);
 		// System.out.println(db.getDatabaseInfos().getNumberOfDatabaseElements());
 		//
 		//
