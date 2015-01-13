@@ -31,7 +31,8 @@ public class KdTreeHelper {
 				sizeLimit_);
 		while (iter.hasNext()) {
 			DatabaseElement e = iter.next();
-			seTree_.addPoint(e.getPixelsAsDouble(), e.getClassification());
+			seTree_.addPoint(e.getPixelsAsDouble(),
+					e.getCorrectClassification());
 		}
 		return seTree_;
 	}
@@ -42,7 +43,7 @@ public class KdTreeHelper {
 				sizeLimit_);
 		while (iter.hasNext()) {
 			DatabaseElement e = iter.next();
-			mTree_.addPoint(e.getPixelsAsDouble(), e.getClassification());
+			mTree_.addPoint(e.getPixelsAsDouble(), e.getCorrectClassification());
 		}
 		return mTree_;
 	}

@@ -66,7 +66,7 @@ public class PERST_MNIST_Converter {
 			for (int i = 0; i < numPixels; i++) {
 				pixels[i] = (char) images.readUnsignedByte();
 			}
-			db_.createDatabaseElement(classification, pixels);
+			db_.createCorrectDatabaseElement(classification, pixels, true);
 		}
 	}
 

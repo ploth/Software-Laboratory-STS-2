@@ -29,7 +29,8 @@ public class DatabaseTest {
 		// System.out.println("database elements: "
 		// + pdb.getNumberOfDatabaseElements_());
 		System.out.println("classification: "
-				+ (int) pdb.getDatabaseElement(120000).getClassification());
+				+ (int) pdb.getDatabaseElement(120000)
+						.getCorrectClassification());
 		pdb.closeDB();
 	}
 }

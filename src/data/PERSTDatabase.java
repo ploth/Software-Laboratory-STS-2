@@ -1,5 +1,7 @@
 package data;
 
+import java.io.IOException;
+
 import org.garret.perst.Database;
 import org.garret.perst.IterableIterator;
 import org.garret.perst.Persistent;
@@ -11,6 +13,7 @@ public class PERSTDatabase {
 	private Storage storage_;
 	private Database db_;
 	private Integer numberOfDatabaseElements_ = 0;
+	private Integer numberOfCorrectDatabaseElements_ = 0; // Trainingdata
 	private int dim_ = 0;
 	private static PERSTDatabase instance_;
 	private static String defaultDatabaseName_ = "perstdatabase.dbs";
@@ -23,12 +26,6 @@ public class PERSTDatabase {
 													// (40kbytes)
 		db_ = new Database(storage_, false);
 		instance_ = this;
-		// count database object
-		IterableIterator<DatabaseElement> iter = this.getDatabaseIterator();
-		while (iter.hasNext()) {
-			iter.next();
-			numberOfDatabaseElements_++;
-		}
 	}
 
 	private Database getDB() {
@@ -36,7 +33,26 @@ public class PERSTDatabase {
 	}
 
 	public Integer getNumberOfDatabaseElements_() {
+		if (numberOfDatabaseElements_ == 0) {
+			IterableIterator<DatabaseElement> iter = this.getDatabaseIterator();
+			while (iter.hasNext()) {
+				iter.next();
+				numberOfDatabaseElements_++;
+			}
+		}
 		return numberOfDatabaseElements_;
+	}
+
+	public Integer getNumberOfCorrectDatabaseElements_() {
+		if (numberOfCorrectDatabaseElements_ == 0) {
+			IterableIterator<DatabaseElement> iter = this
+					.getCorrectDatabaseIterator();
+			while (iter.hasNext()) {
+				iter.next();
+				numberOfCorrectDatabaseElements_++;
+			}
+		}
+		return numberOfCorrectDatabaseElements_;
 	}
 
 	public int getDim_() {
@@ -51,19 +67,29 @@ public class PERSTDatabase {
 
 	public class DatabaseElement extends Persistent {
 
-		private int classification; // int to make query search possible
+		// 1337 for debugging
+		private int correctClassification = (char) 1337;// int to make query
+														// search possible
+		// 42 for debugging
+		private int algoClassification = (char) 42; // int to make query seach
+													// possible
 		private char[] pixels;
 		private int index;
+		private boolean trainingdata;
 
-		public DatabaseElement(char classification, char[] pixels, int index) {
-			this.classification = (int) classification;
+		public DatabaseElement(char[] pixels, int index, boolean trainingdata) {
 			this.pixels = pixels;
 			this.index = index;
+			this.trainingdata = trainingdata;
 			PERSTDatabase.getInstance().getDB().addRecord(this);
 		}
 
-		public char getClassification() {
-			return (char) classification;
+		public char getCorrectClassification() {
+			return (char) correctClassification;
+		}
+
+		public char getAlgoClassification() {
+			return (char) algoClassification;
 		}
 
 		public char[] getPixels() {
@@ -77,6 +103,24 @@ public class PERSTDatabase {
 			}
 			return pixelsAsDouble;
 		}
+
+		public boolean isTrainingdata() {
+			return trainingdata;
+		}
+
+		public void setCorrectClassification(char correctClassification) {
+			this.correctClassification = (int) correctClassification;
+		}
+
+		public void setAlgoClassification(char algoClassification) {
+			this.algoClassification = (int) algoClassification;
+		}
+
+		public void convertToCorrect(char correctClassification) {
+			this.trainingdata = true;
+			this.correctClassification = correctClassification;
+			numberOfCorrectDatabaseElements_++;
+		}
 	}
 
 	public static PERSTDatabase getInstance() {
@@ -86,14 +130,57 @@ public class PERSTDatabase {
 		return instance_;
 	}
 
-	public void createDatabaseElement(char classification, char[] pixels) {
+	// returns index
+	public int createCorrectDatabaseElement(char correctClassification,
+			char[] pixels, boolean trainingdata) {
 		numberOfDatabaseElements_++;
-		DatabaseElement DatabaseElement = new DatabaseElement(classification,
-				pixels, numberOfDatabaseElements_);
+		numberOfCorrectDatabaseElements_++;
+		DatabaseElement DatabaseElement = new DatabaseElement(pixels,
+				numberOfDatabaseElements_, trainingdata);
+		DatabaseElement.setCorrectClassification(correctClassification);
+		return numberOfDatabaseElements_;
 	}
+
+	// return index
+	public int createUnclassifiedDatabaseElement(char[] pixels) {
+		numberOfDatabaseElements_++;
+		DatabaseElement DatabaseElement = new DatabaseElement(pixels,
+				numberOfDatabaseElements_, false);
+		return numberOfDatabaseElements_;
+	}
+
+	// // returns index
+	// public int createCorrectDatabaseElement(char correctClassification,
+	// char[] pixels) {
+	// numberOfDatabaseElements_++;
+	// DatabaseElement DatabaseElement = new DatabaseElement(pixels,
+	// numberOfDatabaseElements_, true);
+	// DatabaseElement.setCorrectClassification(correctClassification);
+	// return numberOfDatabaseElements_;
+	// }
+	//
+	// // returns index
+	// public int createAlgoDatabaseElement(char algoClassification, char[]
+	// pixels) {
+	// numberOfDatabaseElements_++;
+	// DatabaseElement DatabaseElement = new DatabaseElement(pixels,
+	// numberOfDatabaseElements_, false);
+	// DatabaseElement.setAlgoClassification(algoClassification);
+	// return numberOfDatabaseElements_;
+	// }
 
 	public IterableIterator<DatabaseElement> getDatabaseIterator() {
 		return db_.<DatabaseElement> getRecords(DatabaseElement.class);
+	}
+
+	public IterableIterator<DatabaseElement> getCorrectDatabaseIterator() {
+		return db_.<DatabaseElement> select(DatabaseElement.class,
+				"trainingdata = true");
+	}
+
+	public IterableIterator<DatabaseElement> getUnCorrectDatabaseIterator() {
+		return db_.<DatabaseElement> select(DatabaseElement.class,
+				"trainingdata = false");
 	}
 
 	public IterableIterator<DatabaseElement> queryDatabaseElements(
@@ -114,5 +201,10 @@ public class PERSTDatabase {
 	public void closeDB() {
 		db_.commitTransaction();
 		storage_.close();
+	}
+
+	public void deleteDatabase() throws IOException {
+		this.closeDB();
+		// Files.delete(FileSystems.getDefault().getPath(defaultDatabaseName_));
 	}
 }

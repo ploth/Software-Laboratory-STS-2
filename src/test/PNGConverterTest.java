@@ -23,7 +23,8 @@ public class PNGConverterTest {
 		for (int i = 0; i < number; i++) {
 			e = iter.next();
 		}
-		System.out.println("classification: " + (int) e.getClassification());
+		System.out.println("classification: "
+				+ (int) e.getCorrectClassification());
 		// print array
 		for (int k = 0; k < Math.sqrt(e.getPixels().length); k++) {
 			System.out.println();
@@ -32,6 +33,7 @@ public class PNGConverterTest {
 						* (int) Math.sqrt(e.getPixels().length) + l]);
 			}
 		}
-		png.write(e.getClassification(), e.getPixels(), "src/test/test.png");
+		png.write(e.getCorrectClassification(), e.getPixels(),
+				"src/test/test.png");
 	}
 }
