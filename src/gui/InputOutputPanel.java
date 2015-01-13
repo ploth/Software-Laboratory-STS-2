@@ -63,46 +63,7 @@ public class InputOutputPanel extends JPanel {
 		final JButton btnImportMnistData = new JButton("Import MNIST data");
 		btnImportMnistData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String imagesPath = "";
-				String labelsPath = "";
-				lblNumOfTrainingDataElements.setText("Loading...");
-				
-				JFileChooser fc = new JFileChooser("ImageData/");
-				FileNameExtensionFilter filterIDX3 = new FileNameExtensionFilter(
-				        "MNIST images", "idx3-ubyte");
-				FileNameExtensionFilter filterIDX1 = new FileNameExtensionFilter(
-				        "MNIST labels", "idx1-ubyte");
-				fc.setFileFilter(filterIDX3);
-				
-				int returnVal = fc.showDialog(btnImportMnistData.getParent(), "Load MNIST images");
-				
-				if(returnVal == JFileChooser.APPROVE_OPTION) {
-					imagesPath = fc.getSelectedFile().getPath();
-					
-					fc.setFileFilter(filterIDX1);
-					returnVal = fc.showDialog(btnImportMnistData.getParent(), "Load MNIST labels");
-					if(returnVal == JFileChooser.APPROVE_OPTION) {
-						labelsPath = fc.getSelectedFile().getPath();
-						
-						int startIndex = Integer.parseInt(JOptionPane.showInputDialog(new JFrame(), "Enter start index"));
-						int endIndex = Integer.parseInt(JOptionPane.showInputDialog(new JFrame(), "Enter end index"));
-						
-						try {
-							PERST_MNIST_Converter.read(labelsPath, imagesPath, startIndex, endIndex, true);
-							updateDataCounters();
-						} catch (IOException e) {
-							lblNumOfTrainingDataElements.setText("Error");
-							JOptionPane.showMessageDialog(btnImportMnistData.getParent().getParent(),
-								    e.getMessage(),
-								    "IOException",
-								    JOptionPane.ERROR_MESSAGE);
-						}
-					} else {
-						lblNumOfTrainingDataElements.setText("-");
-					}
-				} else {
-					lblNumOfTrainingDataElements.setText("-");
-				}
+				loadMNISTfiles(lblNumOfTrainingDataElements, true);
 			}
 		});
 		panel_3.add(btnImportMnistData, "flowy,cell 0 0,growx");
@@ -145,7 +106,12 @@ public class InputOutputPanel extends JPanel {
 		JButton btnAddNewData = new JButton("Add new data from CSV");
 		panel_1.add(btnAddNewData, "cell 0 2 2 1,growx");
 		
-		JButton btnClassifyDataFrom = new JButton("Classify data from database");
+		JButton btnClassifyDataFrom = new JButton("Add new data from MNIST files");
+		btnClassifyDataFrom.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				loadMNISTfiles(lblNumOfDataToClassify, false);
+			}
+		});
 		panel_1.add(btnClassifyDataFrom, "cell 0 3 2 1,growx");
 		
 		JPanel panel_2 = new JPanel();
@@ -165,9 +131,54 @@ public class InputOutputPanel extends JPanel {
 		updateDataCounters();
 	}
 	
+	private void loadMNISTfiles(JLabel dataLabel, boolean isTrainingData) {
+		String imagesPath = "";
+		String labelsPath = "";
+		dataLabel.setText("Loading...");
+		
+		JFileChooser fc = new JFileChooser("ImageData/");
+		FileNameExtensionFilter filterIDX3 = new FileNameExtensionFilter(
+		        "MNIST images", "idx3-ubyte");
+		FileNameExtensionFilter filterIDX1 = new FileNameExtensionFilter(
+		        "MNIST labels", "idx1-ubyte");
+		fc.setFileFilter(filterIDX3);
+		
+		int returnVal = fc.showDialog(new JFrame(), "Load MNIST images");
+		
+		if(returnVal == JFileChooser.APPROVE_OPTION) {
+			imagesPath = fc.getSelectedFile().getPath();
+			
+			fc.setFileFilter(filterIDX1);
+			returnVal = fc.showDialog(new JFrame(), "Load MNIST labels");
+			if(returnVal == JFileChooser.APPROVE_OPTION) {
+				labelsPath = fc.getSelectedFile().getPath();
+				
+				int startIndex = Integer.parseInt(JOptionPane.showInputDialog(new JFrame(), "Enter start index"));
+				int endIndex = Integer.parseInt(JOptionPane.showInputDialog(new JFrame(), "Enter end index"));
+				
+				try {
+					PERST_MNIST_Converter.read(labelsPath, imagesPath, startIndex, endIndex, isTrainingData);
+					updateDataCounters();
+				} catch (IOException e) {
+					dataLabel.setText("Error");
+					JOptionPane.showMessageDialog(new JFrame(),
+						    e.getMessage(),
+						    "IOException",
+						    JOptionPane.ERROR_MESSAGE);
+				}
+			} else {
+				dataLabel.setText("-");
+			}
+		} else {
+			dataLabel.setText("-");
+		}
+	}
+	
 	private void updateDataCounters() {
 		int numOfTrainingDataElements = db_.getNumberOfCorrectDatabaseElements();
 		int numOfDataToClassify = db_.getNumberOfDatabaseElements() - numOfTrainingDataElements;
+		System.out.println("Num of DbElements: " + db_.getNumberOfDatabaseElements());
+		System.out.println("num of training data: " + numOfTrainingDataElements);
 		if(numOfTrainingDataElements > 0) {
 			lblNumOfTrainingDataElements.setText(String.valueOf(numOfTrainingDataElements));
 		}
