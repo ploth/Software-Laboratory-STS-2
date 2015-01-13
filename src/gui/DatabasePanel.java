@@ -164,7 +164,7 @@ public class DatabasePanel extends JPanel {
 	}
 	
 	private void updateDatabaseState() {
-		numOfDatabaseElements_ = db_.getNumberOfDatabaseElements_();
+		numOfDatabaseElements_ = db_.getNumberOfDatabaseElements();
 		lblDatacounter.setText(String.valueOf(numOfDatabaseElements_));
 		if(numOfDatabaseElements_ > 0) {
 			spnIndex.setModel(new SpinnerNumberModel(1, 1, numOfDatabaseElements_, 1));

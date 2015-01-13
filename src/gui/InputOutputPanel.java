@@ -84,8 +84,11 @@ public class InputOutputPanel extends JPanel {
 					if(returnVal == JFileChooser.APPROVE_OPTION) {
 						labelsPath = fc.getSelectedFile().getPath();
 						
+						int startIndex = Integer.parseInt(JOptionPane.showInputDialog(new JFrame(), "Enter start index"));
+						int endIndex = Integer.parseInt(JOptionPane.showInputDialog(new JFrame(), "Enter end index"));
+						
 						try {
-							PERST_MNIST_Converter.read(labelsPath, imagesPath);
+							PERST_MNIST_Converter.read(labelsPath, imagesPath, startIndex, endIndex);
 							updateDataCounters();
 						} catch (IOException e) {
 							lblNumOfTrainingDataElements.setText("Error");
@@ -93,14 +96,12 @@ public class InputOutputPanel extends JPanel {
 								    e.getMessage(),
 								    "IOException",
 								    JOptionPane.ERROR_MESSAGE);
-						} catch (ConverterException e) {
-							lblNumOfTrainingDataElements.setText("Error");
-							JOptionPane.showMessageDialog(btnImportMnistData.getParent().getParent(),
-								    e.getMessage(),
-								    "Error during conversion",
-								    JOptionPane.ERROR_MESSAGE);
 						}
+					} else {
+						lblNumOfTrainingDataElements.setText("-");
 					}
+				} else {
+					lblNumOfTrainingDataElements.setText("-");
 				}
 			}
 		});
@@ -165,8 +166,8 @@ public class InputOutputPanel extends JPanel {
 	}
 	
 	private void updateDataCounters() {
-		int numOfTrainingDataElements = db_.getNumberOfCorrectDatabaseElements_();
-		int numOfDataToClassify = db_.getNumberOfDatabaseElements_() - numOfTrainingDataElements;
+		int numOfTrainingDataElements = db_.getNumberOfCorrectDatabaseElements();
+		int numOfDataToClassify = db_.getNumberOfDatabaseElements() - numOfTrainingDataElements;
 		if(numOfTrainingDataElements > 0) {
 			lblNumOfTrainingDataElements.setText(String.valueOf(numOfTrainingDataElements));
 		}
