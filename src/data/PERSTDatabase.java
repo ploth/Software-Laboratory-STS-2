@@ -68,11 +68,11 @@ public class PERSTDatabase {
 	public class DatabaseElement extends Persistent {
 
 		// 1337 for debugging
-		private int correctClassification = (char) 1337;// int to make query
-														// search possible
+		private int correctClassification = 1337;// int to make query
+													// search possible
 		// 42 for debugging
-		private int algoClassification = (char) 42; // int to make query seach
-													// possible
+		private int algoClassification = 42; // int to make query seach
+												// possible
 		private char[] pixels;
 		private int index;
 		private boolean trainingdata;
