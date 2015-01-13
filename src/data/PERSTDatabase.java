@@ -205,5 +205,6 @@ public class PERSTDatabase {
 
 	public void deleteDatabase() throws IOException {
 		db_.dropTable(DatabaseElement.class);
+		numberOfDatabaseElements_ = 0;
 	}
 }
