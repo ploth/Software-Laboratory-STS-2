@@ -54,6 +54,10 @@ public class PERSTDatabase {
 		return numberOfCorrectDatabaseElements_;
 	}
 
+	public Integer getNumberOfUncorrectDatabaseElements() {
+		return (getNumberOfDatabaseElements() - getNumberOfCorrectDatabaseElements());
+	}
+
 	public int getDim() {
 		// 28! not 28*28!
 		if (dim_ == 0) {

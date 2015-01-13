@@ -38,6 +38,18 @@ public class KdTreeHelper {
 		return seTree_;
 	}
 
+	// for KMean (whole database incl. !trainingdata)
+	public SqrEuclid<Character> createSqrEuclidKdTreeWithoutValuesFromDatabase() {
+		IterableIterator<DatabaseElement> iter = db_.getDatabaseIterator();
+		seTree_ = new SqrEuclid<Character>(db_.getDim() * db_.getDim(),
+				sizeLimit_);
+		while (iter.hasNext()) {
+			DatabaseElement e = iter.next();
+			seTree_.addPoint(e.getPixelsAsDouble(), (char) 0);
+		}
+		return seTree_;
+	}
+
 	public Manhattan<Character> createManhattenKdTreeFromDatabase() {
 		IterableIterator<DatabaseElement> iter = db_
 				.getCorrectDatabaseIterator();
@@ -46,6 +58,18 @@ public class KdTreeHelper {
 		while (iter.hasNext()) {
 			DatabaseElement e = iter.next();
 			mTree_.addPoint(e.getPixelsAsDouble(), e.getCorrectClassification());
+		}
+		return mTree_;
+	}
+
+	// for KMean (whole database incl. !trainingdata)
+	public Manhattan<Character> createManhattenKdTreeWithoutValuesFromDatabase() {
+		IterableIterator<DatabaseElement> iter = db_.getDatabaseIterator();
+		mTree_ = new Manhattan<Character>(db_.getDim() * db_.getDim(),
+				sizeLimit_);
+		while (iter.hasNext()) {
+			DatabaseElement e = iter.next();
+			mTree_.addPoint(e.getPixelsAsDouble(), (char) 0);
 		}
 		return mTree_;
 	}
