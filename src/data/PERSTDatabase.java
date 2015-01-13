@@ -32,7 +32,7 @@ public class PERSTDatabase {
 		return db_;
 	}
 
-	public Integer getNumberOfDatabaseElements_() {
+	public Integer getNumberOfDatabaseElements() {
 		if (numberOfDatabaseElements_ == 0) {
 			IterableIterator<DatabaseElement> iter = this.getDatabaseIterator();
 			while (iter.hasNext()) {
@@ -43,7 +43,7 @@ public class PERSTDatabase {
 		return numberOfDatabaseElements_;
 	}
 
-	public Integer getNumberOfCorrectDatabaseElements_() {
+	public Integer getNumberOfCorrectDatabaseElements() {
 		if (numberOfCorrectDatabaseElements_ == 0) {
 			IterableIterator<DatabaseElement> iter = this
 					.getCorrectDatabaseIterator();
@@ -55,7 +55,7 @@ public class PERSTDatabase {
 		return numberOfCorrectDatabaseElements_;
 	}
 
-	public int getDim_() {
+	public int getDim() {
 		// 28! not 28*28!
 		if (dim_ == 0) {
 			dim_ = (int) Math.sqrt(this.getDatabaseIterator().first()

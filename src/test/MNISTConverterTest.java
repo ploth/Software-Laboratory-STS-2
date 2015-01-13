@@ -52,22 +52,22 @@ public class MNISTConverterTest {
 		System.out
 				.println("algo recognized a 2 and set it to the algo classification value");
 		System.out.println("number of database elements: "
-				+ db.getNumberOfDatabaseElements_());
+				+ db.getNumberOfDatabaseElements());
 		System.out.println("number of correct database elements: "
-				+ db.getNumberOfCorrectDatabaseElements_());
+				+ db.getNumberOfCorrectDatabaseElements());
 		System.out.println("number of unclassified database elements: "
-				+ (db.getNumberOfDatabaseElements_() - db
-						.getNumberOfCorrectDatabaseElements_()));
+				+ (db.getNumberOfDatabaseElements() - db
+						.getNumberOfCorrectDatabaseElements()));
 		db.convertToCorrect(index, (char) 1);
 		System.out
 				.println("got uncorrect database element and we set the correct value to 1 by hand and converted it to a correct database element (trainingdata)");
 		System.out.println("number of database elements: "
-				+ db.getNumberOfDatabaseElements_());
+				+ db.getNumberOfDatabaseElements());
 		System.out.println("number of correct database elements: "
-				+ db.getNumberOfCorrectDatabaseElements_());
+				+ db.getNumberOfCorrectDatabaseElements());
 		System.out.println("number of uncorrect database elements: "
-				+ (db.getNumberOfDatabaseElements_() - db
-						.getNumberOfCorrectDatabaseElements_()));
+				+ (db.getNumberOfDatabaseElements() - db
+						.getNumberOfCorrectDatabaseElements()));
 		System.out
 				.println("correct classification: "
 						+ (int) db.getDatabaseElement(index)

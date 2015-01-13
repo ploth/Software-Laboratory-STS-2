@@ -27,7 +27,7 @@ public class KdTreeHelper {
 
 	public SqrEuclid<Character> createSqrEuclidKdTreeFromDatabase() {
 		IterableIterator<DatabaseElement> iter = db_.getDatabaseIterator();
-		seTree_ = new SqrEuclid<Character>(db_.getDim_() * db_.getDim_(),
+		seTree_ = new SqrEuclid<Character>(db_.getDim() * db_.getDim(),
 				sizeLimit_);
 		while (iter.hasNext()) {
 			DatabaseElement e = iter.next();
@@ -39,7 +39,7 @@ public class KdTreeHelper {
 
 	public Manhattan<Character> createManhattenKdTreeFromDatabase() {
 		IterableIterator<DatabaseElement> iter = db_.getDatabaseIterator();
-		mTree_ = new Manhattan<Character>(db_.getDim_() * db_.getDim_(),
+		mTree_ = new Manhattan<Character>(db_.getDim() * db_.getDim(),
 				sizeLimit_);
 		while (iter.hasNext()) {
 			DatabaseElement e = iter.next();

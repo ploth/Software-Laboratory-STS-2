@@ -53,7 +53,7 @@ public class DatabasePanel extends JPanel {
 		JLabel lblNumberOfDataelements = new JLabel("Number of data lements in database:");
 		panelLeft.add(lblNumberOfDataelements, "cell 0 0");
 		
-		JLabel lblDatacounter = new JLabel(String.valueOf(db_.getNumberOfDatabaseElements_()));
+		JLabel lblDatacounter = new JLabel(String.valueOf(db_.getNumberOfDatabaseElements()));
 		panelLeft.add(lblDatacounter, "cell 1 0,alignx center");
 		
 		JButton btnDelete = new JButton("Delete database");
