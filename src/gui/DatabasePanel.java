@@ -71,7 +71,7 @@ public class DatabasePanel extends JPanel {
 			public void stateChanged(ChangeEvent arg0) {
 				int value = (int) spinner.getValue();
 				graphicsPanel.update(value); 
-				int classification = db_.getDatabaseElement(value).getClassification();
+				int classification = db_.getDatabaseElement(value).getCorrectClassification();
 				lblClassification.setText(String.valueOf(classification));
 			}
 		});

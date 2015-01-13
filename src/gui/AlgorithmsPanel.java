@@ -1,8 +1,6 @@
 package gui;
 
 import java.awt.Font;
-import java.awt.GridLayout;
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
