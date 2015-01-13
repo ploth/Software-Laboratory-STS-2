@@ -135,7 +135,7 @@ public class DatabasePanel extends JPanel {
 			char[] pixels = e.getPixels();
 			
 			BufferedImage image = new BufferedImage(28, 28,
-					BufferedImage.TYPE_BYTE_GRAY); // TYPE_BYTE_GRAY
+					BufferedImage.TYPE_BYTE_GRAY);
 			int i = 0;
 			for (int x = 0; x < 28; x++) {
 				for (int y = 0; y < 28; y++) {
