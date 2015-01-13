@@ -177,8 +177,6 @@ public class InputOutputPanel extends JPanel {
 	private void updateDataCounters() {
 		int numOfTrainingDataElements = db_.getNumberOfCorrectDatabaseElements();
 		int numOfDataToClassify = db_.getNumberOfDatabaseElements() - numOfTrainingDataElements;
-		System.out.println("Num of DbElements: " + db_.getNumberOfDatabaseElements());
-		System.out.println("num of training data: " + numOfTrainingDataElements);
 		if(numOfTrainingDataElements > 0) {
 			lblNumOfTrainingDataElements.setText(String.valueOf(numOfTrainingDataElements));
 		}

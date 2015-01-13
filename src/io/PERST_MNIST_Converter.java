@@ -65,7 +65,6 @@ public class PERST_MNIST_Converter extends AbstractConverter {
 		}
 		labels.close();
 		images.close();
-		System.out.println("Converter has read " + dataCount + " data elements.");
 		return numberOfImages;
 	}
 
