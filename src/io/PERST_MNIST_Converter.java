@@ -9,7 +9,7 @@ public class PERST_MNIST_Converter extends AbstractConverter {
 	public static int read(String readLabelPath, String readImagePath,
 			int rangeStart, int rangeEnd) throws IOException {
 		if (rangeStart < 0) {
-			rangeStart = 0;
+			rangeStart = 1;
 			System.err.println("Hey, what are you doing? (lower limit set to  "
 					+ rangeStart + ".");
 		}
@@ -49,7 +49,7 @@ public class PERST_MNIST_Converter extends AbstractConverter {
 			System.exit(0);
 		}
 		int numPixels = numberOfRows * numberOfColumns;
-		int readIn = 0;
+		int readIn = rangeStart;
 		while (labels.available() > 0) {
 			char classification = (char) labels.readByte();
 			char[] pixels = new char[numPixels];
