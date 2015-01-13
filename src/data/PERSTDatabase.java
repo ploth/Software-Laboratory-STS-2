@@ -108,6 +108,10 @@ public class PERSTDatabase {
 			return trainingdata;
 		}
 
+		public void setTrainingdata(boolean trainingdata) {
+			this.trainingdata = trainingdata;
+		}
+
 		public void setCorrectClassification(char correctClassification) {
 			this.correctClassification = (int) correctClassification;
 		}
@@ -115,13 +119,16 @@ public class PERSTDatabase {
 		public void setAlgoClassification(char algoClassification) {
 			this.algoClassification = (int) algoClassification;
 		}
+	}
 
-		public void convertToCorrect(char correctClassification) {
-			if (trainingdata == false) {
-				this.trainingdata = true;
-				this.correctClassification = correctClassification;
-				numberOfCorrectDatabaseElements_++;
-			}
+	public void convertToCorrect(int index, char correctClassification) {
+		DatabaseElement e = getDatabaseElement(index);
+		if (e.isTrainingdata() == false) {
+			e.setTrainingdata(true);
+			e.setCorrectClassification(correctClassification);
+			// System.out.println("debug: " + numberOfCorrectDatabaseElements_);
+			numberOfCorrectDatabaseElements_++;
+			// System.out.println("debug: " + numberOfCorrectDatabaseElements_);
 		}
 	}
 
