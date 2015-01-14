@@ -24,7 +24,7 @@ public class KNN extends AbstractAlgorithm {
 		SqrEuclid<Character> SETree = treeHelper
 				.createSqrEuclidKdTreeFromDatabase();
 		IterableIterator<DatabaseElement> uOI = getDb_()
-				.getUnCorrectDatabaseIterator();
+				.getNonTrainingdataDatabaseIterator();
 		DatabaseElement e;
 		List<Entry<Character>> list;
 		int[] predictArray = new int[NUMBER_OF_POSSIBLE_CLASSIFICATIONS];
@@ -62,7 +62,7 @@ public class KNN extends AbstractAlgorithm {
 		Manhattan<Character> MTree = treeHelper
 				.createManhattenKdTreeFromDatabase();
 		IterableIterator<DatabaseElement> uOI = getDb_()
-				.getUnCorrectDatabaseIterator();
+				.getNonTrainingdataDatabaseIterator();
 		DatabaseElement e;
 		List<Entry<Character>> list;
 		int[] predictArray = new int[NUMBER_OF_POSSIBLE_CLASSIFICATIONS];

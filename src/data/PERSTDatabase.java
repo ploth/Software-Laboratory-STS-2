@@ -17,6 +17,9 @@ public class PERSTDatabase {
 	private int dim_ = 0;
 	private static PERSTDatabase instance_;
 	private static String defaultDatabaseName_ = "perstdatabase.dbs";
+	private static final int DEBUG_1337 = 1337;
+	private static final int DEBUG_42 = 42;
+	private static final int DEBUG_9000 = 9000;
 
 	private PERSTDatabase(String databaseName) {
 		storage_ = StorageFactory.getInstance().createStorage();
@@ -71,10 +74,13 @@ public class PERSTDatabase {
 	public class DatabaseElement extends Persistent {
 
 		// 1337 for debugging
-		private int correctClassification = 1337;// int to make query
-													// search possible
+		private int correctClassification = DEBUG_1337;// int to make query
+														// search possible
 		// 42 for debugging
-		private int algoClassification = 42; // int to make query seach
+		private int algoClassification = DEBUG_42; // int to make query seach
+													// possible
+		// 9000 for debugging
+		private int clusterValue = DEBUG_9000; // int to make query seach
 												// possible
 		private char[] pixels;
 		private int index;
@@ -85,6 +91,14 @@ public class PERSTDatabase {
 			this.index = index;
 			this.trainingdata = trainingdata;
 			PERSTDatabase.getInstance().getDB().addRecord(this);
+		}
+
+		public int getClusterValue() {
+			return clusterValue;
+		}
+
+		public void setClusterValue(int clusterValue) {
+			this.clusterValue = clusterValue;
 		}
 
 		public int getIndex() {
@@ -200,7 +214,12 @@ public class PERSTDatabase {
 				"trainingdata = true");
 	}
 
-	public IterableIterator<DatabaseElement> getUnCorrectDatabaseIterator() {
+	public IterableIterator<DatabaseElement> getInCorrectDatabaseIterator() {
+		return db_.<DatabaseElement> select(DatabaseElement.class,
+				"correctClassification = " + String.valueOf(DEBUG_1337));
+	}
+
+	public IterableIterator<DatabaseElement> getNonTrainingdataDatabaseIterator() {
 		return db_.<DatabaseElement> select(DatabaseElement.class,
 				"trainingdata = false");
 	}

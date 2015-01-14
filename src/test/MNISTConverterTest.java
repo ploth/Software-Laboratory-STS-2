@@ -47,7 +47,7 @@ public class MNISTConverterTest {
 				20000).getPixels());
 		System.out.println("unclassified element created");
 		System.out.println("index of unclassified element: " + index);
-		DatabaseElement e = db.getUnCorrectDatabaseIterator().first();
+		DatabaseElement e = db.getNonTrainingdataDatabaseIterator().first();
 		e.setAlgoClassification((char) 2);
 		System.out
 				.println("algo recognized a 2 and set it to the algo classification value");

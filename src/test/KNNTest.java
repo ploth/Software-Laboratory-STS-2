@@ -36,7 +36,7 @@ public class KNNTest {
 		// hopefully
 		// at this point the gui has to display all uncorrect database elements
 		// he will convert it to a correct element and enters a 5
-		int index = db.getUnCorrectDatabaseIterator().first().getIndex();
+		int index = db.getNonTrainingdataDatabaseIterator().first().getIndex();
 		// System.out.println("algo: "
 		// + (int) db.getDatabaseElement(index).getAlgoClassification());
 		// System.out
