@@ -13,7 +13,7 @@ import data.PERSTDatabase.DatabaseElement;
 
 public class KNN extends AbstractAlgorithm {
 
-	private static final int numberOfPossibleClassifications = 10; // 0-9
+	private static final int NUMBER_OF_POSSIBLE_CLASSIFICATIONS = 10; // 0-9
 
 	public KNN() {
 
@@ -27,7 +27,7 @@ public class KNN extends AbstractAlgorithm {
 				.getUnCorrectDatabaseIterator();
 		DatabaseElement e;
 		List<Entry<Character>> list;
-		int[] predictArray = new int[numberOfPossibleClassifications];
+		int[] predictArray = new int[NUMBER_OF_POSSIBLE_CLASSIFICATIONS];
 		int greatestValue = 0;
 		int prediction = 0; // array position
 		double[] pixels;
@@ -36,9 +36,9 @@ public class KNN extends AbstractAlgorithm {
 			e = uOI.next();
 			pixels = e.getPixelsAsDouble();
 
-			time1 = System.currentTimeMillis();
+			// time1 = System.currentTimeMillis();
 			list = SETree.nearestNeighbor(pixels, k, false);
-			time2 = System.currentTimeMillis();
+			// time2 = System.currentTimeMillis();
 
 			Arrays.fill(predictArray, 0);
 			for (int i = list.size() - 1; i >= 0; i--) {
@@ -53,7 +53,7 @@ public class KNN extends AbstractAlgorithm {
 			e.setAlgoClassification((char) prediction);
 			greatestValue = 0;
 			prediction = 0;
-			System.out.println((time2 - time1));
+			// System.out.println((time2 - time1));
 		}
 	}
 
@@ -65,7 +65,7 @@ public class KNN extends AbstractAlgorithm {
 				.getUnCorrectDatabaseIterator();
 		DatabaseElement e;
 		List<Entry<Character>> list;
-		int[] predictArray = new int[numberOfPossibleClassifications];
+		int[] predictArray = new int[NUMBER_OF_POSSIBLE_CLASSIFICATIONS];
 		int greatestValue = 0;
 		int prediction = 0; // array position
 		double[] pixels;
