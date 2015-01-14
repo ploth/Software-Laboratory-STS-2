@@ -224,6 +224,15 @@ public class PERSTDatabase {
 				"trainingdata = false");
 	}
 
+	public IterableIterator<DatabaseElement> getClusteredDatabaseIterator(
+			char clusterValue) {
+		String query = "clusterValue = " + String.valueOf((int) clusterValue);
+		IterableIterator<DatabaseElement> iterator = db_
+				.<DatabaseElement> select(DatabaseElement.class, query);
+		return iterator;
+	}
+
+	// TODO: remove?
 	public IterableIterator<DatabaseElement> queryDatabaseElements(
 			char classification) {
 		String query = "classification = "

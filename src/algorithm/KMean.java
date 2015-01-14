@@ -35,7 +35,9 @@ public class KMean extends AbstractAlgorithm {
 		// System.out.println((int) getDb_().getDatabaseElement(indexes[i])
 		// .getCorrectClassification());
 		// }
-		while (true) {
+		int iterations = 0;
+		while (adjustment > MINIMUM_ADJUSTMENT || iterations <= MAX_ITERATIONS) {
+			iterations++;
 			// iterate through every point and check distance to k prototypes in
 			// kdtree and set the cluster value
 			// the cluster value is the value of the nearest prototype
@@ -56,7 +58,9 @@ public class KMean extends AbstractAlgorithm {
 			// iterate through all points with cluster value 0 for example and
 			// calculate arithmetic mean. the arithmetic mean is to add to a new
 			// kdtree
-
+			for (int i = 0; i < k; i++) {
+				getDb_().getClusteredDatabaseIterator((char) i);
+			}
 			// compare arithmetic means to old positions
 			// -> sum up all distances and divide by k (arithmetic mean)
 			// safe to adjustment value
