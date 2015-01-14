@@ -14,6 +14,8 @@ import java.awt.event.ActionListener;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 
+import algorithm.KNN;
+
 public class AlgorithmsPanel extends JPanel implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
@@ -27,6 +29,8 @@ public class AlgorithmsPanel extends JPanel implements ActionListener{
 		panel.setLayout(new MigLayout("", "[grow]", "[]"));
 		
 		JButton btnStartKnearestneighborAlgorithm = new JButton("Start k-NN algorithm");
+		btnStartKnearestneighborAlgorithm.addActionListener(this);
+		btnStartKnearestneighborAlgorithm.setActionCommand("startKNN");
 		panel.add(btnStartKnearestneighborAlgorithm, "cell 0 0,growx");
 		
 		JPanel panel_1 = new JPanel();
@@ -42,11 +46,16 @@ public class AlgorithmsPanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "startKNN":
-			
+			classifyByKNN();
 			break;
 		case "startKMEANS":
 			break;
 		}
-		
+	}
+	
+	private void classifyByKNN() {
+		KNN kNearestNeighborAlgorithm = new KNN();
+		kNearestNeighborAlgorithm.doAlgorithm(KNN.SQR_EUCLID, 20);
+		new KNNDialog();
 	}
 }
