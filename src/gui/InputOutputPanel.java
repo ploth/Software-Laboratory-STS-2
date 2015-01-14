@@ -88,7 +88,7 @@ public class InputOutputPanel extends JPanel {
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Classify data", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		add(panel_1, "cell 0 1,grow");
-		panel_1.setLayout(new MigLayout("", "[230.00][grow]", "[grow][][][]"));
+		panel_1.setLayout(new MigLayout("", "[230.00][grow]", "[grow][]"));
 		
 		JLabel lblNumberOfDataToClassify = new JLabel("Number of data to be classified:");
 		panel_1.add(lblNumberOfDataToClassify, "cell 0 0,alignx center");
@@ -100,19 +100,19 @@ public class InputOutputPanel extends JPanel {
 		lblNumOfDataToClassify = new JLabel("-");
 		panel_6.add(lblNumOfDataToClassify);
 		
-		JButton btnAddDataFromPNG = new JButton("Add new data from png");
-		panel_1.add(btnAddDataFromPNG, "cell 0 1 2 1,growx");
-		
-		JButton btnAddNewData = new JButton("Add new data from CSV");
-		panel_1.add(btnAddNewData, "cell 0 2 2 1,growx");
-		
 		JButton btnClassifyDataFrom = new JButton("Add new data from MNIST files");
 		btnClassifyDataFrom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				loadMNISTfiles(lblNumOfDataToClassify, false);
 			}
 		});
-		panel_1.add(btnClassifyDataFrom, "cell 0 3 2 1,growx");
+		panel_1.add(btnClassifyDataFrom, "flowy,cell 0 1 2 1,growx");
+		
+		JButton btnAddNewData = new JButton("Add new data from CSV");
+		panel_1.add(btnAddNewData, "cell 0 1 2 1,growx");
+		
+		JButton btnAddDataFromPNG = new JButton("Add new data from png");
+		panel_1.add(btnAddDataFromPNG, "cell 0 1 2 1,growx");
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Export database", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
