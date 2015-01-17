@@ -57,7 +57,8 @@ public class KdTreeHelper {
 		if (k > numberOfDatabaseElements) {
 			// TODO throw exception
 			// the k is greater than the number of database elements
-			System.err.println("NEED EXCEPTION HERE");
+			System.err
+					.println("HELLO I AM THE CREATESQREUCLIDKDTREEWITHRANDOMELEMENTSFROMDATABASE FUNCTION IN KDTREEHELPER. WE NEED A EXCEPTION HERE");
 		}
 		SqrEuclid<Character> seTree = new SqrEuclid<Character>(db_.getDim()
 				* db_.getDim(), sizeLimit_);
@@ -66,6 +67,16 @@ public class KdTreeHelper {
 					FIRST_DATABASE_INDEX, numberOfDatabaseElements));
 			indexes[i] = e.getIndex();
 			seTree.addPoint(e.getPixelsAsDouble(), (char) i);
+		}
+		return seTree;
+	}
+
+	public SqrEuclid<Character> createSqrEuclidKdTreeFromArray(
+			double[][] databaseElements) {
+		SqrEuclid<Character> seTree = new SqrEuclid<Character>(db_.getDim()
+				* db_.getDim(), sizeLimit_);
+		for (int clusterID = 0; clusterID < databaseElements.length; clusterID++) {
+			seTree.addPoint(databaseElements[clusterID], (char) clusterID);
 		}
 		return seTree;
 	}

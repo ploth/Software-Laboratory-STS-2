@@ -28,6 +28,13 @@ public class PERSTDatabase {
 													// (40kbytes)
 		db_ = new Database(storage_, false);
 		instance_ = this;
+
+		IterableIterator<DatabaseElement> iter = this.getDatabaseIterator();
+		while (iter.hasNext()) {
+			iter.next();
+			numberOfDatabaseElements_++;
+		}
+
 	}
 
 	private Database getDB() {
@@ -35,13 +42,6 @@ public class PERSTDatabase {
 	}
 
 	public Integer getNumberOfDatabaseElements() {
-		if (numberOfDatabaseElements_ == 0) {
-			IterableIterator<DatabaseElement> iter = this.getDatabaseIterator();
-			while (iter.hasNext()) {
-				iter.next();
-				numberOfDatabaseElements_++;
-			}
-		}
 		return numberOfDatabaseElements_;
 	}
 
@@ -125,6 +125,18 @@ public class PERSTDatabase {
 			// time2 = System.currentTimeMillis();
 			// System.out.println((time2 - time1));
 			return pixelsAsDouble;
+		}
+
+		public int[] getPixelsAsInteger() {
+			// long time1 = 0, time2 = 0;
+			// time1 = System.currentTimeMillis();
+			int[] pixelsAsInteger = new int[pixels.length];
+			for (int i = 0; i < pixelsAsInteger.length; i++) {
+				pixelsAsInteger[i] = pixels[i];
+			}
+			// time2 = System.currentTimeMillis();
+			// System.out.println((time2 - time1));
+			return pixelsAsInteger;
 		}
 
 		public boolean isTrainingdata() {

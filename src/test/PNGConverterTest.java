@@ -26,11 +26,11 @@ public class PNGConverterTest {
 		System.out.println("classification: "
 				+ (int) e.getCorrectClassification());
 		// print array
-		for (int k = 0; k < Math.sqrt(e.getPixels().length); k++) {
+		for (int r = 0; r < Math.sqrt(e.getPixels().length); r++) {
 			System.out.println();
-			for (int l = 0; l < Math.sqrt(e.getPixels().length); l++) {
-				System.out.print((int) e.getPixels()[k
-						* (int) Math.sqrt(e.getPixels().length) + l]);
+			for (int t = 0; t < Math.sqrt(e.getPixels().length); t++) {
+				System.out.print((int) e.getPixels()[r
+						* (int) Math.sqrt(e.getPixels().length) + t]);
 			}
 		}
 		png.write(e.getCorrectClassification(), e.getPixels(),
