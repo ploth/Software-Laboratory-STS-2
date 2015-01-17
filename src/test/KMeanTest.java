@@ -3,6 +3,9 @@ package test;
 import io.PERST_MNIST_Converter;
 
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import algorithm.KMean;
 import data.PERSTDatabase;
@@ -21,5 +24,8 @@ public class KMeanTest {
 		KMean kmean = new KMean();
 		kmean.doAlgorithm(KMean.SQR_EUCLID, 20);
 		db.closeDB();
+		String defaultDatabaseName_ = "perstdatabase.dbs";
+		Path path = FileSystems.getDefault().getPath(defaultDatabaseName_);
+		Files.delete(path);
 	}
 }

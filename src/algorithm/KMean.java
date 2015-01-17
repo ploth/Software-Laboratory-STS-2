@@ -37,10 +37,6 @@ public class KMean extends AbstractAlgorithm {
 		double[][] prototypes = new double[k][dim * dim];
 		double[][] prototypesNew = new double[k][dim * dim];
 
-		for (int i = 0; i < prototypesNew.length; i++) {
-			Arrays.fill(prototypesNew[i], 0);
-		}
-
 		// adding k random prototypes from database to the kdtree
 		SqrEuclid<Character> SETree = treeHelper
 				.createSqrEuclidKdTreeWithRandomElementsFromDatabase(k, indexes);
@@ -52,7 +48,9 @@ public class KMean extends AbstractAlgorithm {
 		}
 
 		while (adjustment >= MINIMUM_ADJUSTMENT && iterations <= MAX_ITERATIONS) {
-
+			for (int i = 0; i < prototypesNew.length; i++) {
+				Arrays.fill(prototypesNew[i], 0);
+			}
 			// iterate through every point
 			IterableIterator<DatabaseElement> iter = getDb_()
 					.getDatabaseIterator();
@@ -61,6 +59,8 @@ public class KMean extends AbstractAlgorithm {
 				// check distance to each prototype
 				clusterValue = SETree.nearestNeighbor(e.getPixelsAsDouble(),
 						LIST_SIZE, true).get(FIRST_LIST_ELEMENT).value;
+				System.out.println("assigned cluster value: "
+						+ (int) clusterValue);
 				// and set the cluster value.
 				// the cluster value is the value of the nearest prototype
 				e.setClusterValue(clusterValue);
@@ -73,6 +73,11 @@ public class KMean extends AbstractAlgorithm {
 				ArrayList<DatabaseElement> specificClusterAsList = specificCluster
 						.toList();
 				quantityOfThisCluster = specificClusterAsList.size();
+
+				// TODO: if quantityOfThisCluster == 0 break this iteration
+				// else division by zero
+				// System.out.println(quantityOfThisCluster);
+
 				// and calculate the arithmetic mean of each cluster
 				// iterate through each db element of current cluster
 				for (int m = 0; m < quantityOfThisCluster; m++) {
@@ -112,6 +117,14 @@ public class KMean extends AbstractAlgorithm {
 			}
 			// (2) calculate the arithmetic mean of the norms
 			adjustment = adjustment / k;
+
+			// prototypes=prototypesNew.clone();
+			for (int i = 0; i < prototypes.length; i++) {
+				for (int j = 0; j < prototypes[i].length; j++) {
+					prototypes[i][j] = prototypesNew[i][j];
+				}
+			}
+
 			iterations++;
 			// TODO debug
 			System.out.println("adjustment: " + adjustment);

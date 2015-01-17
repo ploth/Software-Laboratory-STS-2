@@ -74,9 +74,10 @@ public class KdTreeHelper {
 	public SqrEuclid<Character> createSqrEuclidKdTreeFromArray(
 			double[][] databaseElements) {
 		SqrEuclid<Character> seTree = new SqrEuclid<Character>(db_.getDim()
-				* db_.getDim(), sizeLimit_);
+				* db_.getDim(), databaseElements.length);
 		for (int clusterID = 0; clusterID < databaseElements.length; clusterID++) {
-			seTree.addPoint(databaseElements[clusterID], (char) clusterID);
+			double[] test = databaseElements[clusterID];
+			seTree.addPoint(test, (char) clusterID);
 		}
 		return seTree;
 	}
