@@ -47,11 +47,13 @@ public class DatabasePanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	private GraphicsPanel graphicsPanel;
+	private final JButton btnEnterClassification;
 	private JLabel lblClassification;
 	private JLabel lblDatacounter;
 	private JSpinner spnIndex;
 	private PERSTDatabase db_;
 	private int numOfDatabaseElements_;
+	private int currentIndex;
 	
 	public DatabasePanel() {
 		db_ = PERSTDatabase.getInstance();
@@ -62,6 +64,11 @@ public class DatabasePanel extends JPanel {
 			public void componentShown(ComponentEvent arg0) {
 				updateDatabaseState();
 				graphicsPanel.update(1); //Reset displayed number to first index
+				if(db_.getDatabaseElement(1).getCorrectClassification()==PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
+					btnEnterClassification.setEnabled(true);
+				} else {
+					btnEnterClassification.setEnabled(false);
+				}
 			}
 		});
 		
@@ -96,9 +103,9 @@ public class DatabasePanel extends JPanel {
 		}
 		spnIndex.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				int value = (int) spnIndex.getValue();
-				graphicsPanel.update(value); 
-				updateClassificationLabel(value);
+				currentIndex = (int) spnIndex.getValue();
+				graphicsPanel.update(currentIndex); 
+				updateClassificationLabel(currentIndex);
 			}
 		});
 		indexChooserPanel.add(spnIndex, "cell 1 0,growx");
@@ -106,11 +113,11 @@ public class DatabasePanel extends JPanel {
 		JPanel panelRight = new JPanel();
 		panelLeft.add(panelRight, "cell 0 3 2 1,grow");
 		panelRight.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panelRight.setLayout(new MigLayout("", "[grow][grow][grow]", "[170.00,grow][grow]"));
+		panelRight.setLayout(new MigLayout("", "[grow][152.00][grow]", "[173.00][][]"));
 		
 		JPanel panelImageOuter = new JPanel();
-		panelRight.add(panelImageOuter, "cell 1 0,alignx center,aligny bottom");
-		panelImageOuter.setLayout(new MigLayout("", "[140px]", "[150px]"));
+		panelRight.add(panelImageOuter, "cell 1 0,growx,aligny bottom");
+		panelImageOuter.setLayout(new MigLayout("", "[140px,grow]", "[150px]"));
 		
 		JPanel panelImageInner = new JPanel();
 		panelImageInner.setBorder(new TitledBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null), "Image", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
@@ -118,8 +125,8 @@ public class DatabasePanel extends JPanel {
 		panelImageInner.setLayout(new MigLayout("", "[grow]", "[grow]"));
 		
 		JPanel panelClassificationOuter = new JPanel();
-		panelRight.add(panelClassificationOuter, "cell 1 1,alignx center,aligny top");
-		panelClassificationOuter.setLayout(new MigLayout("", "[150px]", "[150px]"));
+		panelRight.add(panelClassificationOuter, "cell 1 1,growx,aligny top");
+		panelClassificationOuter.setLayout(new MigLayout("", "[150px,grow]", "[150px]"));
 		
 		JPanel panelClassificationInner = new JPanel();
 		panelClassificationInner.setForeground(Color.BLACK);
@@ -135,11 +142,26 @@ public class DatabasePanel extends JPanel {
 		graphicsPanel = new GraphicsPanel();
 		graphicsPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 		panelImageInner.add(graphicsPanel, "cell 0 0,grow");
+		
+		btnEnterClassification = new JButton("Enter classification");
+		btnEnterClassification.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				enterCorrectClassification();
+			}
+		});
+		btnEnterClassification.setActionCommand("");
+		panelRight.add(btnEnterClassification, "cell 1 2,growx");
 	}
 	
-	private void updateClassificationLabel(int value) {
-		int classification = db_.getDatabaseElement(value).getCorrectClassification();
-		lblClassification.setText(String.valueOf(classification));
+	private void updateClassificationLabel(int index) {
+		int classification = db_.getDatabaseElement(index).getCorrectClassification();
+		if(classification==PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
+			lblClassification.setText("-");
+			btnEnterClassification.setEnabled(true);
+		} else {
+			lblClassification.setText(String.valueOf(classification));
+			btnEnterClassification.setEnabled(false);
+		}
 	}
 	
 	private void updateDatabaseState() {
@@ -150,6 +172,21 @@ public class DatabasePanel extends JPanel {
 			spnIndex.setEnabled(true);
 			updateClassificationLabel(1);
 		}
+	}
+	
+	private void enterCorrectClassification() {
+		String enteredClassification_str = JOptionPane.showInputDialog("Enter correct classification");
+		if(enteredClassification_str==null) {
+			JOptionPane.showMessageDialog(new JFrame(), "Please enter a number between 0 and 9.");
+			return;
+		}
+		int enteredClassfication = Integer.valueOf(enteredClassification_str);
+		if(enteredClassfication < 0 || enteredClassfication > 9) {
+			JOptionPane.showMessageDialog(new JFrame(), "Please enter a number between 0 and 9!");
+			return;
+		}
+		db_.convertToCorrect(currentIndex, (char) enteredClassfication);
+		lblClassification.setText(enteredClassification_str);
 	}
 	
 	class GraphicsPanel extends JPanel {
