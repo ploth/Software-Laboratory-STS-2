@@ -15,7 +15,7 @@ public class KMean extends AbstractAlgorithm {
 
 	private static final int FIRST_LIST_ELEMENT = 0;
 	private static final int LIST_SIZE = 1;
-	private static final int MAX_ITERATIONS = 2; // 100000?
+	private static final int MAX_ITERATIONS = 40; // 100000?
 	private static final int MINIMUM_ADJUSTMENT = 0;
 
 	public KMean() {
@@ -97,8 +97,8 @@ public class KMean extends AbstractAlgorithm {
 									// end
 				int quantityOfThisCluster = specificClusterAsList.size();
 				// int quantityOfThisCluster = numbersOfEachCluster[i];
-				System.out.println("quantityOfASpecificCluster: "
-						+ quantityOfThisCluster);
+				// System.out.println("quantityOfASpecificCluster: "
+				// + quantityOfThisCluster);
 				for (int m = 0; m < quantityOfThisCluster; m++) {
 					// System.out.println("entered");
 					// each point of one specific cluster
