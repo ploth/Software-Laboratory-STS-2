@@ -55,11 +55,15 @@ public class InputOutputPanel extends JPanel implements ActionListener{
 		lblNumOfTrainingDataElements.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		pnlNumOfTrainingData.add(lblNumOfTrainingDataElements);
 		
-		JButton btnImportDataFrom = new JButton("Import data from MNIST files");
-		pnlTrainingData.add(btnImportDataFrom, "cell 0 1 2 1,growx");
+		JButton btnImportDataFromMNIST = new JButton("Import data from MNIST files");
+		btnImportDataFromMNIST.addActionListener(this);
+		btnImportDataFromMNIST.setActionCommand("importTrainingDataMNIST");
+		pnlTrainingData.add(btnImportDataFromMNIST, "cell 0 1 2 1,growx");
 		
-		JButton btnImportDataFrom_1 = new JButton("Import data from CSV");
-		pnlTrainingData.add(btnImportDataFrom_1, "flowy,cell 0 2 2 1,growx");
+		JButton btnImportDataFromCSV = new JButton("Import data from CSV");
+		btnImportDataFromCSV.addActionListener(this);
+		btnImportDataFromCSV.setActionCommand("importTrainingDataCSV");
+		pnlTrainingData.add(btnImportDataFromCSV, "flowy,cell 0 2 2 1,growx");
 		
 		JPanel pnlClassifyData = new JPanel();
 		pnlClassifyData.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Classify data", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -163,13 +167,35 @@ public class InputOutputPanel extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
-		case "importTrainingData":
+		case "importTrainingDataMNIST":
 			loadMNISTfiles(lblNumOfTrainingDataElements, true);
 			updateDataCounters();
 			break;
-		case "addDataToClassify":
+		case "importTrainingDataCSV":
+			//TODO add CSV code
+			JOptionPane.showMessageDialog(new JFrame(), "Import CSV");
+			updateDataCounters();
+			break;
+		case "addDataToClassifyFromMNIST":
 			loadMNISTfiles(lblNumOfDataToClassify, false);
 			updateDataCounters();
+			break;
+		case "addDataToClassifyFromCSV":
+			//TODO add CSV code
+			updateDataCounters();
+			break;
+		case "addDataToClassifyFromPNG":
+			//TODO add PNG code
+			updateDataCounters();
+			break;
+		case "exportToMNIST":
+			//TODO add MNIST export code
+			break;
+		case "exportToCSV":
+			//TODO add CSV export code
+			break;
+		case "exportToPNG":
+			//TODO add PNG export code
 			break;
 		default:
 			//TODO Throw exception?
