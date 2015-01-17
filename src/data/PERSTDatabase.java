@@ -17,8 +17,8 @@ public class PERSTDatabase {
 	private int dim_ = 0;
 	private static PERSTDatabase instance_;
 	private static String defaultDatabaseName_ = "perstdatabase.dbs";
-	public static final int NO_CORRECT_CLASSIFICATION = 1337;
-	public static final int NO_ALGORITHM_CLASSIFICATION = 42;
+	public static final char NO_CORRECT_CLASSIFICATION = 43;
+	public static final char NO_ALGORITHM_CLASSIFICATION = 42;
 	private static final int DEBUG_9000 = 9000;
 
 	private PERSTDatabase(String databaseName) {
@@ -73,10 +73,8 @@ public class PERSTDatabase {
 
 	public class DatabaseElement extends Persistent {
 
-		// 1337 for debugging
 		private int correctClassification = NO_CORRECT_CLASSIFICATION;// int to make query
 														// search possible
-		// 42 for debugging
 		private int algoClassification = NO_ALGORITHM_CLASSIFICATION; // int to make query seach
 													// possible
 		// 9000 for debugging
