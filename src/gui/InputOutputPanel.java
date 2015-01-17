@@ -1,6 +1,5 @@
 package gui;
 
-import io.ConverterException;
 import io.PERST_MNIST_Converter;
 
 import javax.swing.JButton;
@@ -26,8 +25,6 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
 public class InputOutputPanel extends JPanel implements ActionListener{
 	
