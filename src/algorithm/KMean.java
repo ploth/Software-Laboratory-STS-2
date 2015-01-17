@@ -138,8 +138,8 @@ public class KMean extends AbstractAlgorithm {
 
 				// debug
 				PERST_PNG_Converter.write((char) 1, prototypesNew[i],
-						"ArithmeticMean_Iteration_" + iterations + "_Cluster_"
-								+ i + ".png");
+						"Images/ArithmeticMean_Iteration_" + iterations
+								+ "_Cluster_" + i + ".png");
 				// i = k; // TODO REMOVE THIS!
 
 			}
