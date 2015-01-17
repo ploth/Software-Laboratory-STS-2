@@ -1,5 +1,7 @@
 package test;
 
+import io.PERST_MNIST_Converter;
+
 import java.io.IOException;
 
 import algorithm.KMean;
@@ -12,8 +14,8 @@ public class KMeanTest {
 		// System.out.println("numberOfDatabaseElements: "
 		// + db.getNumberOfDatabaseElements());
 		// init a database
-		// PERST_MNIST_Converter.read("ImageData/train-labels.idx1-ubyte",
-		// "ImageData/train-images.idx3-ubyte", 1, 60000, true);
+		PERST_MNIST_Converter.read("ImageData/train-labels.idx1-ubyte",
+				"ImageData/train-images.idx3-ubyte", 1, 1000, true);
 		System.out.println("numberOfDatabaseElements: "
 				+ db.getNumberOfDatabaseElements());
 		KMean kmean = new KMean();

@@ -15,7 +15,7 @@ public class KMean extends AbstractAlgorithm {
 
 	private static final int FIRST_LIST_ELEMENT = 0;
 	private static final int LIST_SIZE = 1;
-	private static final int MAX_ITERATIONS = 5;
+	private static final int MAX_ITERATIONS = 100;
 	private static final double MINIMUM_ADJUSTMENT = 0.1;
 
 	public KMean() {
@@ -29,7 +29,8 @@ public class KMean extends AbstractAlgorithm {
 		int dim = getDb_().getDim();
 		int iterations = 1;
 		int quantityOfThisCluster = 0;
-		double adjustment = 0;
+		double adjustment = MINIMUM_ADJUSTMENT; // looks wrong, but needed to
+												// enter while
 		double sum = 0;
 		double subtraction = 0;
 		int[] indexes = new int[k];
@@ -88,9 +89,9 @@ public class KMean extends AbstractAlgorithm {
 							/ quantityOfThisCluster;
 				}
 				// debug
-				PERST_PNG_Converter.write((char) 1, prototypesNew[i],
-						"Images/ArithmeticMean_Iteration_" + iterations
-								+ "_Cluster_" + i + ".png");
+				PERST_PNG_Converter.write((char) 1, prototypesNew[i], "Images/"
+						+ i + "/ArithmeticMean_Iteration_" + iterations
+						+ ".png");
 			}
 			// overwrite the old kdtree with the new prototypes
 			SETree = treeHelper.createSqrEuclidKdTreeFromArray(prototypesNew);
