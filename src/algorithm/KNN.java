@@ -31,14 +31,10 @@ public class KNN extends AbstractAlgorithm {
 		int greatestValue = 0;
 		int prediction = 0; // array position
 		double[] pixels;
-		long time1 = 0, time2 = 0;
 		while (uOI.hasNext()) {
 			e = uOI.next();
 			pixels = e.getPixelsAsDouble();
-
-			// time1 = System.currentTimeMillis();
 			list = SETree.nearestNeighbor(pixels, k, false);
-			// time2 = System.currentTimeMillis();
 
 			Arrays.fill(predictArray, 0);
 			for (int i = list.size() - 1; i >= 0; i--) {
@@ -53,7 +49,6 @@ public class KNN extends AbstractAlgorithm {
 			e.setAlgoClassification((char) prediction);
 			greatestValue = 0;
 			prediction = 0;
-			// System.out.println((time2 - time1));
 		}
 	}
 
@@ -69,14 +64,10 @@ public class KNN extends AbstractAlgorithm {
 		int greatestValue = 0;
 		int prediction = 0; // array position
 		double[] pixels;
-		long time1 = 0, time2 = 0;
 		while (uOI.hasNext()) {
 			e = uOI.next();
 			pixels = e.getPixelsAsDouble();
-
-			time1 = System.currentTimeMillis();
 			list = MTree.nearestNeighbor(pixels, k, false);
-			time2 = System.currentTimeMillis();
 
 			Arrays.fill(predictArray, 0);
 			for (int i = list.size() - 1; i >= 0; i--) {
@@ -91,7 +82,6 @@ public class KNN extends AbstractAlgorithm {
 			e.setAlgoClassification((char) prediction);
 			greatestValue = 0;
 			prediction = 0;
-			System.out.println((time2 - time1));
 		}
 	}
 }
