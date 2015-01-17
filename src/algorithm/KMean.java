@@ -98,6 +98,9 @@ public class KMean extends AbstractAlgorithm {
 						+ i + "/ArithmeticMean_Iteration_" + iterations
 						+ ".png");
 			}
+			for (int p = 0; p < prototypesNew.length; p++) {
+				System.out.println(prototypesNew[p][392]);
+			}
 			// overwrite the old kdtree with the new prototypes
 			SETree = treeHelper.createSqrEuclidKdTreeFromArray(prototypesNew);
 			// compare old and new prototypes
