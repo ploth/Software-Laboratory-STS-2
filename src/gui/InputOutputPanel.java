@@ -82,13 +82,15 @@ public class InputOutputPanel extends JPanel implements ActionListener{
 		
 		JButton btnClassifyDataFrom = new JButton("Add new data from MNIST files");
 		btnClassifyDataFrom.addActionListener(this);
-		btnClassifyDataFrom.setActionCommand("addDataToClassify");
+		btnClassifyDataFrom.setActionCommand("addDataToClassifyFromMNIST");
 		pnlClassifyData.add(btnClassifyDataFrom, "flowy,cell 0 1 2 1,growx");
 		
 		JButton btnAddNewData = new JButton("Add new data from CSV");
+		btnAddNewData.setActionCommand("addDataToClassifyFromCSV");
 		pnlClassifyData.add(btnAddNewData, "cell 0 1 2 1,growx");
 		
 		JButton btnAddDataFromPNG = new JButton("Add new data from png");
+		btnAddDataFromPNG.setActionCommand("addDataToClassifyFromPNG");
 		pnlClassifyData.add(btnAddDataFromPNG, "cell 0 1 2 1,growx");
 		
 		JPanel pnlExport = new JPanel();
@@ -97,12 +99,15 @@ public class InputOutputPanel extends JPanel implements ActionListener{
 		pnlExport.setLayout(new MigLayout("", "[grow]", "[][][]"));
 		
 		JButton btnExportDatabaseMNIST = new JButton("Export database to MNIST files");
+		btnExportDatabaseMNIST.setActionCommand("exportToMNIST");
 		pnlExport.add(btnExportDatabaseMNIST, "cell 0 0,growx");
 		
 		JButton btnExportDatabaseCSV = new JButton("Eport database to CSV file");
+		btnExportDatabaseCSV.setActionCommand("exportToCSV");
 		pnlExport.add(btnExportDatabaseCSV, "cell 0 1,growx");
 		
 		JButton btnExportDatabasePNG = new JButton("Export database to PNG files");
+		btnExportDatabasePNG.setActionCommand("exportToPNG");
 		pnlExport.add(btnExportDatabasePNG, "cell 0 2,growx");
 		
 		updateDataCounters();
