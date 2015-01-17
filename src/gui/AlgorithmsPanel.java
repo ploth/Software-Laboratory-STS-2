@@ -76,6 +76,6 @@ public class AlgorithmsPanel extends JPanel implements ActionListener{
 	private void classifyByKNN() {
 		KNN kNearestNeighborAlgorithm = new KNN();
 		kNearestNeighborAlgorithm.doAlgorithm(KNN.SQR_EUCLID, 20);
-		new KNNDialog();
+		new KNNResultDisplayDialog();
 	}
 }
