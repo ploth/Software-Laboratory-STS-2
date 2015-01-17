@@ -15,8 +15,8 @@ public class KMean extends AbstractAlgorithm {
 
 	private static final int FIRST_LIST_ELEMENT = 0;
 	private static final int LIST_SIZE = 1;
-	private static final int MAX_ITERATIONS = 40; // 100000?
-	private static final int MINIMUM_ADJUSTMENT = 0;
+	private static final int MAX_ITERATIONS = 5;
+	private static final double MINIMUM_ADJUSTMENT = 0.1;
 
 	public KMean() {
 
@@ -24,9 +24,9 @@ public class KMean extends AbstractAlgorithm {
 
 	@Override
 	public void doSqrEuclid(int k) {
-		// select k random prototypes and add them to kdtree
 		KdTreeHelper treeHelper = KdTreeHelper.getInstance();
 		int dim = getDb_().getDim();
+		int iterations = 1;
 		double adjustment = 0;
 		double sum = 0;
 		double subtraction = 0;
@@ -35,32 +35,24 @@ public class KMean extends AbstractAlgorithm {
 		double[][] prototypes = new double[k][dim * dim];
 		double[][] prototypesNew = new double[k][dim * dim];
 
-		// TODO remove
-		// for (int i = 0; i < pixelsNew.length; i++) {
-		// printCreepyArray(pixelsNew[i]);
-		// }
-
 		for (int i = 0; i < prototypesNew.length; i++) {
 			Arrays.fill(prototypesNew[i], 0);
 		}
+
+		// adding k random prototypes from database to the kdtree
 		SqrEuclid<Character> SETree = treeHelper
 				.createSqrEuclidKdTreeWithRandomElementsFromDatabase(k, indexes);
 
-		// get backup of the prototype positions
+		// save the prototype positions
 		for (int i = 0; i < prototypes.length; i++) {
 			prototypes[i] = getDb_().getDatabaseElement(indexes[i])
 					.getPixelsAsDouble();
 		}
-		// debug
-		// for (int i = 0; i < indexes.length; i++) {
-		// System.out.println((int) getDb_().getDatabaseElement(indexes[i])
-		// .getCorrectClassification());
-		// }
-		int iterations = 1;
+
 		while (adjustment >= MINIMUM_ADJUSTMENT && iterations <= MAX_ITERATIONS) {
 
-			// iterate through every point and check distance to k prototypes in
-			// kdtree and set the cluster value
+			// iterate through every point and check distance to each prototype
+			// and set the cluster value
 			// the cluster value is the value of the nearest prototype
 			IterableIterator<DatabaseElement> iter = getDb_()
 					.getDatabaseIterator();
@@ -72,33 +64,20 @@ public class KMean extends AbstractAlgorithm {
 				numbersOfEachCluster[clusterValue]++;
 				e.setClusterValue(clusterValue);
 			}
+
 			// backup the position of all k (vector)
 			// safe them in 2 dimensional array and the index is the cluster
 			// value
 
-			// debug
-			// for (int n = 0; n < numbersOfEachCluster.length; n++) {
-			// System.out.println("quantityOfASpecificCluster: "
-			// + numbersOfEachCluster[n]);
-			// }
-			// System.out.println();
-			// System.out.println();
-
-			// delete kdtree
-
 			// iterate through all points with cluster value 0, 1, 2, ...
 			for (int i = 0; i < k; i++) {
 				// and calculate arithmetic mean.
-				// System.out.println("cluster value: " + i);
 				IterableIterator<DatabaseElement> specificCluster = getDb_()
 						.getClusteredDatabaseIterator((char) i);
 				ArrayList<DatabaseElement> specificClusterAsList = specificCluster
 						.toList(); // after this command the iterator is at the
 									// end
 				int quantityOfThisCluster = specificClusterAsList.size();
-				// int quantityOfThisCluster = numbersOfEachCluster[i];
-				// System.out.println("quantityOfASpecificCluster: "
-				// + quantityOfThisCluster);
 				for (int m = 0; m < quantityOfThisCluster; m++) {
 					// System.out.println("entered");
 					// each point of one specific cluster
