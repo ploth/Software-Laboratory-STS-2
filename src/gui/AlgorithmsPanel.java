@@ -114,6 +114,6 @@ public class AlgorithmsPanel extends JPanel implements ActionListener{
 			kNearestNeighborAlgorithm.doAlgorithm(KNN.MANHATTAN, k);
 		}
 		
-		new KNNResultDisplayDialog();
+		new ResultDisplayDialog();
 	}
 }
