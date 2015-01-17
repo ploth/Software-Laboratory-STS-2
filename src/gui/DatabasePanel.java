@@ -61,6 +61,7 @@ public class DatabasePanel extends JPanel {
 			@Override
 			public void componentShown(ComponentEvent arg0) {
 				updateDatabaseState();
+				graphicsPanel.update(1); //Reset displayed number to first index
 			}
 		});
 		
@@ -134,8 +135,6 @@ public class DatabasePanel extends JPanel {
 		graphicsPanel = new GraphicsPanel();
 		graphicsPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 		panelImageInner.add(graphicsPanel, "cell 0 0,grow");
-		
-		//updateDatabaseState();
 	}
 	
 	private void updateClassificationLabel(int value) {
