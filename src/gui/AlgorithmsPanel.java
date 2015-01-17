@@ -1,8 +1,9 @@
 package gui;
 
-import java.awt.Font;
-
+import javax.swing.Icon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
@@ -14,12 +15,13 @@ import java.awt.event.ActionListener;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 
+import data.PERSTDatabase;
 import algorithm.KNN;
-import javax.swing.JLabel;
 
 public class AlgorithmsPanel extends JPanel implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
+	private final PERSTDatabase db = PERSTDatabase.getInstance();
 
 	public AlgorithmsPanel() {
 		setLayout(new MigLayout("", "[grow]", "[][]"));
@@ -74,8 +76,44 @@ public class AlgorithmsPanel extends JPanel implements ActionListener{
 	}
 	
 	private void classifyByKNN() {
+		if(db.getNumberOfCorrectDatabaseElements() == 0) {
+			JOptionPane.showMessageDialog(new JFrame(), "Please load some training data first!");
+			return;
+		} 
+		if(db.getNumberOfUncorrectDatabaseElements() == 0) {
+			JOptionPane.showMessageDialog(new JFrame(), "Please load some data to classify first!");
+			return;
+		}
+		String k_str = JOptionPane.showInputDialog(new JFrame(), "Enter a value for k.");
+		if(k_str==null) {
+			return;
+		}
+		int k = Integer.valueOf(k_str);
+		if(k<0) {
+			JOptionPane.showMessageDialog(new JFrame(), "Please choose a value above 0.");
+			return;
+		}
+		
+		String[] distanceCalculationMethods = {"Square-euclid","Manhattan"};
+		String chosenMethod = (String) JOptionPane.showInputDialog(
+				new JFrame(),
+				"Choose a distance measurement method:",
+				"Distance Measurement",
+				JOptionPane.QUESTION_MESSAGE,
+				null,
+				distanceCalculationMethods,
+				distanceCalculationMethods[0]);
+		if(chosenMethod==null) {
+			return;
+		}
+		
 		KNN kNearestNeighborAlgorithm = new KNN();
-		kNearestNeighborAlgorithm.doAlgorithm(KNN.SQR_EUCLID, 20);
-		new KNNResultDisplayDialog();
+		if(chosenMethod==distanceCalculationMethods[0]) {
+			kNearestNeighborAlgorithm.doAlgorithm(KNN.SQR_EUCLID, k);
+		} else if (chosenMethod==distanceCalculationMethods[1]) {
+			kNearestNeighborAlgorithm.doAlgorithm(KNN.MANHATTAN, k);
+		}
+		
+		new ResultDisplayDialog();
 	}
 }

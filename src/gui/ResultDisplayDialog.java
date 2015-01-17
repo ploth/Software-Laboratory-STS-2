@@ -29,10 +29,10 @@ import org.garret.perst.IterableIterator;
 import data.PERSTDatabase;
 import data.PERSTDatabase.DatabaseElement;
 import java.awt.Dimension;
-import java.awt.Dialog.ModalityType;
-import java.awt.Dialog.ModalExclusionType;
 
-public class KNNResultDisplayDialog extends JDialog implements ActionListener {
+public class ResultDisplayDialog extends JDialog implements ActionListener {
+
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private final GraphicsPanel graphicsPanel;
 	private final JButton btnNext;
@@ -49,7 +49,7 @@ public class KNNResultDisplayDialog extends JDialog implements ActionListener {
 	private static final int MIN_LABEL = 0;
 	private static final int MAX_LABEL = 9;
 
-	public KNNResultDisplayDialog() {
+	public ResultDisplayDialog() {
 		setModal(true);
 		setSize(new Dimension(450, 300));
 		setTitle("Results");
