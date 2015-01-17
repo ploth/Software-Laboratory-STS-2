@@ -1,5 +1,7 @@
 package main;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -23,7 +25,6 @@ public class OCRApp {
 	    catch (IllegalAccessException e) {
 	       // TODO handle exception
 	    }
-		
 		new Workbench("OCR Workbench");
 	}
 }

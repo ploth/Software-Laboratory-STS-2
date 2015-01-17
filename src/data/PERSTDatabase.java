@@ -17,8 +17,8 @@ public class PERSTDatabase {
 	private int dim_ = 0;
 	private static PERSTDatabase instance_;
 	private static String defaultDatabaseName_ = "perstdatabase.dbs";
-	private static final int DEBUG_1337 = 1337;
-	private static final int DEBUG_42 = 42;
+	public static final int NO_CORRECT_CLASSIFICATION = 1337;
+	public static final int NO_ALGORITHM_CLASSIFICATION = 42;
 	private static final int DEBUG_9000 = 9000;
 
 	private PERSTDatabase(String databaseName) {
@@ -74,10 +74,10 @@ public class PERSTDatabase {
 	public class DatabaseElement extends Persistent {
 
 		// 1337 for debugging
-		private int correctClassification = DEBUG_1337;// int to make query
+		private int correctClassification = NO_CORRECT_CLASSIFICATION;// int to make query
 														// search possible
 		// 42 for debugging
-		private int algoClassification = DEBUG_42; // int to make query seach
+		private int algoClassification = NO_ALGORITHM_CLASSIFICATION; // int to make query seach
 													// possible
 		// 9000 for debugging
 		private int clusterValue = DEBUG_9000; // int to make query seach
@@ -228,7 +228,7 @@ public class PERSTDatabase {
 
 	public IterableIterator<DatabaseElement> getInCorrectDatabaseIterator() {
 		return db_.<DatabaseElement> select(DatabaseElement.class,
-				"correctClassification = " + String.valueOf(DEBUG_1337));
+				"correctClassification = " + String.valueOf(NO_CORRECT_CLASSIFICATION));
 	}
 
 	public IterableIterator<DatabaseElement> getNonTrainingdataDatabaseIterator() {

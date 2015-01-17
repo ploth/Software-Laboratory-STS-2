@@ -61,13 +61,14 @@ public class DatabasePanel extends JPanel {
 			@Override
 			public void componentShown(ComponentEvent arg0) {
 				updateDatabaseState();
+				graphicsPanel.update(1); //Reset displayed number to first index
 			}
 		});
 		
 		JPanel panelLeft = new JPanel();
 		panelLeft.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Controls"));
 		add(panelLeft, "cell 0 0,grow");
-		panelLeft.setLayout(new MigLayout("", "[184.00,grow][grow]", "[][][][][grow]"));
+		panelLeft.setLayout(new MigLayout("", "[184.00,grow][grow]", "[][][][grow]"));
 		
 		JLabel lblNumberOfDataelements = new JLabel("Number of data elements in database:");
 		panelLeft.add(lblNumberOfDataelements, "cell 0 0");
@@ -75,32 +76,12 @@ public class DatabasePanel extends JPanel {
 		lblDatacounter = new JLabel("-");
 		panelLeft.add(lblDatacounter, "cell 1 0,alignx center");
 		
-		JButton btnDelete = new JButton("Delete database");
-		btnDelete.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if(numOfDatabaseElements_ > 0) {
-					try {
-						db_.deleteDatabase();
-						lblClassification.setText("-");
-						spnIndex.setModel(new SpinnerNumberModel(0, 0, 0, 0));
-						spnIndex.setEnabled(false);
-					} catch (IOException e) {
-						JOptionPane.showMessageDialog(new JFrame(),
-							    e.getMessage(),
-							    "IOException",
-							    JOptionPane.ERROR_MESSAGE);
-					}
-				}
-			}
-		});
-		panelLeft.add(btnDelete, "cell 0 1 2 1,growx");
-		
 		JSeparator separator = new JSeparator();
-		panelLeft.add(separator, "cell 0 2 2 1,growx");
+		panelLeft.add(separator, "cell 0 1 2 1,growx");
 		
 		JPanel indexChooserPanel = new JPanel();
 		indexChooserPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Display data", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelLeft.add(indexChooserPanel, "cell 0 3 2 1,grow");
+		panelLeft.add(indexChooserPanel, "cell 0 2 2 1,grow");
 		indexChooserPanel.setLayout(new MigLayout("", "[][grow]", "[]"));
 		
 		JLabel lblIndex = new JLabel("Index:");
@@ -123,7 +104,7 @@ public class DatabasePanel extends JPanel {
 		indexChooserPanel.add(spnIndex, "cell 1 0,growx");
 		
 		JPanel panelRight = new JPanel();
-		panelLeft.add(panelRight, "cell 0 4 2 1,grow");
+		panelLeft.add(panelRight, "cell 0 3 2 1,grow");
 		panelRight.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelRight.setLayout(new MigLayout("", "[grow][grow][grow]", "[170.00,grow][grow]"));
 		
@@ -154,8 +135,6 @@ public class DatabasePanel extends JPanel {
 		graphicsPanel = new GraphicsPanel();
 		graphicsPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 		panelImageInner.add(graphicsPanel, "cell 0 0,grow");
-		
-		//updateDatabaseState();
 	}
 	
 	private void updateClassificationLabel(int value) {

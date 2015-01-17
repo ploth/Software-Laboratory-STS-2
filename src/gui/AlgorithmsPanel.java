@@ -15,6 +15,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 
 import algorithm.KNN;
+import javax.swing.JLabel;
 
 public class AlgorithmsPanel extends JPanel implements ActionListener{
 
@@ -26,20 +27,26 @@ public class AlgorithmsPanel extends JPanel implements ActionListener{
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "k-nearest neighbors", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		add(panel, "cell 0 0,grow");
-		panel.setLayout(new MigLayout("", "[grow]", "[]"));
+		panel.setLayout(new MigLayout("", "[grow]", "[][]"));
 		
-		JButton btnStartKnearestneighborAlgorithm = new JButton("Start k-NN algorithm");
-		btnStartKnearestneighborAlgorithm.addActionListener(this);
-		btnStartKnearestneighborAlgorithm.setActionCommand("startKNN");
-		panel.add(btnStartKnearestneighborAlgorithm, "cell 0 0,growx");
+		JButton btnStartKNN = new JButton("Classify new data");
+		btnStartKNN.addActionListener(this);
+		
+		JButton btnStartTestRunKNN = new JButton("Start test run & Display statistics");
+		panel.add(btnStartTestRunKNN, "cell 0 0,growx");
+		btnStartKNN.setActionCommand("startKNN");
+		panel.add(btnStartKNN, "cell 0 1,growx");
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "k-means clustering", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		add(panel_1, "cell 0 1,grow");
-		panel_1.setLayout(new MigLayout("", "[grow]", "[]"));
+		panel_1.setLayout(new MigLayout("", "[grow]", "[][]"));
 		
-		JButton btnStartKmeansclusteringAlgorithm = new JButton("Start k-means clustering algorithm");
-		panel_1.add(btnStartKmeansclusteringAlgorithm, "cell 0 0,growx");
+		JButton btnStartTestRunKMeans = new JButton("Start test run & Display statistics");
+		panel_1.add(btnStartTestRunKMeans, "cell 0 0,growx");
+		
+		JButton btnStartKMeans = new JButton("Classify new data");
+		panel_1.add(btnStartKMeans, "cell 0 1,growx");
 	}
 
 	@Override
