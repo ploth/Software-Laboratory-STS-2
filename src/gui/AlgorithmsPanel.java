@@ -24,38 +24,51 @@ public class AlgorithmsPanel extends JPanel implements ActionListener{
 	public AlgorithmsPanel() {
 		setLayout(new MigLayout("", "[grow]", "[][]"));
 		
-		JPanel panel = new JPanel();
-		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "k-nearest neighbors", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		add(panel, "cell 0 0,grow");
-		panel.setLayout(new MigLayout("", "[grow]", "[][]"));
-		
-		JButton btnStartKNN = new JButton("Classify new data");
-		btnStartKNN.addActionListener(this);
+		JPanel pnlKNN = new JPanel();
+		pnlKNN.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "k-nearest neighbors", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		add(pnlKNN, "cell 0 0,grow");
+		pnlKNN.setLayout(new MigLayout("", "[grow]", "[][]"));
 		
 		JButton btnStartTestRunKNN = new JButton("Start test run & Display statistics");
-		panel.add(btnStartTestRunKNN, "cell 0 0,growx");
-		btnStartKNN.setActionCommand("startKNN");
-		panel.add(btnStartKNN, "cell 0 1,growx");
+		btnStartTestRunKNN.addActionListener(this);
+		btnStartTestRunKNN.setActionCommand("startKNNTest");
+		pnlKNN.add(btnStartTestRunKNN, "cell 0 0,growx");
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "k-means clustering", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		add(panel_1, "cell 0 1,grow");
-		panel_1.setLayout(new MigLayout("", "[grow]", "[][]"));
+		JButton btnClassifyByKNN = new JButton("Classify data");
+		btnClassifyByKNN.addActionListener(this);
+		btnClassifyByKNN.setActionCommand("classifyByKNN");
+		pnlKNN.add(btnClassifyByKNN, "cell 0 1,growx");
+		
+		JPanel pnlKMeans = new JPanel();
+		pnlKMeans.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "k-means clustering", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		add(pnlKMeans, "cell 0 1,grow");
+		pnlKMeans.setLayout(new MigLayout("", "[grow]", "[][]"));
 		
 		JButton btnStartTestRunKMeans = new JButton("Start test run & Display statistics");
-		panel_1.add(btnStartTestRunKMeans, "cell 0 0,growx");
+		btnStartTestRunKMeans.addActionListener(this);
+		btnStartTestRunKMeans.setActionCommand("startKMeansTest");
+		pnlKMeans.add(btnStartTestRunKMeans, "cell 0 0,growx");
 		
-		JButton btnStartKMeans = new JButton("Classify new data");
-		panel_1.add(btnStartKMeans, "cell 0 1,growx");
+		JButton btnClassifyByKMeans = new JButton("Classify data");
+		btnClassifyByKMeans.addActionListener(this);
+		btnClassifyByKMeans.setActionCommand("classifyByKMeans");
+		pnlKMeans.add(btnClassifyByKMeans, "cell 0 1,growx");
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
-		case "startKNN":
+		case "startKNNTest":
+			//TODO Write code for kNN test run
+			break;
+		case "classifyByKNN":
 			classifyByKNN();
 			break;
-		case "startKMEANS":
+		case "startKMeansTest":
+			//TODO Write code for kMeans test run
+			break;
+		case "classifyByKMeans":
+			//TODO Write code for kMeans classifying
 			break;
 		}
 	}
@@ -63,6 +76,6 @@ public class AlgorithmsPanel extends JPanel implements ActionListener{
 	private void classifyByKNN() {
 		KNN kNearestNeighborAlgorithm = new KNN();
 		kNearestNeighborAlgorithm.doAlgorithm(KNN.SQR_EUCLID, 20);
-		new KNNDialog();
+		new KNNResultDisplayDialog();
 	}
 }

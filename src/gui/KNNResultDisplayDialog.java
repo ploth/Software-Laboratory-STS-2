@@ -13,7 +13,9 @@ import java.awt.image.WritableRaster;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -26,11 +28,16 @@ import org.garret.perst.IterableIterator;
 
 import data.PERSTDatabase;
 import data.PERSTDatabase.DatabaseElement;
+import java.awt.Dimension;
+import java.awt.Dialog.ModalityType;
+import java.awt.Dialog.ModalExclusionType;
 
-public class KNNDialog extends JDialog implements ActionListener {
+public class KNNResultDisplayDialog extends JDialog implements ActionListener {
 	private final JPanel contentPanel = new JPanel();
 	private final GraphicsPanel graphicsPanel;
-	private final JButton btnConfirmNext;
+	private final JButton btnNext;
+	private final JButton btnEnterCorrectValue;
+	private final JButton btnDone;
 	private final JLabel lblclassifiedValue;
 	private final JLabel lblcorrectValue;
 	private final JLabel lblIndexNumber;
@@ -39,10 +46,15 @@ public class KNNDialog extends JDialog implements ActionListener {
 	private DatabaseElement currentElement_;
 	private int confirmedCounter_ = 0;
 	private final int numOfIncorrectElements_;
+	private static final int MIN_LABEL = 0;
+	private static final int MAX_LABEL = 9;
 
-	public KNNDialog() {
+	public KNNResultDisplayDialog() {
+		setModal(true);
+		setSize(new Dimension(450, 300));
+		setTitle("Results");
+		setResizable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setVisible(true);
 		setBounds(100, 100, 450, 300);
 
 		iter_ = db_.getNonTrainingdataDatabaseIterator();
@@ -95,50 +107,86 @@ public class KNNDialog extends JDialog implements ActionListener {
 		correctValueBorderPanel.add(lblcorrectValue, "cell 0 0,grow");
 
 		JPanel panel = new JPanel();
+		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPanel.add(panel, "cell 0 1,growx,aligny bottom");
-		panel.setLayout(new MigLayout("", "[][][135.00][grow]", "[]"));
+		panel.setLayout(new MigLayout("", "[][][135.00][116.00][50.00,grow]", "[]"));
 
-		btnConfirmNext = new JButton("Confirm & Next");
-		btnConfirmNext.addActionListener(this);
-		btnConfirmNext.setActionCommand("Confirm");
-		panel.add(btnConfirmNext, "cell 0 0");
-
-		JButton btnEnterCorrectValue = new JButton("Enter correct value");
-		btnEnterCorrectValue.addActionListener(this);
-		btnEnterCorrectValue.setActionCommand("Edit");
-		panel.add(btnEnterCorrectValue, "cell 1 0");
-
+		btnNext = new JButton("Next");
+		btnNext.addActionListener(this);
+		btnNext.setActionCommand("next");
+		panel.add(btnNext, "cell 0 0");
+		
 		JLabel lblIndex = new JLabel("Index:");
-		panel.add(lblIndex, "cell 2 0,alignx right");
-
+		panel.add(lblIndex, "cell 1 0,alignx right");
+		
 		lblIndexNumber = new JLabel("-/-");
-		panel.add(lblIndexNumber, "cell 3 0");
+		panel.add(lblIndexNumber, "cell 2 0");
+
+		btnEnterCorrectValue = new JButton("Enter correct classification");
+		btnEnterCorrectValue.addActionListener(this);
+		btnEnterCorrectValue.setActionCommand("enterCorrectValue");
+		panel.add(btnEnterCorrectValue, "cell 3 0");
+		
+		btnDone = new JButton("Done");
+		btnDone.addActionListener(this);
+		btnDone.setActionCommand("done");
+		btnDone.setEnabled(false);
+		panel.add(btnDone, "cell 4 0");
 
 		updateGUIState();
+		
+		setVisible(true);
 	}
 
 	private void updateGUIState() {
 		graphicsPanel.update();
 		lblclassifiedValue.setText(String.valueOf((int) currentElement_
 				.getAlgoClassification()));
-		lblcorrectValue.setText(String.valueOf((int) currentElement_
-				.getCorrectClassification()));
+		int correctClassfication = (int) currentElement_.getCorrectClassification();
+		if(correctClassfication == PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
+			lblcorrectValue.setText("-");
+			btnEnterCorrectValue.setEnabled(true);
+			
+		} else {
+			lblcorrectValue.setText(String.valueOf(correctClassfication));
+			btnEnterCorrectValue.setEnabled(false);
+		}
 		lblIndexNumber.setText((confirmedCounter_ + 1) + "/"
 				+ numOfIncorrectElements_);
 		if (!iter_.hasNext()) {
-			btnConfirmNext.setEnabled(false);
+			btnNext.setEnabled(false);
+			btnDone.setEnabled(true);
 		}
+	}
+	
+	private void enterCorrectClassification() {
+		String enteredClassification_str = JOptionPane.showInputDialog("Enter correct classification");
+		if(enteredClassification_str==null) {
+			JOptionPane.showMessageDialog(new JFrame(), "Please enter a number between 0 and 9.");
+			return;
+		}
+		int enteredClassfication = Integer.valueOf(enteredClassification_str);
+		if(enteredClassfication < MIN_LABEL || enteredClassfication > MAX_LABEL) {
+			JOptionPane.showMessageDialog(new JFrame(), "Please enter a number between 0 and 9!");
+			return;
+		}
+		db_.convertToCorrect(currentElement_.getIndex(), (char) enteredClassfication);
+		lblcorrectValue.setText(enteredClassification_str);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
-		case "Confirm":
+		case "done":
+			dispose();
+			break;
+		case "next":
 			currentElement_ = iter_.next();
 			confirmedCounter_++;
 			updateGUIState();
 			break;
-		case "Edit":
+		case "enterCorrectValue":
+			enterCorrectClassification();
 			break;
 		}
 	}
