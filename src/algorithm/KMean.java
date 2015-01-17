@@ -25,13 +25,14 @@ public class KMean extends AbstractAlgorithm {
 	@Override
 	public void doSqrEuclid(int k) {
 		KdTreeHelper treeHelper = KdTreeHelper.getInstance();
+		char clusterValue = 0;
 		int dim = getDb_().getDim();
 		int iterations = 1;
+		int quantityOfThisCluster = 0;
 		double adjustment = 0;
 		double sum = 0;
 		double subtraction = 0;
 		int[] indexes = new int[k];
-		int[] numbersOfEachCluster = new int[k];
 		double[][] prototypes = new double[k][dim * dim];
 		double[][] prototypesNew = new double[k][dim * dim];
 
@@ -51,100 +52,68 @@ public class KMean extends AbstractAlgorithm {
 
 		while (adjustment >= MINIMUM_ADJUSTMENT && iterations <= MAX_ITERATIONS) {
 
-			// iterate through every point and check distance to each prototype
-			// and set the cluster value
-			// the cluster value is the value of the nearest prototype
+			// iterate through every point
 			IterableIterator<DatabaseElement> iter = getDb_()
 					.getDatabaseIterator();
 			while (iter.hasNext()) {
 				DatabaseElement e = iter.next();
-				char clusterValue = SETree.nearestNeighbor(
-						e.getPixelsAsDouble(), LIST_SIZE, true).get(
-						FIRST_LIST_ELEMENT).value;
-				numbersOfEachCluster[clusterValue]++;
+				// check distance to each prototype
+				clusterValue = SETree.nearestNeighbor(e.getPixelsAsDouble(),
+						LIST_SIZE, true).get(FIRST_LIST_ELEMENT).value;
+				// and set the cluster value.
+				// the cluster value is the value of the nearest prototype
 				e.setClusterValue(clusterValue);
 			}
 
-			// backup the position of all k (vector)
-			// safe them in 2 dimensional array and the index is the cluster
-			// value
-
-			// iterate through all points with cluster value 0, 1, 2, ...
+			// iterate through cluster value 0, 1, 2, ...
 			for (int i = 0; i < k; i++) {
-				// and calculate arithmetic mean.
 				IterableIterator<DatabaseElement> specificCluster = getDb_()
 						.getClusteredDatabaseIterator((char) i);
 				ArrayList<DatabaseElement> specificClusterAsList = specificCluster
-						.toList(); // after this command the iterator is at the
-									// end
-				int quantityOfThisCluster = specificClusterAsList.size();
+						.toList();
+				quantityOfThisCluster = specificClusterAsList.size();
+				// and calculate the arithmetic mean of each cluster
+				// iterate through each db element of current cluster
 				for (int m = 0; m < quantityOfThisCluster; m++) {
-					// System.out.println("entered");
-					// each point of one specific cluster
 					DatabaseElement e = specificClusterAsList.get(m);
-					// DatabaseElement e = specificCluster.next();
-					// sum up all vectors of a specific cluster
-					// pixelsNew[i] = pixelsNew[i] + e.getPixels();
-					// vector addition not defined
-					// System.out.println(pixels[i].length);
-					for (int j = 0; j < prototypes[i].length; j++) {
+					// sum up the vectors of a specific cluster
+					for (int j = 0; j < prototypesNew[i].length; j++) {
 						prototypesNew[i][j] = (prototypesNew[i][j] + e
 								.getPixels()[j]);
 					}
-
-					// // TODO remove
-					// System.out.println("after summation");
-					// printCreepyArray(pixelsNew[i]);
-					//
-					// // TODO: remove
-					// System.out.println("after divide by "
-					// + quantityOfThisCluster);
-					// printCreepyArray(pixelsNew[i]);
-
 				}
-
-				// divide by the number of vectors of a specific cluster
-
-				for (int j = 0; j < prototypes[i].length; j++) {
-
-					double value = prototypesNew[i][j] / quantityOfThisCluster; // cut
-					// off
-					// after
-					// point
-					// System.out.println(value);
-					prototypesNew[i][j] = value;
+				// divide by the number of current cluster elements
+				for (int j = 0; j < prototypesNew[i].length; j++) {
+					prototypesNew[i][j] = prototypesNew[i][j]
+							/ quantityOfThisCluster;
 				}
-
 				// debug
 				PERST_PNG_Converter.write((char) 1, prototypesNew[i],
 						"Images/ArithmeticMean_Iteration_" + iterations
 								+ "_Cluster_" + i + ".png");
-				// i = k; // TODO REMOVE THIS!
-
 			}
-			// the arithmetic mean is to add to a new kdtree (overwrite the old
-			// one)
+			// overwrite the old kdtree with the new prototypes
 			SETree = treeHelper.createSqrEuclidKdTreeFromArray(prototypesNew);
-
-			// compare arithmetic means to old positions
-			// -> sum up all distances and divide by k (arithmetic mean)
-			// safe to adjustment value
-
+			// compare old and new prototypes
 			adjustment = 0;
 			sum = 0;
-			subtraction = 0;
 			for (int i = 0; i < prototypesNew.length; i++) {
 				for (int j = 0; j < prototypesNew[i].length; j++) {
+					// subtract the new prototypes from the old
 					subtraction = prototypes[i][j] - prototypesNew[i][j];
+					// (1) calculate the norm of each distance
 					sum = sum + subtraction * subtraction;
 				}
+				// (2) calculate the norm of each distance
+				// (1) calculate the arithmetic mean of the norms
 				adjustment = adjustment + Math.sqrt(sum);
 				sum = 0;
 			}
+			// (2) calculate the arithmetic mean of the norms
 			adjustment = adjustment / k;
+			iterations++;
 			// TODO debug
 			System.out.println("adjustment: " + adjustment);
-			iterations++;
 		}
 	}
 
@@ -152,18 +121,5 @@ public class KMean extends AbstractAlgorithm {
 	public void doManhattan(int k) {
 		// TODO Auto-generated method stub
 
-	}
-
-	// TODO: Remove
-	public void printCreepyArray(int[] array) {
-		for (int r = 0; r < (int) (Math.sqrt(array.length)); r++) {
-			System.out.println();
-			for (int t = 0; t < 28; t++) {
-				System.out
-						.print(array[r * (int) (Math.sqrt(array.length)) + t]);
-			}
-		}
-		System.out.println();
-		System.out.println();
 	}
 }
