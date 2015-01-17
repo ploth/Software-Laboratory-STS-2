@@ -55,32 +55,11 @@ public class InputOutputPanel extends JPanel implements ActionListener{
 		lblNumOfTrainingDataElements.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		pnlNumOfTrainingData.add(lblNumOfTrainingDataElements);
 		
-		JPanel pnlImportTrainingData = new JPanel();
-		pnlImportTrainingData.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Import data", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		pnlTrainingData.add(pnlImportTrainingData, "cell 0 1 2 1,grow");
-		pnlImportTrainingData.setLayout(new MigLayout("", "[grow]", "[][]"));
+		JButton btnImportDataFrom = new JButton("Import data from MNIST files");
+		pnlTrainingData.add(btnImportDataFrom, "cell 0 1 2 1,growx");
 		
-		final JButton btnImportMnistData = new JButton("Import MNIST data");
-		btnImportMnistData.addActionListener(this);
-		btnImportMnistData.setActionCommand("importTrainingData");
-		pnlImportTrainingData.add(btnImportMnistData, "flowy,cell 0 0,growx");
-		
-		JButton btnImportCSV = new JButton("Import from CSV");
-		pnlImportTrainingData.add(btnImportCSV, "cell 0 0,growx");
-		
-		JButton btnLearnFromPng = new JButton("Learn from PNG");
-		pnlImportTrainingData.add(btnLearnFromPng, "cell 0 1,growx");
-		
-		JPanel pnlModifyTrainingData = new JPanel();
-		pnlModifyTrainingData.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Modify data", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		pnlTrainingData.add(pnlModifyTrainingData, "cell 0 2 2 1,grow");
-		pnlModifyTrainingData.setLayout(new MigLayout("", "[grow]", "[][]"));
-		
-		JButton btnViewEditData = new JButton("View/Edit data");
-		pnlModifyTrainingData.add(btnViewEditData, "cell 0 0,growx");
-		
-		JButton btnDeleteData = new JButton("Delete data");
-		pnlModifyTrainingData.add(btnDeleteData, "cell 0 1,growx");
+		JButton btnImportDataFrom_1 = new JButton("Import data from CSV");
+		pnlTrainingData.add(btnImportDataFrom_1, "flowy,cell 0 2 2 1,growx");
 		
 		JPanel pnlClassifyData = new JPanel();
 		pnlClassifyData.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Classify data", TitledBorder.LEADING, TitledBorder.TOP, null, null));
