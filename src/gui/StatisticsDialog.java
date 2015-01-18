@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,28 +15,13 @@ import javax.swing.JLabel;
 
 public class StatisticsDialog extends JDialog implements ActionListener {
 	
+	private static final long serialVersionUID = 1L;
 	private static final int WIDTH = 450;
 	private static final int HEIGHT = 300;
-	private final String classificatorName;
-	private final String distanceMethodName;
-	private final int numTotalTestObjects;
-	private final int numTestObjectsPerClass;
-	private final int numTrainingElements;
-	private final int numTrainingElements_class;
-	private final int numWrongClassifications;
-
 	public StatisticsDialog(String classificatorName,
 			String distanceMethodName, int numTotalTestObjects,
 			int numTestObjectsPerClass, int numTrainingElements,
 			int numTrainingElements_class, int numWrongClassifications) {
-		this.classificatorName = classificatorName;
-		this.distanceMethodName = distanceMethodName;
-		this.numTotalTestObjects = numTotalTestObjects;
-		this.numTestObjectsPerClass = numTestObjectsPerClass;
-		this.numTrainingElements = numTrainingElements;
-		this.numTrainingElements_class = numTrainingElements_class;
-		this.numWrongClassifications = numWrongClassifications;
-		
 		setResizable(false);
 		setSize(WIDTH, HEIGHT);
 		setModal(true);
@@ -109,6 +93,7 @@ public class StatisticsDialog extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand()) {
 		case "displayWrongElements":
+			//TODO Write code for displaying the wrong elements
 			break;
 		case "done":
 			dispose();

@@ -1,6 +1,5 @@
 package gui;
 
-import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -61,7 +60,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "startKNNTest":
-			//TODO Write code for kNN test run
+			testKNN();
 			break;
 		case "classifyByKNN":
 			classifyByKNN();
@@ -88,18 +87,23 @@ public class AlgorithmsPanel extends JPanel implements ActionListener{
 		return false;
 	}
 	
-	private boolean inputAlgorithmParameters(int k, String distanceMeasurement) {
+	private int inputK() {
+		int k = 0;
 		String k_str = JOptionPane.showInputDialog(new JFrame(), "Enter a value for k.");
 		if(k_str==null) {
-			return false;
+			return 0;
 		}
 		k = Integer.valueOf(k_str);
 		if(k<0) {
 			JOptionPane.showMessageDialog(new JFrame(), "Please choose a value above 0.");
-			return false;
+			return 0;
 		}
+		return k;
+	}
+	
+	private String inputDistanceMeasurement() {
 		String[] distanceCalculationMethods = {"Square-euclid","Manhattan"};
-		distanceMeasurement = (String) JOptionPane.showInputDialog(
+		String distanceMeasurement = (String) JOptionPane.showInputDialog(
 				new JFrame(),
 				"Choose a distance measurement method:",
 				"Distance Measurement",
@@ -108,26 +112,42 @@ public class AlgorithmsPanel extends JPanel implements ActionListener{
 				distanceCalculationMethods,
 				distanceCalculationMethods[0]);
 		if(distanceMeasurement==null) {
-			return false;
+			return null;
 		}
-		return true;
+		return distanceMeasurement;
+	}
+	
+	private void testKNN() {
+		if(isDatabaseEmpty()) 
+			return;
+		int k = inputK();
+		
 	}
 	
 	private void classifyByKNN() {
+		if(launchKNN())
+			new ResultDisplayDialog();
+	}
+	
+	private boolean launchKNN() {
 		if(isDatabaseEmpty()) 
-			return;
-		int k = 0;
-		String distanceMeasurement = "";
-		boolean paramsSet = inputAlgorithmParameters(k, distanceMeasurement);
-		if(!paramsSet)
-			return;
+			return false;
+		int k = inputK();
+		String distanceMeasurement = inputDistanceMeasurement();
+		if(k==0 || distanceMeasurement==null) {
+			JOptionPane.showMessageDialog(new JFrame(), "Please set the algorithm parameters correctly");
+			return false;
+		}
 		KNN kNearestNeighborAlgorithm = new KNN();
 		if(distanceMeasurement=="Square-euclid") {
 			kNearestNeighborAlgorithm.doAlgorithm(KNN.SQR_EUCLID, k);
+			return true;
 		} else if (distanceMeasurement=="Manhattan") {
 			kNearestNeighborAlgorithm.doAlgorithm(KNN.MANHATTAN, k);
+			return true;
+		} else {
+			JOptionPane.showMessageDialog(new JFrame(), "Invalid distance measurement method chosen");
+			return false;
 		}
-		
-		new ResultDisplayDialog();
 	}
 }
