@@ -24,6 +24,8 @@ import data.PERSTDatabase;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.IOException;
 
 public class InputOutputPanel extends JPanel implements ActionListener{
@@ -35,6 +37,13 @@ public class InputOutputPanel extends JPanel implements ActionListener{
 	
 	public InputOutputPanel() {
 		setLayout(new MigLayout("", "[grow]", "[][][]"));
+		
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent arg0) {
+				updateDataCounters();
+			}
+		});
 		
 		JPanel pnlTrainingData = new JPanel();
 		pnlTrainingData.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Training data", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -157,13 +166,9 @@ public class InputOutputPanel extends JPanel implements ActionListener{
 	
 	private void updateDataCounters() {
 		int numOfTrainingDataElements = db_.getNumberOfCorrectDatabaseElements();
-		int numOfDataToClassify = db_.getNumberOfDatabaseElements() - numOfTrainingDataElements;
-		if(numOfTrainingDataElements > 0) {
-			lblNumOfTrainingDataElements.setText(String.valueOf(numOfTrainingDataElements));
-		}
-		if(numOfDataToClassify > 0) {
-			lblNumOfDataToClassify.setText(String.valueOf(numOfDataToClassify));
-		}
+		int numOfDataToClassify = db_.getNumberOfUncorrectDatabaseElements();
+		lblNumOfTrainingDataElements.setText(String.valueOf(numOfTrainingDataElements));
+		lblNumOfDataToClassify.setText(String.valueOf(numOfDataToClassify));
 	}
 
 	@Override
