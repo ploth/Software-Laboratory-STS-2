@@ -75,27 +75,31 @@ public class AlgorithmsPanel extends JPanel implements ActionListener{
 		}
 	}
 	
-	private void classifyByKNN() {
+	private boolean isDatabaseEmpty() {
+		
 		if(db.getNumberOfCorrectDatabaseElements() == 0) {
 			JOptionPane.showMessageDialog(new JFrame(), "Please load some training data first!");
-			return;
+			return true;
 		} 
 		if(db.getNumberOfUncorrectDatabaseElements() == 0) {
 			JOptionPane.showMessageDialog(new JFrame(), "Please load some data to classify first!");
-			return;
+			return true;
 		}
+		return false;
+	}
+	
+	private boolean inputAlgorithmParameters(int k, String distanceMeasurement) {
 		String k_str = JOptionPane.showInputDialog(new JFrame(), "Enter a value for k.");
 		if(k_str==null) {
-			return;
+			return false;
 		}
-		int k = Integer.valueOf(k_str);
+		k = Integer.valueOf(k_str);
 		if(k<0) {
 			JOptionPane.showMessageDialog(new JFrame(), "Please choose a value above 0.");
-			return;
+			return false;
 		}
-		
 		String[] distanceCalculationMethods = {"Square-euclid","Manhattan"};
-		String chosenMethod = (String) JOptionPane.showInputDialog(
+		distanceMeasurement = (String) JOptionPane.showInputDialog(
 				new JFrame(),
 				"Choose a distance measurement method:",
 				"Distance Measurement",
@@ -103,14 +107,24 @@ public class AlgorithmsPanel extends JPanel implements ActionListener{
 				null,
 				distanceCalculationMethods,
 				distanceCalculationMethods[0]);
-		if(chosenMethod==null) {
-			return;
+		if(distanceMeasurement==null) {
+			return false;
 		}
-		
+		return true;
+	}
+	
+	private void classifyByKNN() {
+		if(isDatabaseEmpty()) 
+			return;
+		int k = 0;
+		String distanceMeasurement = "";
+		boolean paramsSet = inputAlgorithmParameters(k, distanceMeasurement);
+		if(!paramsSet)
+			return;
 		KNN kNearestNeighborAlgorithm = new KNN();
-		if(chosenMethod==distanceCalculationMethods[0]) {
+		if(distanceMeasurement=="Square-euclid") {
 			kNearestNeighborAlgorithm.doAlgorithm(KNN.SQR_EUCLID, k);
-		} else if (chosenMethod==distanceCalculationMethods[1]) {
+		} else if (distanceMeasurement=="Manhattan") {
 			kNearestNeighborAlgorithm.doAlgorithm(KNN.MANHATTAN, k);
 		}
 		
