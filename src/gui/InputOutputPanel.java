@@ -166,7 +166,7 @@ public class InputOutputPanel extends JPanel implements ActionListener{
 	
 	private void updateDataCounters() {
 		int numOfTrainingDataElements = db_.getNumberOfCorrectDatabaseElements();
-		int numOfDataToClassify = db_.getNumberOfNoTrainingdataDatabaseElements();
+		int numOfDataToClassify = db_.getNumberOfNonTrainingdataDatabaseElements();
 		lblNumOfTrainingDataElements.setText(String.valueOf(numOfTrainingDataElements));
 		lblNumOfDataToClassify.setText(String.valueOf(numOfDataToClassify));
 	}
