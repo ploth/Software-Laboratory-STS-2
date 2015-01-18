@@ -1,5 +1,7 @@
 package algorithm;
 
+import io.PERST_PNG_Converter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -14,7 +16,7 @@ public class KMean extends AbstractAlgorithm {
 	private static final int FIRST_LIST_ELEMENT = 0;
 	private static final int LIST_SIZE = 1;
 	private static final int MAX_ITERATIONS = 100;
-	private static final double MINIMUM_ADJUSTMENT = 0;
+	private static final double MINIMUM_ADJUSTMENT = 0.1;
 
 	public KMean() {
 
@@ -33,18 +35,18 @@ public class KMean extends AbstractAlgorithm {
 		double subtraction = 0;
 		int[] indexes = new int[k];
 		double[][] prototypes = new double[k][dim * dim];
-
 		// adding k random prototypes from database to the kdtree
 		SqrEuclid<Character> SETree = treeHelper
 				.createSqrEuclidKdTreeWithRandomElementsFromDatabase(k, indexes);
-
 		// save the prototype positions
 		for (int i = 0; i < prototypes.length; i++) {
 			prototypes[i] = getDb_().getDatabaseElement(indexes[i])
 					.getPixelsAsDouble();
 		}
-
 		while (adjustment >= MINIMUM_ADJUSTMENT && iterations <= MAX_ITERATIONS) {
+			// important to init prototypesNew here again and not outside the
+			// while loop.
+			// otherwise much much errors cause of references
 			double[][] prototypesNew = new double[k][dim * dim];
 			for (int i = 0; i < prototypesNew.length; i++) {
 				Arrays.fill(prototypesNew[i], 0);
@@ -57,14 +59,10 @@ public class KMean extends AbstractAlgorithm {
 				// check distance to each prototype
 				clusterValue = SETree.nearestNeighbor(e.getPixelsAsDouble(),
 						LIST_SIZE, true).get(FIRST_LIST_ELEMENT).value;
-				// TODO remove syso
-				// System.out.println("assigned cluster value: "
-				// + (int) clusterValue);
 				// and set the cluster value.
 				// the cluster value is the value of the nearest prototype
 				e.setClusterValue(clusterValue);
 			}
-
 			// iterate through cluster value 0, 1, 2, ...
 			for (int i = 0; i < k; i++) {
 				IterableIterator<DatabaseElement> specificCluster = getDb_()
@@ -72,11 +70,9 @@ public class KMean extends AbstractAlgorithm {
 				ArrayList<DatabaseElement> specificClusterAsList = specificCluster
 						.toList();
 				quantityOfThisCluster = specificClusterAsList.size();
-
-				// TODO: if quantityOfThisCluster == 0 break this iteration
-				// else division by zero
-				// System.out.println(quantityOfThisCluster);
-
+				if (quantityOfThisCluster == 0)
+					break; // TODO: This could be a problem? It is a prevention
+							// to not to divide by zero
 				// and calculate the arithmetic mean of each cluster
 				// iterate through each db element of current cluster
 				for (int m = 0; m < quantityOfThisCluster; m++) {
@@ -89,30 +85,17 @@ public class KMean extends AbstractAlgorithm {
 						// System.out.println(prototypesNew[i][j]);
 					}
 				}
-
-				// TODO moveable debug blog
-				// for (int p = 0; p < prototypesNew.length; p++) {
-				// for (int o = 0; o < prototypesNew[p].length; o++) {
-				// if (Double.isNaN(prototypesNew[p][o])) {
-				// System.out.println("dick");
-				// }
-				// }
-				// }
-
 				// divide by the number of current cluster elements
 				for (int j = 0; j < prototypesNew[i].length; j++) {
 					prototypesNew[i][j] = prototypesNew[i][j]
 							/ quantityOfThisCluster;
 					// System.out.println(prototypesNew[i][j]);
 				}
-
 				// debug
-				// PERST_PNG_Converter.write((char) 1, prototypesNew[i],
-				// "Images/"
-				// + i + "/ArithmeticMean_Iteration_" + iterations
-				// + ".png");
+				PERST_PNG_Converter.write((char) 1, prototypesNew[i], "Images/"
+						+ i + "/ArithmeticMean_Iteration_" + iterations
+						+ ".png");
 			}
-
 			// overwrite the old kdtree with the new prototypes
 			SETree = treeHelper.createSqrEuclidKdTreeFromArray(prototypesNew);
 			// compare old and new prototypes
@@ -139,37 +122,10 @@ public class KMean extends AbstractAlgorithm {
 					prototypes[i][j] = prototypesNew[i][j];
 				}
 			}
-
 			iterations++;
 			// TODO debug
 			System.out.println("adjustment: " + adjustment);
 		}
-	}
-
-	// TODO: Remove
-	public void printCreepyArray(int[] array) {
-		for (int r = 0; r < (int) (Math.sqrt(array.length)); r++) {
-			System.out.println();
-			for (int t = 0; t < 28; t++) {
-				System.out
-						.print(array[r * (int) (Math.sqrt(array.length)) + t]);
-			}
-		}
-		System.out.println();
-		System.out.println();
-	}
-
-	// TODO: Remove
-	public void printCreepyArray(double[] array) {
-		for (int r = 0; r < (int) (Math.sqrt(array.length)); r++) {
-			System.out.println();
-			for (int t = 0; t < 28; t++) {
-				System.out
-						.print(array[r * (int) (Math.sqrt(array.length)) + t]);
-			}
-		}
-		System.out.println();
-		System.out.println();
 	}
 
 	@Override
