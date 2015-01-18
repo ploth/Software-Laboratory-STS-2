@@ -14,13 +14,39 @@ public class KMean extends AbstractAlgorithm {
 
 	private static final int FIRST_LIST_ELEMENT = 0;
 	private static final int LIST_SIZE = 1;
-	private static final int MAX_ITERATIONS = 100;
-	private static final double MINIMUM_ADJUSTMENT = 0.1;
+	private int maxIterations = 100;
+	private double deviation = 0.1;
 	private SqrEuclid<Character> sETree;
 	private Manhattan<Character> mTree;
+	private double[][] prototypesSqrEuclid;
+	private double[][] prototypesManhattan;
 
 	public KMean() {
 
+	}
+
+	public double[][] getPrototypesSqrEuclid() {
+		return prototypesSqrEuclid;
+	}
+
+	public double[][] getPrototypesManhattan() {
+		return prototypesManhattan;
+	}
+
+	public void setMaxIterations(int maxIterations) {
+		this.maxIterations = maxIterations;
+	}
+
+	public void setDeviation(double deviation) {
+		this.deviation = deviation;
+	}
+
+	public void classifyCluster(int clusterValue, char classification) {
+		IterableIterator<DatabaseElement> iter = getDb_()
+				.getClusteredDatabaseIterator(clusterValue);
+		while (iter.hasNext()) {
+			iter.next().setAlgoClassification(classification);
+		}
 	}
 
 	@Override
@@ -30,8 +56,8 @@ public class KMean extends AbstractAlgorithm {
 		int dim = getDb_().getDim();
 		int iterations = 1;
 		int quantityOfThisCluster = 0;
-		double adjustment = MINIMUM_ADJUSTMENT; // looks wrong, but needed to
-												// enter while
+		double adjustment = deviation; // looks wrong, but needed to
+										// enter while
 		double sum = 0;
 		double subtraction = 0;
 		int[] indexes = new int[k];
@@ -44,7 +70,7 @@ public class KMean extends AbstractAlgorithm {
 			prototypes[i] = getDb_().getDatabaseElement(indexes[i])
 					.getPixelsAsDouble();
 		}
-		while (adjustment >= MINIMUM_ADJUSTMENT && iterations <= MAX_ITERATIONS) {
+		while (adjustment >= deviation && iterations <= maxIterations) {
 			// important to init prototypesNew here again and not outside the
 			// while loop.
 			// otherwise much much errors cause of references
@@ -67,7 +93,7 @@ public class KMean extends AbstractAlgorithm {
 			// iterate through cluster value 0, 1, 2, ...
 			for (int i = 0; i < k; i++) {
 				IterableIterator<DatabaseElement> specificCluster = getDb_()
-						.getClusteredDatabaseIterator((char) i);
+						.getClusteredDatabaseIterator(i);
 				ArrayList<DatabaseElement> specificClusterAsList = specificCluster
 						.toList();
 				quantityOfThisCluster = specificClusterAsList.size();
@@ -129,6 +155,7 @@ public class KMean extends AbstractAlgorithm {
 			// + adjustment);
 			// iterations++;
 		}
+		prototypesSqrEuclid = prototypes.clone();
 	}
 
 	@Override
@@ -138,8 +165,8 @@ public class KMean extends AbstractAlgorithm {
 		int dim = getDb_().getDim();
 		int iterations = 1;
 		int quantityOfThisCluster = 0;
-		double adjustment = MINIMUM_ADJUSTMENT; // looks wrong, but needed to
-												// enter while
+		double adjustment = deviation; // looks wrong, but needed to
+										// enter while
 		double sum = 0;
 		double subtraction = 0;
 		int[] indexes = new int[k];
@@ -152,7 +179,7 @@ public class KMean extends AbstractAlgorithm {
 			prototypes[i] = getDb_().getDatabaseElement(indexes[i])
 					.getPixelsAsDouble();
 		}
-		while (adjustment >= MINIMUM_ADJUSTMENT && iterations <= MAX_ITERATIONS) {
+		while (adjustment >= deviation && iterations <= maxIterations) {
 			// important to init prototypesNew here again and not outside the
 			// while loop.
 			// otherwise much much errors cause of references
@@ -175,7 +202,7 @@ public class KMean extends AbstractAlgorithm {
 			// iterate through cluster value 0, 1, 2, ...
 			for (int i = 0; i < k; i++) {
 				IterableIterator<DatabaseElement> specificCluster = getDb_()
-						.getClusteredDatabaseIterator((char) i);
+						.getClusteredDatabaseIterator(i);
 				ArrayList<DatabaseElement> specificClusterAsList = specificCluster
 						.toList();
 				quantityOfThisCluster = specificClusterAsList.size();
@@ -237,5 +264,6 @@ public class KMean extends AbstractAlgorithm {
 			// + adjustment);
 			// iterations++;
 		}
+		prototypesManhattan = prototypes.clone();
 	}
 }

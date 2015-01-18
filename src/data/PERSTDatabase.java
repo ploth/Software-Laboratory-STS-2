@@ -34,7 +34,6 @@ public class PERSTDatabase {
 			iter.next();
 			numberOfDatabaseElements_++;
 		}
-
 	}
 
 	private Database getDB() {
@@ -73,10 +72,15 @@ public class PERSTDatabase {
 
 	public class DatabaseElement extends Persistent {
 
-		private int correctClassification = NO_CORRECT_CLASSIFICATION;// int to make query
-														// search possible
-		private int algoClassification = NO_ALGORITHM_CLASSIFICATION; // int to make query seach
-													// possible
+		private int correctClassification = NO_CORRECT_CLASSIFICATION;// int to
+																		// make
+																		// query
+		// search possible
+		private int algoClassification = NO_ALGORITHM_CLASSIFICATION; // int to
+																		// make
+																		// query
+																		// seach
+		// possible
 		// 9000 for debugging
 		private int clusterValue = DEBUG_9000; // int to make query seach
 												// possible
@@ -116,26 +120,18 @@ public class PERSTDatabase {
 		}
 
 		public double[] getPixelsAsDouble() {
-			// long time1 = 0, time2 = 0;
-			// time1 = System.currentTimeMillis();
 			double[] pixelsAsDouble = new double[pixels.length];
 			for (int i = 0; i < pixelsAsDouble.length; i++) {
 				pixelsAsDouble[i] = pixels[i];
 			}
-			// time2 = System.currentTimeMillis();
-			// System.out.println((time2 - time1));
 			return pixelsAsDouble;
 		}
 
 		public int[] getPixelsAsInteger() {
-			// long time1 = 0, time2 = 0;
-			// time1 = System.currentTimeMillis();
 			int[] pixelsAsInteger = new int[pixels.length];
 			for (int i = 0; i < pixelsAsInteger.length; i++) {
 				pixelsAsInteger[i] = pixels[i];
 			}
-			// time2 = System.currentTimeMillis();
-			// System.out.println((time2 - time1));
 			return pixelsAsInteger;
 		}
 
@@ -161,9 +157,7 @@ public class PERSTDatabase {
 		if (e.isTrainingdata() == false) {
 			e.setTrainingdata(true);
 			e.setCorrectClassification(correctClassification);
-			// System.out.println("debug: " + numberOfCorrectDatabaseElements_);
 			numberOfCorrectDatabaseElements_++;
-			// System.out.println("debug: " + numberOfCorrectDatabaseElements_);
 		}
 	}
 
@@ -195,26 +189,6 @@ public class PERSTDatabase {
 		return numberOfDatabaseElements_;
 	}
 
-	// // returns index
-	// public int createCorrectDatabaseElement(char correctClassification,
-	// char[] pixels) {
-	// numberOfDatabaseElements_++;
-	// DatabaseElement DatabaseElement = new DatabaseElement(pixels,
-	// numberOfDatabaseElements_, true);
-	// DatabaseElement.setCorrectClassification(correctClassification);
-	// return numberOfDatabaseElements_;
-	// }
-	//
-	// // returns index
-	// public int createAlgoDatabaseElement(char algoClassification, char[]
-	// pixels) {
-	// numberOfDatabaseElements_++;
-	// DatabaseElement DatabaseElement = new DatabaseElement(pixels,
-	// numberOfDatabaseElements_, false);
-	// DatabaseElement.setAlgoClassification(algoClassification);
-	// return numberOfDatabaseElements_;
-	// }
-
 	public IterableIterator<DatabaseElement> getDatabaseIterator() {
 		return db_.<DatabaseElement> getRecords(DatabaseElement.class);
 	}
@@ -225,8 +199,10 @@ public class PERSTDatabase {
 	}
 
 	public IterableIterator<DatabaseElement> getInCorrectDatabaseIterator() {
-		return db_.<DatabaseElement> select(DatabaseElement.class,
-				"correctClassification = " + String.valueOf(NO_CORRECT_CLASSIFICATION));
+		return db_.<DatabaseElement> select(
+				DatabaseElement.class,
+				"correctClassification = "
+						+ String.valueOf(NO_CORRECT_CLASSIFICATION));
 	}
 
 	public IterableIterator<DatabaseElement> getNonTrainingdataDatabaseIterator() {
@@ -235,18 +211,8 @@ public class PERSTDatabase {
 	}
 
 	public IterableIterator<DatabaseElement> getClusteredDatabaseIterator(
-			char clusterValue) {
-		String query = "clusterValue = " + String.valueOf((int) clusterValue);
-		IterableIterator<DatabaseElement> iterator = db_
-				.<DatabaseElement> select(DatabaseElement.class, query);
-		return iterator;
-	}
-
-	// TODO: remove?
-	public IterableIterator<DatabaseElement> queryDatabaseElements(
-			char classification) {
-		String query = "classification = "
-				+ String.valueOf((int) classification);
+			int clusterValue) {
+		String query = "clusterValue = " + String.valueOf(clusterValue);
 		IterableIterator<DatabaseElement> iterator = db_
 				.<DatabaseElement> select(DatabaseElement.class, query);
 		return iterator;

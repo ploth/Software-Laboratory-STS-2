@@ -26,6 +26,11 @@ public class KMeanTest {
 		kmean.doAlgorithm(KMean.SQR_EUCLID, 20);
 		long time2 = System.currentTimeMillis();
 		System.out.println((time2 - time1));
+		KMean kmean2 = new KMean();
+		long time3 = System.currentTimeMillis();
+		kmean2.doAlgorithm(KMean.MANHATTAN, 20);
+		long time4 = System.currentTimeMillis();
+		System.out.println((time4 - time3));
 		db.closeDB();
 		String defaultDatabaseName_ = "perstdatabase.dbs";
 		Path path = FileSystems.getDefault().getPath(defaultDatabaseName_);
