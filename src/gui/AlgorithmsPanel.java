@@ -80,7 +80,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener{
 			JOptionPane.showMessageDialog(new JFrame(), "Please load some training data first!");
 			return true;
 		} 
-		if(db.getNumberOfUncorrectDatabaseElements() == 0) {
+		if(db.getNumberOfNoTrainingdataDatabaseElements() == 0) {
 			JOptionPane.showMessageDialog(new JFrame(), "Please load some data to classify first!");
 			return true;
 		}

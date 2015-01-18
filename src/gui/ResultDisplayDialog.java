@@ -60,7 +60,7 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 
 		iter_ = db_.getNonTrainingdataDatabaseIterator();
 		currentElement_ = iter_.next();
-		numOfIncorrectElements_ = db_.getNumberOfUncorrectDatabaseElements();
+		numOfIncorrectElements_ = db_.getNumberOfNoTrainingdataDatabaseElements();
 
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

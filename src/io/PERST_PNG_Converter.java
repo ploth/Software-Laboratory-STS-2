@@ -12,13 +12,14 @@ public class PERST_PNG_Converter extends AbstractConverter {
 	private static final int BAND = 0;
 
 	public static void read(String path) throws IOException {
+		// TODO magic number party
 		File file = new File(path);
 		BufferedImage image = ImageIO.read(file);
 		WritableRaster wr = image.getRaster();
 		char pixels[] = new char[784];
 		for (int i = 0; i < 784; i++) {
-			int x = i / 28;
-			int y = i % 28;
+			int x = i % 28;
+			int y = i / 28;
 			pixels[i] = (char) wr.getSample(x, y, BAND);
 		}
 		getDb_().createUnclassifiedDatabaseElement(pixels);

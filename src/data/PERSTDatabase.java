@@ -51,7 +51,7 @@ public class PERSTDatabase {
 		return numberOfCorrectDatabaseElements_;
 	}
 
-	public Integer getNumberOfUncorrectDatabaseElements() {
+	public Integer getNumberOfNoTrainingdataDatabaseElements() {
 		return (getNumberOfDatabaseElements() - getNumberOfCorrectDatabaseElements());
 	}
 
