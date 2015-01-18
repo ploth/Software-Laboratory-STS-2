@@ -44,6 +44,7 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 	private final PERSTDatabase db_ = PERSTDatabase.getInstance();
 	private IterableIterator<DatabaseElement> iter_;
 	private DatabaseElement currentElement_;
+	private int currentlyEnteredClassification = PERSTDatabase.NO_CORRECT_CLASSIFICATION;
 	private int confirmedCounter_ = 0;
 	private final int numOfIncorrectElements_;
 	private static final int MIN_LABEL = 0;
@@ -64,7 +65,7 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(new MigLayout("", "[grow]", "[164.00][grow]"));
+		contentPanel.setLayout(new MigLayout("", "[grow]", "[154.00][grow]"));
 
 		JPanel panel_1 = new JPanel();
 		contentPanel.add(panel_1, "cell 0 0,grow");
@@ -154,6 +155,7 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 		} else {
 			lblcorrectValue.setText(String.valueOf(correctClassfication));
 			btnEnterCorrectValue.setEnabled(false);
+			currentlyEnteredClassification=correctClassfication;
 		}
 		lblIndexNumber.setText((confirmedCounter_ + 1) + "/"
 				+ numOfIncorrectElements_);
@@ -167,14 +169,14 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 		String enteredClassification_str = JOptionPane.showInputDialog("Enter correct classification");
 		if(enteredClassification_str==null) {
 			JOptionPane.showMessageDialog(new JFrame(), "Please enter a number between 0 and 9.");
+			currentlyEnteredClassification = PERSTDatabase.NO_CORRECT_CLASSIFICATION;
 			return;
 		}
-		int enteredClassfication = Integer.valueOf(enteredClassification_str);
-		if(enteredClassfication < MIN_LABEL || enteredClassfication > MAX_LABEL) {
+		currentlyEnteredClassification = Integer.valueOf(enteredClassification_str);
+		if(currentlyEnteredClassification < MIN_LABEL || currentlyEnteredClassification > MAX_LABEL) {
 			JOptionPane.showMessageDialog(new JFrame(), "Please enter a number between 0 and 9!");
 			return;
 		}
-		db_.convertToCorrect(currentElement_.getIndex(), (char) enteredClassfication);
 		lblcorrectValue.setText(enteredClassification_str);
 	}
 
@@ -182,11 +184,20 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "done":
+			if(currentlyEnteredClassification!=PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
+				db_.convertToCorrect(currentElement_.getIndex(), (char) currentlyEnteredClassification);
+				System.out.println("Converted to correct!");
+			}
 			dispose();
 			break;
 		case "next":
+			if(currentlyEnteredClassification!=PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
+				db_.convertToCorrect(currentElement_.getIndex(), (char) currentlyEnteredClassification);
+				System.out.println("Converted to correct!");
+			}
 			currentElement_ = iter_.next();
 			confirmedCounter_++;
+			currentlyEnteredClassification=PERSTDatabase.NO_CORRECT_CLASSIFICATION;
 			updateGUIState();
 			break;
 		case "enterCorrectValue":

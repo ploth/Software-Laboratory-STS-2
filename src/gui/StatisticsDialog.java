@@ -109,6 +109,7 @@ public class StatisticsDialog extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand()) {
 		case "displayWrongElements":
+			//TODO Write code for displaying the wrong elements
 			break;
 		case "done":
 			dispose();
