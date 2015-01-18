@@ -66,7 +66,7 @@ public class PERST_MNIST_Converter extends AbstractConverter {
 		return numberOfImages;
 	}
 
-	public void write(String writeLabelPath, String writeImagePath) {
+	public static void write(String writeLabelPath, String writeImagePath) {
 
 	}
 }
