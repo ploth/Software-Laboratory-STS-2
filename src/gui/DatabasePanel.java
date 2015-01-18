@@ -59,12 +59,14 @@ public class DatabasePanel extends JPanel {
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent arg0) {
-				updateDatabaseState();
-				graphicsPanel.update(1); //Reset displayed number to first index
-				if(db_.getDatabaseElement(1).getCorrectClassification()==PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
-					btnEnterClassification.setEnabled(true);
-				} else {
-					btnEnterClassification.setEnabled(false);
+				if(db_.getNumberOfDatabaseElements() > 0) {
+					updateDatabaseState();
+					graphicsPanel.update(1); //Reset displayed number to first index
+					if(db_.getDatabaseElement(1).getCorrectClassification()!=PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
+						btnEnterClassification.setEnabled(false);
+					} else {
+						btnEnterClassification.setEnabled(true);
+					}
 				}
 			}
 		});
@@ -147,6 +149,7 @@ public class DatabasePanel extends JPanel {
 			}
 		});
 		btnEnterClassification.setActionCommand("");
+		btnEnterClassification.setEnabled(false);
 		panelRight.add(btnEnterClassification, "cell 1 2,growx");
 	}
 	
