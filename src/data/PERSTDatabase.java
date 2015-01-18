@@ -31,7 +31,10 @@ public class PERSTDatabase {
 
 		IterableIterator<DatabaseElement> iter = this.getDatabaseIterator();
 		while (iter.hasNext()) {
-			iter.next();
+			DatabaseElement e = iter.next();
+			if (e.isTrainingdata()) {
+				numberOfCorrectDatabaseElements_++;
+			}
 			numberOfDatabaseElements_++;
 		}
 	}
@@ -45,14 +48,6 @@ public class PERSTDatabase {
 	}
 
 	public Integer getNumberOfCorrectDatabaseElements() {
-		if (numberOfCorrectDatabaseElements_ == 0) {
-			IterableIterator<DatabaseElement> iter = this
-					.getCorrectDatabaseIterator();
-			while (iter.hasNext()) {
-				iter.next();
-				numberOfCorrectDatabaseElements_++;
-			}
-		}
 		return numberOfCorrectDatabaseElements_;
 	}
 
