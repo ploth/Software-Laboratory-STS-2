@@ -71,19 +71,11 @@ public class PERSTDatabase {
 	}
 
 	public class DatabaseElement extends Persistent {
-
-		private int correctClassification = NO_CORRECT_CLASSIFICATION;// int to
-																		// make
-																		// query
-		// search possible
-		private int algoClassification = NO_ALGORITHM_CLASSIFICATION; // int to
-																		// make
-																		// query
-																		// seach
-		// possible
+		// values have to be int to make a query seach possible
+		private int correctClassification = NO_CORRECT_CLASSIFICATION;
+		private int algoClassification = NO_ALGORITHM_CLASSIFICATION;
 		// 9000 for debugging
-		private int clusterValue = DEBUG_9000; // int to make query seach
-												// possible
+		private int clusterValue = DEBUG_9000;
 		private char[] pixels;
 		private int index;
 		private boolean trainingdata;
