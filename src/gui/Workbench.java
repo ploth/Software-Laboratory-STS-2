@@ -20,7 +20,7 @@ public class Workbench extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final int WIDTH = 340;
-	private static final int HEIGHT = 620;
+	private static final int HEIGHT = 600;
 
 	private JPanel dataLoadingPanel_;
 	private JPanel databasePanel_;

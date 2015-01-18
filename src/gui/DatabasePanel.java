@@ -112,10 +112,10 @@ public class DatabasePanel extends JPanel {
 		JPanel panelRight = new JPanel();
 		panelLeft.add(panelRight, "cell 0 3 2 1,grow");
 		panelRight.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panelRight.setLayout(new MigLayout("", "[grow][152.00][grow]", "[173.00][][]"));
+		panelRight.setLayout(new MigLayout("", "[grow][152.00][grow]", "[167.00][][]"));
 		
 		JPanel panelImageOuter = new JPanel();
-		panelRight.add(panelImageOuter, "cell 1 0,growx,aligny bottom");
+		panelRight.add(panelImageOuter, "cell 1 0,growx,aligny top");
 		panelImageOuter.setLayout(new MigLayout("", "[140px,grow]", "[150px]"));
 		
 		JPanel panelImageInner = new JPanel();
