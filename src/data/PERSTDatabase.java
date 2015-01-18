@@ -185,13 +185,6 @@ public class PERSTDatabase {
 				"trainingdata = true");
 	}
 
-	public IterableIterator<DatabaseElement> getInCorrectDatabaseIterator() {
-		return db_.<DatabaseElement> select(
-				DatabaseElement.class,
-				"correctClassification = "
-						+ String.valueOf(NO_CORRECT_CLASSIFICATION));
-	}
-
 	public IterableIterator<DatabaseElement> getNonTrainingdataDatabaseIterator() {
 		return db_.<DatabaseElement> select(DatabaseElement.class,
 				"trainingdata = false");
