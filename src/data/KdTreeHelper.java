@@ -38,19 +38,6 @@ public class KdTreeHelper {
 		return seTree;
 	}
 
-	// for KMean (whole database incl. !trainingdata)
-	// public SqrEuclid<Character>
-	// createSqrEuclidKdTreeWithoutValuesFromDatabase() {
-	// IterableIterator<DatabaseElement> iter = db_.getDatabaseIterator();
-	// seTree_ = new SqrEuclid<Character>(db_.getDim() * db_.getDim(),
-	// sizeLimit_);
-	// while (iter.hasNext()) {
-	// DatabaseElement e = iter.next();
-	// seTree_.addPoint(e.getPixelsAsDouble(), (char) 0);
-	// }
-	// return seTree_;
-	// }
-
 	public SqrEuclid<Character> createSqrEuclidKdTreeWithRandomElementsFromDatabase(
 			int k, int[] indexes) {
 		int numberOfDatabaseElements = db_.getNumberOfDatabaseElements();
@@ -73,25 +60,11 @@ public class KdTreeHelper {
 
 	public SqrEuclid<Character> createSqrEuclidKdTreeFromArray(
 			double[][] databaseElements) {
-		// TODO remove
-		// for (int p = 0; p < databaseElements.length; p++) {
-		// for (int o = 0; o < databaseElements[p].length; o++) {
-		// // if (Double.isNaN(databaseElements[p][o])) {
-		// // System.out.println("Knoblauchtastatur mir Speckflasche");
-		// // }
-		// System.out.println(databaseElements[p][o]);
-		// }
-		// }
 		SqrEuclid<Character> seTree = new SqrEuclid<Character>(db_.getDim()
 				* db_.getDim(), databaseElements.length);
 		for (int clusterID = 0; clusterID < databaseElements.length; clusterID++) {
-			double[] test = databaseElements[clusterID];
-			seTree.addPoint(test, (char) clusterID);
-			// for(z=0; z<test.length; z++){
-			// System.out.println();
-			// }
+			seTree.addPoint(databaseElements[clusterID], (char) clusterID);
 		}
-
 		return seTree;
 	}
 
@@ -107,18 +80,35 @@ public class KdTreeHelper {
 		return mTree;
 	}
 
-	// for KMean (whole database incl. !trainingdata)
-	// public Manhattan<Character>
-	// createManhattenKdTreeWithoutValuesFromDatabase() {
-	// IterableIterator<DatabaseElement> iter = db_.getDatabaseIterator();
-	// mTree_ = new Manhattan<Character>(db_.getDim() * db_.getDim(),
-	// sizeLimit_);
-	// while (iter.hasNext()) {
-	// DatabaseElement e = iter.next();
-	// mTree_.addPoint(e.getPixelsAsDouble(), (char) 0);
-	// }
-	// return mTree_;
-	// }
+	public Manhattan<Character> createManhattanKdTreeWithRandomElementsFromDatabase(
+			int k, int[] indexes) {
+		int numberOfDatabaseElements = db_.getNumberOfDatabaseElements();
+		if (k > numberOfDatabaseElements) {
+			// TODO throw exception
+			// the k is greater than the number of database elements
+			System.err
+					.println("HELLO I AM THE CREATESQREUCLIDKDTREEWITHRANDOMELEMENTSFROMDATABASE FUNCTION IN KDTREEHELPER. WE NEED A EXCEPTION HERE");
+		}
+		Manhattan<Character> mTree = new Manhattan<Character>(db_.getDim()
+				* db_.getDim(), sizeLimit_);
+		for (int i = 0; i < k; i++) {
+			DatabaseElement e = db_.getDatabaseElement(randomIntInRange(
+					FIRST_DATABASE_INDEX, numberOfDatabaseElements));
+			indexes[i] = e.getIndex();
+			mTree.addPoint(e.getPixelsAsDouble(), (char) i);
+		}
+		return mTree;
+	}
+
+	public Manhattan<Character> createManhattanKdTreeFromArray(
+			double[][] databaseElements) {
+		Manhattan<Character> mTree = new Manhattan<Character>(db_.getDim()
+				* db_.getDim(), databaseElements.length);
+		for (int clusterID = 0; clusterID < databaseElements.length; clusterID++) {
+			mTree.addPoint(databaseElements[clusterID], (char) clusterID);
+		}
+		return mTree;
+	}
 
 	public int randomIntInRange(int min, int max) {
 		Random rand = new Random();

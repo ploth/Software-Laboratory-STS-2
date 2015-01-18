@@ -31,8 +31,6 @@ public class PERST_MNIST_Converter extends AbstractConverter {
 			System.exit(0);
 		}
 		int numberOfLabels = labels.readInt();
-		// debug
-		// System.out.println("numLabels: " + numLabels);
 		int numberOfImages = images.readInt();
 		int numberOfRows = images.readInt();
 		int numberOfColumns = images.readInt();
@@ -50,17 +48,17 @@ public class PERST_MNIST_Converter extends AbstractConverter {
 			System.exit(0);
 		}
 		int numPixels = numberOfRows * numberOfColumns;
-		images.skipBytes(28*28*(rangeStart-1));
-		labels.skipBytes((rangeStart-1));
+		images.skipBytes(28 * 28 * (rangeStart - 1));
+		labels.skipBytes((rangeStart - 1));
 		int dataCount = 0;
-		while ((labels.available() > 0) && dataCount <= (rangeEnd-rangeStart)) {
+		while ((labels.available() > 0) && dataCount <= (rangeEnd - rangeStart)) {
 			char classification = (char) labels.readByte();
 			char[] pixels = new char[numPixels];
 			for (int i = 0; i < numPixels; i++) {
 				pixels[i] = (char) images.readUnsignedByte();
 			}
 			getDb_().createCorrectDatabaseElement(classification, pixels,
-						trainingdata);
+					trainingdata);
 			dataCount++;
 		}
 		labels.close();
