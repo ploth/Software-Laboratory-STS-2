@@ -10,15 +10,21 @@ import net.miginfocom.swing.MigLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 
+import org.garret.perst.IterableIterator;
+
 import data.PERSTDatabase;
+import data.PERSTDatabase.DatabaseElement;
 import algorithm.KNN;
 
 public class AlgorithmsPanel extends JPanel implements ActionListener{
 
+	private String chosenDistaneMeasurementMethod;
+	private int chosenParameterK;
 	private static final long serialVersionUID = 1L;
 	private final PERSTDatabase db = PERSTDatabase.getInstance();
 
@@ -102,7 +108,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener{
 	}
 	
 	private String inputDistanceMeasurement() {
-		String[] distanceCalculationMethods = {"Square-euclid","Manhattan"};
+		String[] distanceCalculationMethods = {"Euclid","Manhattan"};
 		String distanceMeasurement = (String) JOptionPane.showInputDialog(
 				new JFrame(),
 				"Choose a distance measurement method:",
@@ -111,17 +117,54 @@ public class AlgorithmsPanel extends JPanel implements ActionListener{
 				null,
 				distanceCalculationMethods,
 				distanceCalculationMethods[0]);
-		if(distanceMeasurement==null) {
-			return null;
-		}
 		return distanceMeasurement;
 	}
 	
 	private void testKNN() {
-		if(isDatabaseEmpty()) 
-			return;
-		int k = inputK();
+		int numTotalTestObjects = db.getNumberOfUncorrectDatabaseElements();
+		//TODO Remove getincorrectDatabaseIterator
+		IterableIterator<DatabaseElement> iter_test = db.getNonTrainingdataDatabaseIterator();
+		int[] testObjectsPerClass = new int[10];
+		Arrays.fill(testObjectsPerClass, 0);
+		int numOfWrongObjects = 0;
+		int meanSquaredError = 0;
+		while(iter_test.hasNext()) {
+			DatabaseElement e = iter_test.next();
+			int classValue = e.getCorrectClassification();
+			int algoValue = e.getAlgoClassification();
+			if(classValue!=algoValue) {
+				numOfWrongObjects++;
+				int meanSquaredError_temp = classValue - algoValue;
+				meanSquaredError_temp*=meanSquaredError_temp;
+				meanSquaredError+=meanSquaredError_temp;
+			}
+			testObjectsPerClass[classValue]++;
+		}
+		meanSquaredError = meanSquaredError / numTotalTestObjects;
+		int numTotalTrainingObjects = db.getNumberOfCorrectDatabaseElements();
+		int[] trainingObjectsPerClass = new int[10];
+		Arrays.fill(trainingObjectsPerClass, 0);
+		IterableIterator<DatabaseElement> iter_training = db.getCorrectDatabaseIterator();
+		while(iter_training.hasNext()) {
+			DatabaseElement e = iter_training.next();
+			int classValue = e.getCorrectClassification();
+			trainingObjectsPerClass[classValue]++;
+		}
 		
+		
+		if(launchKNN()) {
+			new StatisticsDialog(
+					"k-Nearest-Neighbor", 
+					chosenDistaneMeasurementMethod, 
+					chosenParameterK, 
+					numTotalTestObjects, 
+					testObjectsPerClass, 
+					numTotalTrainingObjects, 
+					trainingObjectsPerClass, 
+					numOfWrongObjects,
+					meanSquaredError
+					);
+		}
 	}
 	
 	private void classifyByKNN() {
@@ -132,18 +175,18 @@ public class AlgorithmsPanel extends JPanel implements ActionListener{
 	private boolean launchKNN() {
 		if(isDatabaseEmpty()) 
 			return false;
-		int k = inputK();
-		String distanceMeasurement = inputDistanceMeasurement();
-		if(k==0 || distanceMeasurement==null) {
+		chosenParameterK = inputK();
+		chosenDistaneMeasurementMethod = inputDistanceMeasurement();
+		if(chosenParameterK==0 || chosenDistaneMeasurementMethod==null) {
 			JOptionPane.showMessageDialog(new JFrame(), "Please set the algorithm parameters correctly");
 			return false;
 		}
 		KNN kNearestNeighborAlgorithm = new KNN();
-		if(distanceMeasurement=="Square-euclid") {
-			kNearestNeighborAlgorithm.doAlgorithm(KNN.SQR_EUCLID, k);
+		if(chosenDistaneMeasurementMethod=="Euclid") {
+			kNearestNeighborAlgorithm.doAlgorithm(KNN.SQR_EUCLID, chosenParameterK);
 			return true;
-		} else if (distanceMeasurement=="Manhattan") {
-			kNearestNeighborAlgorithm.doAlgorithm(KNN.MANHATTAN, k);
+		} else if (chosenDistaneMeasurementMethod=="Manhattan") {
+			kNearestNeighborAlgorithm.doAlgorithm(KNN.MANHATTAN, chosenParameterK);
 			return true;
 		} else {
 			JOptionPane.showMessageDialog(new JFrame(), "Invalid distance measurement method chosen");
