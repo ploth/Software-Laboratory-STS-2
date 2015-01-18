@@ -13,26 +13,22 @@ import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
-import javax.swing.JTable;
-import javax.swing.UIManager;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.SwingConstants;
 
 public class StatisticsDialog extends JDialog implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
-	private static final int WIDTH = 450;
-	private static final int HEIGHT = 300;
+	private static final int WIDTH = 480;
+	private static final int HEIGHT = 400;
 	
 	public StatisticsDialog(String classificatorName,
-			String distanceMethodName, int numTotalTestObjects,
+			String distanceMethodName, int k, int numTotalTestObjects,
 			int[] numTestObjectsPerClass, int numTrainingElements,
-			int numTrainingElements_class, int numWrongClassifications) {
+			int[] numTrainingElementsPerClass, int numWrongClassifications, int meanSquaredError) {
 		setResizable(false);
-		setSize(480, 350);
+		setSize(WIDTH, HEIGHT);
 		setLocationRelativeTo(null);
 		setModal(true);
 		setTitle("Algorithm test run statistics");
@@ -42,7 +38,7 @@ public class StatisticsDialog extends JDialog implements ActionListener {
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Results", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		getContentPane().add(panel, "cell 0 0 2 1,grow");
-		panel.setLayout(new MigLayout("", "[grow][]", "[][][][][][][][grow][][]"));
+		panel.setLayout(new MigLayout("", "[156.00,grow][]", "[][][][][][][][][][][][]"));
 		
 		JLabel lblClassificatorAlgorithm = new JLabel("Classificator algorithm:");
 		panel.add(lblClassificatorAlgorithm, "cell 0 0");
@@ -56,19 +52,25 @@ public class StatisticsDialog extends JDialog implements ActionListener {
 		JLabel lblDistanceMethodName = new JLabel(distanceMethodName);
 		panel.add(lblDistanceMethodName, "cell 1 1");
 		
+		JLabel lblParameterK = new JLabel("Parameter k:");
+		panel.add(lblParameterK, "cell 0 2");
+		
+		JLabel lblParameterK_number = new JLabel(String.valueOf(k));
+		panel.add(lblParameterK_number, "cell 1 2");
+		
 		JSeparator separator = new JSeparator();
-		panel.add(separator, "cell 0 2 2 1,growx");
+		panel.add(separator, "cell 0 3 2 1,growx");
 		
 		JLabel lblNumberOfTotal = new JLabel("Number of total test objects:");
-		panel.add(lblNumberOfTotal, "cell 0 3");
+		panel.add(lblNumberOfTotal, "flowx,cell 0 4");
 		
 		JLabel lblNumTotalTestObjects = new JLabel(String.valueOf(numTotalTestObjects));
-		panel.add(lblNumTotalTestObjects, "cell 1 3");
+		panel.add(lblNumTotalTestObjects, "cell 1 4");
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Test objects per class:", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panel.add(panel_1, "cell 0 4 2 1,grow");
-		panel_1.setLayout(new MigLayout("", "[grow][grow][][grow][][grow][][grow][][grow][][grow][-36.00][30.00,grow][2.00][23.00,grow][-11.00][45.00,grow][-21.00][1.00][21.00,grow]", "[][][]"));
+		panel.add(panel_1, "cell 0 5 2 1,grow");
+		panel_1.setLayout(new MigLayout("", "[][grow][][grow][][grow][][grow][][grow][][grow][-36.00][grow][2.00][grow][-11.00][grow][-21.00][1.00][grow]", "[][][]"));
 		
 		JLabel lblClass = new JLabel("Class:");
 		panel_1.add(lblClass, "cell 0 0,alignx right");
@@ -146,48 +148,48 @@ public class StatisticsDialog extends JDialog implements ActionListener {
 		JLabel lblelements = new JLabel("#elements:");
 		panel_1.add(lblelements, "cell 0 2");
 		
-		JLabel lblTest = new JLabel("test0");
+		JLabel lblTest = new JLabel(String.valueOf(numTestObjectsPerClass[0]));
 		panel_1.add(lblTest, "cell 1 2,alignx center");
 		
-		JLabel lblTest_1 = new JLabel("test1");
+		JLabel lblTest_1 = new JLabel(String.valueOf(numTestObjectsPerClass[1]));
 		panel_1.add(lblTest_1, "cell 3 2,alignx center");
 		
-		JLabel lblTest_2 = new JLabel("test2");
+		JLabel lblTest_2 = new JLabel(String.valueOf(numTestObjectsPerClass[2]));
 		panel_1.add(lblTest_2, "cell 5 2,alignx center");
 		
-		JLabel lblTest_3 = new JLabel("test3");
+		JLabel lblTest_3 = new JLabel(String.valueOf(numTestObjectsPerClass[3]));
 		panel_1.add(lblTest_3, "cell 7 2,alignx center");
 		
-		JLabel lblTest_4 = new JLabel("test4");
+		JLabel lblTest_4 = new JLabel(String.valueOf(numTestObjectsPerClass[4]));
 		panel_1.add(lblTest_4, "cell 9 2,alignx center");
 		
-		JLabel lblTest_5 = new JLabel("test5");
+		JLabel lblTest_5 = new JLabel(String.valueOf(numTestObjectsPerClass[5]));
 		panel_1.add(lblTest_5, "cell 11 2,alignx center");
 		
-		JLabel lblTest_6 = new JLabel("test6");
+		JLabel lblTest_6 = new JLabel(String.valueOf(numTestObjectsPerClass[6]));
 		panel_1.add(lblTest_6, "cell 13 2,alignx center");
 		
-		JLabel lblTest_7 = new JLabel("test7");
+		JLabel lblTest_7 = new JLabel(String.valueOf(numTestObjectsPerClass[7]));
 		panel_1.add(lblTest_7, "cell 15 2,alignx center");
 		
-		JLabel lblTest_8 = new JLabel("test8");
+		JLabel lblTest_8 = new JLabel(String.valueOf(numTestObjectsPerClass[8]));
 		panel_1.add(lblTest_8, "cell 17 2,alignx center");
 		
-		JLabel lblTest_9 = new JLabel("test9");
+		JLabel lblTest_9 = new JLabel(String.valueOf(numTestObjectsPerClass[9]));
 		panel_1.add(lblTest_9, "cell 20 2,alignx center");
 		
 		JSeparator separator_1 = new JSeparator();
-		panel.add(separator_1, "cell 0 5 2 1,growx");
+		panel.add(separator_1, "cell 0 6 2 1,growx");
 		
 		JLabel lblTotalNumberOf = new JLabel("Total number of training data elements:");
-		panel.add(lblTotalNumberOf, "cell 0 6");
+		panel.add(lblTotalNumberOf, "cell 0 7");
 		
 		JLabel lblNumtrainingelements = new JLabel(String.valueOf(numTrainingElements));
-		panel.add(lblNumtrainingelements, "cell 1 6");
+		panel.add(lblNumtrainingelements, "cell 1 7");
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Training data per class:", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panel.add(panel_2, "cell 0 7 2 1,grow");
+		panel.add(panel_2, "cell 0 8 2 1,grow");
 		panel_2.setLayout(new MigLayout("", "[][grow][][grow][][grow][][grow][][grow][][grow][][grow][][grow][][grow][][grow]", "[][]"));
 		
 		JLabel lblClass_1 = new JLabel("Class:");
@@ -262,44 +264,50 @@ public class StatisticsDialog extends JDialog implements ActionListener {
 		JLabel lblelements_1 = new JLabel("#elements:");
 		panel_2.add(lblelements_1, "cell 0 1");
 		
-		JLabel lblTr = new JLabel("tr0");
-		panel_2.add(lblTr, "cell 1 1");
+		JLabel lblTr = new JLabel(String.valueOf(numTrainingElementsPerClass[0]));
+		panel_2.add(lblTr, "cell 1 1,alignx center");
 		
-		JLabel lblTr_1 = new JLabel("tr1");
+		JLabel lblTr_1 = new JLabel(String.valueOf(numTrainingElementsPerClass[1]));
 		panel_2.add(lblTr_1, "cell 3 1,alignx center");
 		
-		JLabel lblTr_2 = new JLabel("tr2");
+		JLabel lblTr_2 = new JLabel(String.valueOf(numTrainingElementsPerClass[2]));
 		panel_2.add(lblTr_2, "cell 5 1,alignx center");
 		
-		JLabel lblTr_3 = new JLabel("tr3");
+		JLabel lblTr_3 = new JLabel(String.valueOf(numTrainingElementsPerClass[3]));
 		panel_2.add(lblTr_3, "cell 7 1,alignx center");
 		
-		JLabel lblTr_4 = new JLabel("tr4");
+		JLabel lblTr_4 = new JLabel(String.valueOf(numTrainingElementsPerClass[4]));
 		panel_2.add(lblTr_4, "cell 9 1,alignx center");
 		
-		JLabel lblTr_5 = new JLabel("tr5");
+		JLabel lblTr_5 = new JLabel(String.valueOf(numTrainingElementsPerClass[5]));
 		panel_2.add(lblTr_5, "cell 11 1,alignx center");
 		
-		JLabel lblTr_6 = new JLabel("tr6");
+		JLabel lblTr_6 = new JLabel(String.valueOf(numTrainingElementsPerClass[6]));
 		panel_2.add(lblTr_6, "cell 13 1,alignx center");
 		
-		JLabel lblTr_7 = new JLabel("tr7");
+		JLabel lblTr_7 = new JLabel(String.valueOf(numTrainingElementsPerClass[7]));
 		panel_2.add(lblTr_7, "cell 15 1,alignx center");
 		
-		JLabel lblTr_8 = new JLabel("tr8");
+		JLabel lblTr_8 = new JLabel(String.valueOf(numTrainingElementsPerClass[8]));
 		panel_2.add(lblTr_8, "cell 17 1,alignx center");
 		
-		JLabel lblTr_9 = new JLabel("tr9");
+		JLabel lblTr_9 = new JLabel(String.valueOf(numTrainingElementsPerClass[9]));
 		panel_2.add(lblTr_9, "cell 19 1,alignx center");
 		
 		JSeparator separator_2 = new JSeparator();
-		panel.add(separator_2, "cell 0 8 2 1,growx");
+		panel.add(separator_2, "cell 0 9 2 1,growx");
 		
 		JLabel lblNumberOfWrong = new JLabel("Number of wrong classifications:");
-		panel.add(lblNumberOfWrong, "cell 0 9");
+		panel.add(lblNumberOfWrong, "cell 0 10");
 		
 		JLabel lblNumwrongclassifications = new JLabel(String.valueOf(numWrongClassifications));
-		panel.add(lblNumwrongclassifications, "cell 1 9");
+		panel.add(lblNumwrongclassifications, "cell 1 10");
+		
+		JLabel lblMeanSquaredError = new JLabel("Mean squared error:");
+		panel.add(lblMeanSquaredError, "cell 0 11");
+		
+		JLabel lblMeansquarederrorvalue = new JLabel(String.valueOf(meanSquaredError));
+		panel.add(lblMeansquarederrorvalue, "cell 1 11");
 		
 		JButton btnDisplayWrongClassified = new JButton("Display wrong classified elements");
 		btnDisplayWrongClassified.addActionListener(this);

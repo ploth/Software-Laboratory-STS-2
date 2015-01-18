@@ -52,11 +52,11 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 
 	public ResultDisplayDialog() {
 		setModal(true);
-		setSize(new Dimension(450, 300));
+		setSize(new Dimension(450, 250));
+		setLocationRelativeTo(null);
 		setTitle("Results");
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
 
 		iter_ = db_.getNonTrainingdataDatabaseIterator();
 		currentElement_ = iter_.next();
