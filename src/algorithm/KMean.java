@@ -14,7 +14,7 @@ public class KMean extends AbstractAlgorithm {
 	private static final int FIRST_LIST_ELEMENT = 0;
 	private static final int LIST_SIZE = 1;
 	private static final int MAX_ITERATIONS = 100;
-	private static final double MINIMUM_ADJUSTMENT = 0.1;
+	private static final double MINIMUM_ADJUSTMENT = 0;
 
 	public KMean() {
 
