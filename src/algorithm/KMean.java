@@ -122,9 +122,11 @@ public class KMean extends AbstractAlgorithm {
 					prototypes[i][j] = prototypesNew[i][j];
 				}
 			}
-			iterations++;
 			// TODO debug
-			System.out.println("adjustment: " + adjustment);
+			System.out.println("iteration: " + iterations + " adjustment: "
+					+ adjustment);
+			iterations++;
+
 		}
 	}
 

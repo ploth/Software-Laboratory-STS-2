@@ -18,11 +18,14 @@ public class KMeanTest {
 		// + db.getNumberOfDatabaseElements());
 		// init a database
 		PERST_MNIST_Converter.read("ImageData/train-labels.idx1-ubyte",
-				"ImageData/train-images.idx3-ubyte", 1, 1000, true);
+				"ImageData/train-images.idx3-ubyte", 1, 60000, true);
 		System.out.println("numberOfDatabaseElements: "
 				+ db.getNumberOfDatabaseElements());
 		KMean kmean = new KMean();
+		long time1 = System.currentTimeMillis();
 		kmean.doAlgorithm(KMean.SQR_EUCLID, 20);
+		long time2 = System.currentTimeMillis();
+		System.out.println((time2 - time1));
 		db.closeDB();
 		String defaultDatabaseName_ = "perstdatabase.dbs";
 		Path path = FileSystems.getDefault().getPath(defaultDatabaseName_);
