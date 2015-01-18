@@ -186,14 +186,12 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 		case "done":
 			if(currentlyEnteredClassification!=PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
 				db_.convertToCorrect(currentElement_.getIndex(), (char) currentlyEnteredClassification);
-				System.out.println("Converted to correct!");
 			}
 			dispose();
 			break;
 		case "next":
 			if(currentlyEnteredClassification!=PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
 				db_.convertToCorrect(currentElement_.getIndex(), (char) currentlyEnteredClassification);
-				System.out.println("Converted to correct!");
 			}
 			currentElement_ = iter_.next();
 			confirmedCounter_++;
