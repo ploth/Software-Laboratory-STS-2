@@ -20,7 +20,7 @@ public class PERST_PNG_Converter extends AbstractConverter {
 		for (int i = 0; i < 784; i++) {
 			int x = i % 28;
 			int y = i / 28;
-			pixels[i] = (char) wr.getSample(x, y, BAND);
+			pixels[i] = (char) (255 - wr.getSample(x, y, BAND));
 		}
 		getDb_().createUnclassifiedDatabaseElement(pixels);
 	}
