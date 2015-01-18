@@ -140,8 +140,12 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 
 	private void updateGUIState() {
 		graphicsPanel.update();
-		lblclassifiedValue.setText(String.valueOf((int) currentElement_
-				.getAlgoClassification()));
+		int algoClassification = (int) currentElement_.getAlgoClassification();
+		if(algoClassification==PERSTDatabase.NO_ALGORITHM_CLASSIFICATION) {
+			lblclassifiedValue.setText("-");
+		} else {
+			lblclassifiedValue.setText(String.valueOf(algoClassification));
+		}
 		int correctClassfication = (int) currentElement_.getCorrectClassification();
 		if(correctClassfication == PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
 			lblcorrectValue.setText("-");
