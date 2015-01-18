@@ -19,6 +19,7 @@ public class KNN extends AbstractAlgorithm {
 
 	}
 
+	@Override
 	public void doSqrEuclid(int k) {
 		KdTreeHelper treeHelper = KdTreeHelper.getInstance();
 		SqrEuclid<Character> SETree = treeHelper
@@ -52,6 +53,7 @@ public class KNN extends AbstractAlgorithm {
 		}
 	}
 
+	@Override
 	public void doManhattan(int k) {
 		KdTreeHelper treeHelper = KdTreeHelper.getInstance();
 		Manhattan<Character> MTree = treeHelper
