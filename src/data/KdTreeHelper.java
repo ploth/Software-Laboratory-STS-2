@@ -73,12 +73,25 @@ public class KdTreeHelper {
 
 	public SqrEuclid<Character> createSqrEuclidKdTreeFromArray(
 			double[][] databaseElements) {
+		// TODO remove
+		// for (int p = 0; p < databaseElements.length; p++) {
+		// for (int o = 0; o < databaseElements[p].length; o++) {
+		// // if (Double.isNaN(databaseElements[p][o])) {
+		// // System.out.println("Knoblauchtastatur mir Speckflasche");
+		// // }
+		// System.out.println(databaseElements[p][o]);
+		// }
+		// }
 		SqrEuclid<Character> seTree = new SqrEuclid<Character>(db_.getDim()
 				* db_.getDim(), databaseElements.length);
 		for (int clusterID = 0; clusterID < databaseElements.length; clusterID++) {
 			double[] test = databaseElements[clusterID];
 			seTree.addPoint(test, (char) clusterID);
+			// for(z=0; z<test.length; z++){
+			// System.out.println();
+			// }
 		}
+
 		return seTree;
 	}
 
