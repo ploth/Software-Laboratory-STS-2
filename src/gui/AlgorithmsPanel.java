@@ -60,7 +60,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "startKNNTest":
-			//TODO Write code for kNN test run
+			testKNN();
 			break;
 		case "classifyByKNN":
 			classifyByKNN();
@@ -117,24 +117,37 @@ public class AlgorithmsPanel extends JPanel implements ActionListener{
 		return distanceMeasurement;
 	}
 	
-	private void classifyByKNN() {
+	private void testKNN() {
 		if(isDatabaseEmpty()) 
 			return;
+		int k = inputK();
+		
+	}
+	
+	private void classifyByKNN() {
+		if(launchKNN())
+			new ResultDisplayDialog();
+	}
+	
+	private boolean launchKNN() {
+		if(isDatabaseEmpty()) 
+			return false;
 		int k = inputK();
 		String distanceMeasurement = inputDistanceMeasurement();
 		if(k==0 || distanceMeasurement==null) {
 			JOptionPane.showMessageDialog(new JFrame(), "Please set the algorithm parameters correctly");
-			return;
+			return false;
 		}
 		KNN kNearestNeighborAlgorithm = new KNN();
 		if(distanceMeasurement=="Square-euclid") {
 			kNearestNeighborAlgorithm.doAlgorithm(KNN.SQR_EUCLID, k);
+			return true;
 		} else if (distanceMeasurement=="Manhattan") {
 			kNearestNeighborAlgorithm.doAlgorithm(KNN.MANHATTAN, k);
+			return true;
 		} else {
 			JOptionPane.showMessageDialog(new JFrame(), "Invalid distance measurement method chosen");
+			return false;
 		}
-		
-		new ResultDisplayDialog();
 	}
 }
