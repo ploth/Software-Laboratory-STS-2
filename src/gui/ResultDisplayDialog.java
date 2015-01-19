@@ -193,7 +193,6 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 			if (currentlyEnteredClassification != PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
 				db_.convertToCorrect(currentElement_.getIndex(),
 						(char) currentlyEnteredClassification);
-				System.out.println("convertedToCorrect");
 			}
 			dispose();
 			break;
@@ -201,7 +200,6 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 			if (currentlyEnteredClassification != PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
 				db_.convertToCorrect(currentElement_.getIndex(),
 						(char) currentlyEnteredClassification);
-				System.out.println("convertedToCorrect");
 			}
 			currentElement_ = iter_.next();
 			confirmedCounter_++;
