@@ -84,7 +84,7 @@ public class PERST_MNIST_Converter extends AbstractConverter {
 		BufferedWriter bwImage = new BufferedWriter(fwImage);
 		while (iter.hasNext()) {
 			DatabaseElement e = iter.next();
-			bwImage.write(e.getPixelsInverted());
+			bwImage.write(e.getPixels());
 		}
 		bwLabel.close();
 		bwImage.close();

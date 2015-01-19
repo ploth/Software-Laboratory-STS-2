@@ -27,7 +27,7 @@ public class KMean extends AbstractAlgorithm {
 	public double[][] getClusterMeans() {
 		return clusterMeans;
 	}
-	
+
 	public void setMaxIterations(int maxIterations) {
 		this.maxIterations = maxIterations;
 	}
@@ -83,7 +83,7 @@ public class KMean extends AbstractAlgorithm {
 						LIST_SIZE, true).get(FIRST_LIST_ELEMENT).value;
 				// and set the cluster value.
 				// the cluster value is the value of the nearest prototype
-				e.setClusterValue(clusterValue);
+				e.setClusterID(clusterValue);
 			}
 			// iterate through cluster value 0, 1, 2, ...
 			for (int i = 0; i < k; i++) {
@@ -192,7 +192,7 @@ public class KMean extends AbstractAlgorithm {
 						LIST_SIZE, true).get(FIRST_LIST_ELEMENT).value;
 				// and set the cluster value.
 				// the cluster value is the value of the nearest prototype
-				e.setClusterValue(clusterValue);
+				e.setClusterID(clusterValue);
 			}
 			// iterate through cluster value 0, 1, 2, ...
 			for (int i = 0; i < k; i++) {

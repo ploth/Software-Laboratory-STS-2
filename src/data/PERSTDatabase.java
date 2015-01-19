@@ -30,14 +30,16 @@ public class PERSTDatabase {
 		db_ = new Database(storage_, false);
 		instance_ = this;
 
-		IterableIterator<DatabaseElement> iter = this.getDatabaseIterator();
-		while (iter.hasNext()) {
-			DatabaseElement e = iter.next();
-			if (e.isTrainingdata()) {
-				numberOfCorrectDatabaseElements_++;
-			}
-			numberOfDatabaseElements_++;
-		}
+		// IterableIterator<DatabaseElement> iter = getDatabaseIterator();
+		// while (iter.hasNext()) {
+		// DatabaseElement e = iter.next();
+		// if (e.isTrainingdata()) {
+		// System.out.println("numberOfCorrectDatabaseElements_++");
+		// numberOfCorrectDatabaseElements_++;
+		// }
+		// System.out.println("numberOfDatabaseElements_++");
+		// numberOfDatabaseElements_++;
+		// }
 	}
 
 	private Database getDB() {
@@ -45,10 +47,26 @@ public class PERSTDatabase {
 	}
 
 	public Integer getNumberOfDatabaseElements() {
+		numberOfDatabaseElements_ = 0;
+		IterableIterator<DatabaseElement> iter = getDatabaseIterator();
+		while (iter.hasNext()) {
+			DatabaseElement e = iter.next();
+			System.out.println("numberOfDatabaseElements_++");
+			numberOfDatabaseElements_++;
+		}
 		return numberOfDatabaseElements_;
 	}
 
 	public Integer getNumberOfCorrectDatabaseElements() {
+		numberOfCorrectDatabaseElements_ = 0;
+		IterableIterator<DatabaseElement> iter = getDatabaseIterator();
+		while (iter.hasNext()) {
+			DatabaseElement e = iter.next();
+			if (e.isTrainingdata()) {
+				numberOfCorrectDatabaseElements_++;
+				System.out.println("numberOfCorrectDatabaseElements_++");
+			}
+		}
 		return numberOfCorrectDatabaseElements_;
 	}
 
@@ -71,7 +89,7 @@ public class PERSTDatabase {
 		private int correctClassification = NO_CORRECT_CLASSIFICATION;
 		private int algoClassification = NO_ALGORITHM_CLASSIFICATION;
 		// 9000 for debugging
-		private int clusterValue = DEBUG_9000;
+		private int clusterID = DEBUG_9000;
 		private char[] pixels;
 		private int index;
 		private boolean trainingdata;
@@ -83,12 +101,12 @@ public class PERSTDatabase {
 			PERSTDatabase.getInstance().getDB().addRecord(this);
 		}
 
-		public int getClusterValue() {
-			return clusterValue;
+		public int getClusterID() {
+			return clusterID;
 		}
 
-		public void setClusterValue(int clusterValue) {
-			this.clusterValue = clusterValue;
+		public void setClusterID(int clusterID) {
+			this.clusterID = clusterID;
 		}
 
 		public int getIndex() {
@@ -136,7 +154,8 @@ public class PERSTDatabase {
 		}
 
 		public void setTrainingdata(boolean trainingdata) {
-			this.trainingdata = trainingdata;
+			// this.trainingdata = trainingdata;
+			db_.updateKey(this, "trainingdata", trainingdata);
 		}
 
 		public void setCorrectClassification(char correctClassification) {
@@ -148,10 +167,28 @@ public class PERSTDatabase {
 		}
 	}
 
+	public void updateTrainingdata(DatabaseElement e, boolean trainingdata) {
+		db_.updateKey(e, "trainingdata", trainingdata);
+	}
+
+	public void updateCorrectClassification(DatabaseElement e,
+			char correctClassification) {
+		db_.updateKey(e, "correctClassification", correctClassification);
+	}
+
+	public void updateAlgoClassification(DatabaseElement e,
+			char algoClassification) {
+		db_.updateKey(e, "algoClassification", algoClassification);
+	}
+
+	public void updateClusterID(DatabaseElement e, int clusterID) {
+		db_.updateKey(e, "clusterID", clusterID);
+	}
+
 	public void convertToCorrect(int index, char correctClassification) {
 		DatabaseElement e = getDatabaseElement(index);
 		if (e.isTrainingdata() == false) {
-			e.setTrainingdata(true);
+			updateTrainingdata(e, true);
 			e.setCorrectClassification(correctClassification);
 			numberOfCorrectDatabaseElements_++;
 		}
@@ -200,8 +237,8 @@ public class PERSTDatabase {
 	}
 
 	public IterableIterator<DatabaseElement> getClusteredDatabaseIterator(
-			int clusterValue) {
-		String query = "clusterValue = " + String.valueOf(clusterValue);
+			int clusterID) {
+		String query = "clusterID = " + String.valueOf(clusterID);
 		IterableIterator<DatabaseElement> iterator = db_
 				.<DatabaseElement> select(DatabaseElement.class, query);
 		return iterator;
@@ -214,6 +251,18 @@ public class PERSTDatabase {
 	}
 
 	public void closeDB() {
+		int td = 0;
+		int dbe = 0;
+		IterableIterator<DatabaseElement> iter = getDatabaseIterator();
+		while (iter.hasNext()) {
+			DatabaseElement e = iter.next();
+			if (e.isTrainingdata()) {
+				td++;
+			}
+			dbe++;
+		}
+		System.out.println("database elements: " + dbe);
+		System.out.println("training data: " + td);
 		db_.commitTransaction();
 		storage_.close();
 	}

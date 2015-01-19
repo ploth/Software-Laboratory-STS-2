@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -10,6 +11,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -23,17 +26,12 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import net.miginfocom.swing.MigLayout;
-
 import data.PERSTDatabase;
 import data.PERSTDatabase.DatabaseElement;
 
-import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.Iterator;
-
 public class ResultDisplayDialog extends JDialog implements ActionListener {
 
-	//TODO Refactor member variables with underscore
+	// TODO Refactor member variables with underscore
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private final GraphicsPanel graphicsPanel;
@@ -112,16 +110,17 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 		JPanel panel = new JPanel();
 		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPanel.add(panel, "cell 0 1,growx,aligny bottom");
-		panel.setLayout(new MigLayout("", "[][][135.00][116.00][50.00,grow]", "[]"));
+		panel.setLayout(new MigLayout("", "[][][135.00][116.00][50.00,grow]",
+				"[]"));
 
 		btnNext = new JButton("Next");
 		btnNext.addActionListener(this);
 		btnNext.setActionCommand("next");
 		panel.add(btnNext, "cell 0 0");
-		
+
 		JLabel lblIndex = new JLabel("Index:");
 		panel.add(lblIndex, "cell 1 0,alignx right");
-		
+
 		lblIndexNumber = new JLabel("-/-");
 		panel.add(lblIndexNumber, "cell 2 0");
 
@@ -129,7 +128,7 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 		btnEnterCorrectValue.addActionListener(this);
 		btnEnterCorrectValue.setActionCommand("enterCorrectValue");
 		panel.add(btnEnterCorrectValue, "cell 3 0");
-		
+
 		btnDone = new JButton("Done");
 		btnDone.addActionListener(this);
 		btnDone.setActionCommand("done");
@@ -137,46 +136,51 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 		panel.add(btnDone, "cell 4 0");
 
 		updateGUIState();
-		
+
 		setVisible(true);
 	}
 
 	private void updateGUIState() {
 		graphicsPanel.update();
 		int algoClassification = (int) currentElement_.getAlgoClassification();
-		if(algoClassification==PERSTDatabase.NO_ALGORITHM_CLASSIFICATION) {
+		if (algoClassification == PERSTDatabase.NO_ALGORITHM_CLASSIFICATION) {
 			lblclassifiedValue.setText("-");
 		} else {
 			lblclassifiedValue.setText(String.valueOf(algoClassification));
 		}
-		int correctClassfication = (int) currentElement_.getCorrectClassification();
-		if(correctClassfication == PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
+		int correctClassfication = (int) currentElement_
+				.getCorrectClassification();
+		if (correctClassfication == PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
 			lblcorrectValue.setText("-");
 			btnEnterCorrectValue.setEnabled(true);
-			
+
 		} else {
 			lblcorrectValue.setText(String.valueOf(correctClassfication));
 			btnEnterCorrectValue.setEnabled(false);
-			currentlyEnteredClassification=correctClassfication;
+			currentlyEnteredClassification = correctClassfication;
 		}
-		lblIndexNumber.setText((confirmedCounter_ + 1) + "/"
-				+ numOElements_);
+		lblIndexNumber.setText((confirmedCounter_ + 1) + "/" + numOElements_);
 		if (!iter_.hasNext()) {
 			btnNext.setEnabled(false);
 			btnDone.setEnabled(true);
 		}
 	}
-	
+
 	private void enterCorrectClassification() {
-		String enteredClassification_str = JOptionPane.showInputDialog("Enter correct classification");
-		if(enteredClassification_str==null) {
-			JOptionPane.showMessageDialog(new JFrame(), "Please enter a number between 0 and 9.");
+		String enteredClassification_str = JOptionPane
+				.showInputDialog("Enter correct classification");
+		if (enteredClassification_str == null) {
+			JOptionPane.showMessageDialog(new JFrame(),
+					"Please enter a number between 0 and 9.");
 			currentlyEnteredClassification = PERSTDatabase.NO_CORRECT_CLASSIFICATION;
 			return;
 		}
-		currentlyEnteredClassification = Integer.valueOf(enteredClassification_str);
-		if(currentlyEnteredClassification < MIN_LABEL || currentlyEnteredClassification > MAX_LABEL) {
-			JOptionPane.showMessageDialog(new JFrame(), "Please enter a number between 0 and 9!");
+		currentlyEnteredClassification = Integer
+				.valueOf(enteredClassification_str);
+		if (currentlyEnteredClassification < MIN_LABEL
+				|| currentlyEnteredClassification > MAX_LABEL) {
+			JOptionPane.showMessageDialog(new JFrame(),
+					"Please enter a number between 0 and 9!");
 			return;
 		}
 		lblcorrectValue.setText(enteredClassification_str);
@@ -186,18 +190,22 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "done":
-			if(currentlyEnteredClassification!=PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
-				db_.convertToCorrect(currentElement_.getIndex(), (char) currentlyEnteredClassification);
+			if (currentlyEnteredClassification != PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
+				db_.convertToCorrect(currentElement_.getIndex(),
+						(char) currentlyEnteredClassification);
+				System.out.println("convertedToCorrect");
 			}
 			dispose();
 			break;
 		case "next":
-			if(currentlyEnteredClassification!=PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
-				db_.convertToCorrect(currentElement_.getIndex(), (char) currentlyEnteredClassification);
+			if (currentlyEnteredClassification != PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
+				db_.convertToCorrect(currentElement_.getIndex(),
+						(char) currentlyEnteredClassification);
+				System.out.println("convertedToCorrect");
 			}
 			currentElement_ = iter_.next();
 			confirmedCounter_++;
-			currentlyEnteredClassification=PERSTDatabase.NO_CORRECT_CLASSIFICATION;
+			currentlyEnteredClassification = PERSTDatabase.NO_CORRECT_CLASSIFICATION;
 			updateGUIState();
 			break;
 		case "enterCorrectValue":

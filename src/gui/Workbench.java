@@ -2,6 +2,8 @@ package gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -12,9 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import data.PERSTDatabase;
-
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class Workbench extends JFrame implements ActionListener {
 
@@ -31,7 +30,7 @@ public class Workbench extends JFrame implements ActionListener {
 		setTitle(title);
 		setSize(WIDTH, HEIGHT);
 		setLocationRelativeTo(null); // Set initial window position to center of
-									 // screen
+										// screen
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		// -----------------------
@@ -51,7 +50,7 @@ public class Workbench extends JFrame implements ActionListener {
 		algorithmsPanel_ = new AlgorithmsPanel();
 
 		JTabbedPane tabbedPane = new JTabbedPane();
-		
+
 		// -----------------------
 		// TABS
 		// -----------------------
@@ -62,16 +61,15 @@ public class Workbench extends JFrame implements ActionListener {
 		tabbedPane.addTab("Algorithms", algorithmsPanel_);
 		this.getContentPane().add(tabbedPane); // Add tabs to workbench
 
-		addWindowListener(new WindowAdapter()
-        {
-            @Override
-            public void windowClosing(WindowEvent e)
-            {
-                PERSTDatabase.getInstance().closeDB();
-                e.getWindow().dispose();
-            }
-        });
-		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				PERSTDatabase.getInstance().closeDB();
+				System.out.println("closed DB");
+				e.getWindow().dispose();
+			}
+		});
+
 		setVisible(true);
 	}
 
@@ -79,7 +77,9 @@ public class Workbench extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "about":
-			JOptionPane.showMessageDialog(this, "Programmed: by\nPascal Loth\nThomas Schattschneider\n\n2015");
+			JOptionPane
+					.showMessageDialog(this,
+							"Programmed: by\nPascal Loth\nThomas Schattschneider\n\n2015");
 			break;
 		default:
 			System.err.println("Unknown action: " + e.getActionCommand());
