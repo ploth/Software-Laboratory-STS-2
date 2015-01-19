@@ -65,7 +65,6 @@ public class Workbench extends JFrame implements ActionListener {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				PERSTDatabase.getInstance().closeDB();
-				System.out.println("closed DB");
 				e.getWindow().dispose();
 			}
 		});

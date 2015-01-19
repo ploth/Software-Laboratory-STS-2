@@ -38,7 +38,6 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 			@Override
 			public void componentShown(ComponentEvent arg0) {
 				updateDataCounters();
-				System.err.println("neu zählen");
 			}
 		});
 

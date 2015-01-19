@@ -29,17 +29,14 @@ public class PERSTDatabase {
 													// (40kbytes)
 		db_ = new Database(storage_, false);
 		instance_ = this;
-
-		// IterableIterator<DatabaseElement> iter = getDatabaseIterator();
-		// while (iter.hasNext()) {
-		// DatabaseElement e = iter.next();
-		// if (e.isTrainingdata()) {
-		// System.out.println("numberOfCorrectDatabaseElements_++");
-		// numberOfCorrectDatabaseElements_++;
-		// }
-		// System.out.println("numberOfDatabaseElements_++");
-		// numberOfDatabaseElements_++;
-		// }
+		IterableIterator<DatabaseElement> iter = getDatabaseIterator();
+		while (iter.hasNext()) {
+			DatabaseElement e = iter.next();
+			if (e.isTrainingdata()) {
+				numberOfCorrectDatabaseElements_++;
+			}
+			numberOfDatabaseElements_++;
+		}
 	}
 
 	private Database getDB() {
@@ -47,26 +44,10 @@ public class PERSTDatabase {
 	}
 
 	public Integer getNumberOfDatabaseElements() {
-		numberOfDatabaseElements_ = 0;
-		IterableIterator<DatabaseElement> iter = getDatabaseIterator();
-		while (iter.hasNext()) {
-			DatabaseElement e = iter.next();
-			System.out.println("numberOfDatabaseElements_++");
-			numberOfDatabaseElements_++;
-		}
 		return numberOfDatabaseElements_;
 	}
 
 	public Integer getNumberOfCorrectDatabaseElements() {
-		numberOfCorrectDatabaseElements_ = 0;
-		IterableIterator<DatabaseElement> iter = getDatabaseIterator();
-		while (iter.hasNext()) {
-			DatabaseElement e = iter.next();
-			if (e.isTrainingdata()) {
-				numberOfCorrectDatabaseElements_++;
-				System.out.println("numberOfCorrectDatabaseElements_++");
-			}
-		}
 		return numberOfCorrectDatabaseElements_;
 	}
 
@@ -151,11 +132,6 @@ public class PERSTDatabase {
 
 		public boolean isTrainingdata() {
 			return trainingdata;
-		}
-
-		public void setTrainingdata(boolean trainingdata) {
-			// this.trainingdata = trainingdata;
-			db_.updateKey(this, "trainingdata", trainingdata);
 		}
 
 		public void setCorrectClassification(char correctClassification) {
@@ -251,18 +227,6 @@ public class PERSTDatabase {
 	}
 
 	public void closeDB() {
-		int td = 0;
-		int dbe = 0;
-		IterableIterator<DatabaseElement> iter = getDatabaseIterator();
-		while (iter.hasNext()) {
-			DatabaseElement e = iter.next();
-			if (e.isTrainingdata()) {
-				td++;
-			}
-			dbe++;
-		}
-		System.out.println("database elements: " + dbe);
-		System.out.println("training data: " + td);
 		db_.commitTransaction();
 		storage_.close();
 	}
