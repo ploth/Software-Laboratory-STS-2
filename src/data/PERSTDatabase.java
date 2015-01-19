@@ -86,9 +86,9 @@ public class PERSTDatabase {
 			return clusterID;
 		}
 
-		public void setClusterID(int clusterID) {
-			this.clusterID = clusterID;
-		}
+		// public void setClusterID(int clusterID) {
+		// this.clusterID = clusterID;
+		// }
 
 		public int getIndex() {
 			return index;

@@ -36,9 +36,9 @@ public class KMean extends AbstractAlgorithm {
 		this.deviation = deviation;
 	}
 
-	public void classifyCluster(int clusterValue, char classification) {
+	public void classifyCluster(int clusterID, char classification) {
 		IterableIterator<DatabaseElement> iter = getDb_()
-				.getClusteredDatabaseIterator(clusterValue);
+				.getClusteredDatabaseIterator(clusterID);
 		while (iter.hasNext()) {
 			iter.next().setAlgoClassification(classification);
 		}
@@ -47,7 +47,7 @@ public class KMean extends AbstractAlgorithm {
 	@Override
 	public void doSqrEuclid(int k) {
 		KdTreeHelper treeHelper = KdTreeHelper.getInstance();
-		char clusterValue = 0;
+		char clusterID = 0;
 		int dim = getDb_().getDim();
 		int iterations = 1;
 		int quantityOfThisCluster = 0;
@@ -79,11 +79,11 @@ public class KMean extends AbstractAlgorithm {
 			while (iter.hasNext()) {
 				DatabaseElement e = iter.next();
 				// check distance to each prototype
-				clusterValue = sETree.nearestNeighbor(e.getPixelsAsDouble(),
+				clusterID = sETree.nearestNeighbor(e.getPixelsAsDouble(),
 						LIST_SIZE, true).get(FIRST_LIST_ELEMENT).value;
 				// and set the cluster value.
 				// the cluster value is the value of the nearest prototype
-				e.setClusterID(clusterValue);
+				getDb_().updateClusterID(e, clusterID);
 			}
 			// iterate through cluster value 0, 1, 2, ...
 			for (int i = 0; i < k; i++) {
@@ -156,7 +156,7 @@ public class KMean extends AbstractAlgorithm {
 	@Override
 	public void doManhattan(int k) {
 		KdTreeHelper treeHelper = KdTreeHelper.getInstance();
-		char clusterValue = 0;
+		char clusterID = 0;
 		int dim = getDb_().getDim();
 		int iterations = 1;
 		int quantityOfThisCluster = 0;
@@ -188,11 +188,11 @@ public class KMean extends AbstractAlgorithm {
 			while (iter.hasNext()) {
 				DatabaseElement e = iter.next();
 				// check distance to each prototype
-				clusterValue = mTree.nearestNeighbor(e.getPixelsAsDouble(),
+				clusterID = mTree.nearestNeighbor(e.getPixelsAsDouble(),
 						LIST_SIZE, true).get(FIRST_LIST_ELEMENT).value;
 				// and set the cluster value.
 				// the cluster value is the value of the nearest prototype
-				e.setClusterID(clusterValue);
+				getDb_().updateClusterID(e, clusterID);
 			}
 			// iterate through cluster value 0, 1, 2, ...
 			for (int i = 0; i < k; i++) {
