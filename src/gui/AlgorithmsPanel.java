@@ -3,6 +3,7 @@ package gui;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.swing.JButton;
@@ -171,8 +172,11 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 	}
 
 	private void classifyByKNN() {
-		if (launchKNN())
-			new ResultDisplayDialog();
+		if (launchKNN()) {
+			IterableIterator<DatabaseElement> iter = db.getNonTrainingdataDatabaseIterator();
+			ArrayList<DatabaseElement> classifiedElements = iter.toList();
+			new ResultDisplayDialog(classifiedElements);
+		}
 	}
 
 	private boolean launchKNN() {
