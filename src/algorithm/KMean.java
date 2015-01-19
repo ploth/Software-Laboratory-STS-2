@@ -18,21 +18,16 @@ public class KMean extends AbstractAlgorithm {
 	private double deviation = 0.1;
 	private SqrEuclid<Character> sETree;
 	private Manhattan<Character> mTree;
-	private double[][] prototypesSqrEuclid;
-	private double[][] prototypesManhattan;
+	private double[][] clusterMeans;
 
 	public KMean() {
 
 	}
 
-	public double[][] getPrototypesSqrEuclid() {
-		return prototypesSqrEuclid;
+	public double[][] getClusterMeans() {
+		return clusterMeans;
 	}
-
-	public double[][] getPrototypesManhattan() {
-		return prototypesManhattan;
-	}
-
+	
 	public void setMaxIterations(int maxIterations) {
 		this.maxIterations = maxIterations;
 	}
@@ -155,7 +150,7 @@ public class KMean extends AbstractAlgorithm {
 			// + adjustment);
 			// iterations++;
 		}
-		prototypesSqrEuclid = prototypes.clone();
+		clusterMeans = prototypes.clone();
 	}
 
 	@Override
@@ -264,6 +259,6 @@ public class KMean extends AbstractAlgorithm {
 			// + adjustment);
 			// iterations++;
 		}
-		prototypesManhattan = prototypes.clone();
+		clusterMeans = prototypes.clone();
 	}
 }
