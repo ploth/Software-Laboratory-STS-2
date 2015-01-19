@@ -24,14 +24,16 @@ import javax.swing.border.TitledBorder;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.garret.perst.IterableIterator;
-
 import data.PERSTDatabase;
 import data.PERSTDatabase.DatabaseElement;
+
 import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class ResultDisplayDialog extends JDialog implements ActionListener {
 
+	//TODO Refactor member variables with underscore
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private final GraphicsPanel graphicsPanel;
@@ -42,15 +44,15 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 	private final JLabel lblcorrectValue;
 	private final JLabel lblIndexNumber;
 	private final PERSTDatabase db_ = PERSTDatabase.getInstance();
-	private IterableIterator<DatabaseElement> iter_;
+	private Iterator<DatabaseElement> iter_;
 	private DatabaseElement currentElement_;
 	private int currentlyEnteredClassification = PERSTDatabase.NO_CORRECT_CLASSIFICATION;
 	private int confirmedCounter_ = 0;
-	private final int numOfIncorrectElements_;
+	private final int numOElements_;
 	private static final int MIN_LABEL = 0;
 	private static final int MAX_LABEL = 9;
 
-	public ResultDisplayDialog() {
+	public ResultDisplayDialog(ArrayList<DatabaseElement> elements) {
 		setModal(true);
 		setSize(new Dimension(450, 250));
 		setLocationRelativeTo(null);
@@ -58,9 +60,9 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-		iter_ = db_.getNonTrainingdataDatabaseIterator();
+		iter_ = elements.iterator();
 		currentElement_ = iter_.next();
-		numOfIncorrectElements_ = db_.getNumberOfNonTrainingdataDatabaseElements();
+		numOElements_ = elements.size();
 
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -158,7 +160,7 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 			currentlyEnteredClassification=correctClassfication;
 		}
 		lblIndexNumber.setText((confirmedCounter_ + 1) + "/"
-				+ numOfIncorrectElements_);
+				+ numOElements_);
 		if (!iter_.hasNext()) {
 			btnNext.setEnabled(false);
 			btnDone.setEnabled(true);
