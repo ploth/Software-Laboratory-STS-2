@@ -47,7 +47,7 @@ public class KNN extends AbstractAlgorithm {
 					prediction = i;
 				}
 			}
-			e.setAlgoClassification((char) prediction);
+			getDb_().updateAlgoClassification(e, (char) prediction);
 			greatestValue = 0;
 			prediction = 0;
 		}
@@ -81,7 +81,7 @@ public class KNN extends AbstractAlgorithm {
 					prediction = i;
 				}
 			}
-			e.setAlgoClassification((char) prediction);
+			getDb_().updateAlgoClassification(e, (char) prediction);
 			greatestValue = 0;
 			prediction = 0;
 		}

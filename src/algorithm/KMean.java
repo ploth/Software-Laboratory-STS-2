@@ -40,7 +40,8 @@ public class KMean extends AbstractAlgorithm {
 		IterableIterator<DatabaseElement> iter = getDb_()
 				.getClusteredDatabaseIterator(clusterID);
 		while (iter.hasNext()) {
-			iter.next().setAlgoClassification(classification);
+			DatabaseElement e = iter.next();
+			getDb_().updateAlgoClassification(e, classification);
 		}
 	}
 

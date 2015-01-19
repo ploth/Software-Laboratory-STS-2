@@ -86,10 +86,6 @@ public class PERSTDatabase {
 			return clusterID;
 		}
 
-		// public void setClusterID(int clusterID) {
-		// this.clusterID = clusterID;
-		// }
-
 		public int getIndex() {
 			return index;
 		}
@@ -133,14 +129,6 @@ public class PERSTDatabase {
 		public boolean isTrainingdata() {
 			return trainingdata;
 		}
-
-		public void setCorrectClassification(char correctClassification) {
-			this.correctClassification = (int) correctClassification;
-		}
-
-		public void setAlgoClassification(char algoClassification) {
-			this.algoClassification = (int) algoClassification;
-		}
 	}
 
 	public void updateTrainingdata(DatabaseElement e, boolean trainingdata) {
@@ -165,7 +153,7 @@ public class PERSTDatabase {
 		DatabaseElement e = getDatabaseElement(index);
 		if (e.isTrainingdata() == false) {
 			updateTrainingdata(e, true);
-			e.setCorrectClassification(correctClassification);
+			updateCorrectClassification(e, correctClassification);
 			numberOfCorrectDatabaseElements_++;
 		}
 	}
@@ -186,7 +174,7 @@ public class PERSTDatabase {
 		}
 		DatabaseElement DatabaseElement = new DatabaseElement(pixels,
 				numberOfDatabaseElements_, trainingdata);
-		DatabaseElement.setCorrectClassification(correctClassification);
+		updateCorrectClassification(DatabaseElement, correctClassification);
 		return numberOfDatabaseElements_;
 	}
 
