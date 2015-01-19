@@ -321,6 +321,9 @@ public class StatisticsDialog extends JDialog implements ActionListener {
 		btnDisplayFalseClassified = new JButton("Display false classifications");
 		btnDisplayFalseClassified.addActionListener(this);
 		btnDisplayFalseClassified.setActionCommand("displayWrongElements");
+		if(falseClassifiedObjects.size()==0) {
+			btnDisplayFalseClassified.setEnabled(false);
+		}
 		getContentPane().add(btnDisplayFalseClassified, "cell 0 1,alignx right");
 		
 		JButton btnDone = new JButton("Done");
