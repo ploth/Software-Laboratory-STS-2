@@ -14,19 +14,26 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
 import javax.swing.border.LineBorder;
+
 import java.awt.Color;
+import java.util.ArrayList;
+
 import javax.swing.SwingConstants;
+
+import data.PERSTDatabase.DatabaseElement;
 
 public class StatisticsDialog extends JDialog implements ActionListener {
 	
 	private static final long serialVersionUID = 1L;
 	private static final int WIDTH = 480;
 	private static final int HEIGHT = 400;
+	private final JButton btnDisplayFalseClassified;
+	private final ArrayList<DatabaseElement> falseClassifiedObjects;
 	
 	public StatisticsDialog(String classificatorName,
 			String distanceMethodName, int k, int numTotalTestObjects,
 			int[] numTestObjectsPerClass, int numTrainingElements,
-			int[] numTrainingElementsPerClass, int numWrongClassifications, int meanSquaredError) {
+			int[] numTrainingElementsPerClass, ArrayList<DatabaseElement> falseClassifiedObjects, int meanSquaredError) {
 		setResizable(false);
 		setSize(WIDTH, HEIGHT);
 		setLocationRelativeTo(null);
@@ -34,6 +41,8 @@ public class StatisticsDialog extends JDialog implements ActionListener {
 		setTitle("Algorithm test run statistics");
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		getContentPane().setLayout(new MigLayout("", "[grow][]", "[grow][]"));
+		
+		this.falseClassifiedObjects = falseClassifiedObjects;
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Results", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -297,10 +306,10 @@ public class StatisticsDialog extends JDialog implements ActionListener {
 		JSeparator separator_2 = new JSeparator();
 		panel.add(separator_2, "cell 0 9 2 1,growx");
 		
-		JLabel lblNumberOfWrong = new JLabel("Number of wrong classifications:");
-		panel.add(lblNumberOfWrong, "cell 0 10");
+		JLabel lblNumberOfFalse = new JLabel("Number of false classifications:");
+		panel.add(lblNumberOfFalse, "cell 0 10");
 		
-		JLabel lblNumwrongclassifications = new JLabel(String.valueOf(numWrongClassifications));
+		JLabel lblNumwrongclassifications = new JLabel(String.valueOf(falseClassifiedObjects.size()));
 		panel.add(lblNumwrongclassifications, "cell 1 10");
 		
 		JLabel lblMeanSquaredError = new JLabel("Mean squared error:");
@@ -309,10 +318,10 @@ public class StatisticsDialog extends JDialog implements ActionListener {
 		JLabel lblMeansquarederrorvalue = new JLabel(String.valueOf(meanSquaredError));
 		panel.add(lblMeansquarederrorvalue, "cell 1 11");
 		
-		JButton btnDisplayWrongClassified = new JButton("Display wrong classified elements");
-		btnDisplayWrongClassified.addActionListener(this);
-		btnDisplayWrongClassified.setActionCommand("displayWrongElements");
-		getContentPane().add(btnDisplayWrongClassified, "cell 0 1,alignx right");
+		btnDisplayFalseClassified = new JButton("Display wrong classified elements");
+		btnDisplayFalseClassified.addActionListener(this);
+		btnDisplayFalseClassified.setActionCommand("displayWrongElements");
+		getContentPane().add(btnDisplayFalseClassified, "cell 0 1,alignx right");
 		
 		JButton btnDone = new JButton("Done");
 		btnDone.addActionListener(this);
@@ -326,7 +335,8 @@ public class StatisticsDialog extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand()) {
 		case "displayWrongElements":
-			//TODO Write code for displaying the wrong elements
+			btnDisplayFalseClassified.setEnabled(false);
+			new ResultDisplayDialog(falseClassifiedObjects);
 			break;
 		case "done":
 			dispose();

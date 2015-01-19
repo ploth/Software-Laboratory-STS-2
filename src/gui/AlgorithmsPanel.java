@@ -3,6 +3,7 @@ package gui;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.EOFException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -129,21 +130,22 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 	}
 
 	private void testKNN() {
+		if(!launchKNN())
+			return;
 		int numTotalTestObjects = db
 				.getNumberOfNonTrainingdataDatabaseElements();
-		// TODO Remove getincorrectDatabaseIterator
 		IterableIterator<DatabaseElement> iter_test = db
 				.getNonTrainingdataDatabaseIterator();
 		int[] testObjectsPerClass = new int[10];
 		Arrays.fill(testObjectsPerClass, 0);
-		int numOfWrongObjects = 0;
 		int meanSquaredError = 0;
+		ArrayList<DatabaseElement> falseClassifiedObjects = new ArrayList<DatabaseElement>();
 		while (iter_test.hasNext()) {
 			DatabaseElement e = iter_test.next();
 			int classValue = e.getCorrectClassification();
 			int algoValue = e.getAlgoClassification();
 			if (classValue != algoValue) {
-				numOfWrongObjects++;
+				falseClassifiedObjects.add(e);
 				int meanSquaredError_temp = classValue - algoValue;
 				meanSquaredError_temp *= meanSquaredError_temp;
 				meanSquaredError += meanSquaredError_temp;
@@ -162,13 +164,11 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 			trainingObjectsPerClass[classValue]++;
 		}
 
-		if (launchKNN()) {
-			new StatisticsDialog("k-Nearest-Neighbor",
-					chosenDistaneMeasurementMethod, chosenParameterK,
-					numTotalTestObjects, testObjectsPerClass,
-					numTotalTrainingObjects, trainingObjectsPerClass,
-					numOfWrongObjects, meanSquaredError);
-		}
+		new StatisticsDialog("k-Nearest-Neighbor",
+				chosenDistaneMeasurementMethod, chosenParameterK,
+				numTotalTestObjects, testObjectsPerClass,
+				numTotalTrainingObjects, trainingObjectsPerClass,
+				falseClassifiedObjects, meanSquaredError);
 	}
 
 	private void classifyByKNN() {

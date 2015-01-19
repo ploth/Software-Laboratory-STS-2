@@ -24,8 +24,6 @@ import javax.swing.border.TitledBorder;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.garret.perst.IterableIterator;
-
 import data.PERSTDatabase;
 import data.PERSTDatabase.DatabaseElement;
 
