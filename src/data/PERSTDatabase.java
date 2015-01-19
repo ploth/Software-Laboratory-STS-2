@@ -20,6 +20,7 @@ public class PERSTDatabase {
 	public static final char NO_CORRECT_CLASSIFICATION = 43;
 	public static final char NO_ALGORITHM_CLASSIFICATION = 42;
 	private static final int DEBUG_9000 = 9000;
+	private static final char MAX_CHAR = 255;
 
 	private PERSTDatabase(String databaseName) {
 		storage_ = StorageFactory.getInstance().createStorage();
@@ -104,6 +105,14 @@ public class PERSTDatabase {
 
 		public char[] getPixels() {
 			return pixels;
+		}
+
+		public char[] getPixelsInverted() {
+			char[] pixelsInverted = new char[pixels.length];
+			for (int i = 0; i < pixels.length; i++) {
+				pixelsInverted[i] = (char) (MAX_CHAR - pixels[i]);
+			}
+			return pixelsInverted;
 		}
 
 		public double[] getPixelsAsDouble() {

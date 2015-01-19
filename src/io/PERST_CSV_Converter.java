@@ -40,8 +40,6 @@ public class PERST_CSV_Converter extends AbstractConverter {
 		BufferedWriter bw = new BufferedWriter(fw);
 		while (iter.hasNext()) {
 			DatabaseElement e = iter.next();
-			// bw.write(e.getPixels());
-
 			// classification
 			bw.write(String.valueOf((int) e.getCorrectClassification()));
 			for (int i = 0; i < (dim * dim); i++) {

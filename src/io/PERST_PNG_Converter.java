@@ -38,7 +38,7 @@ public class PERST_PNG_Converter extends AbstractConverter {
 			for (int x = 0; x < dim; x++) {
 				for (int y = 0; y < dim; y++) {
 					WritableRaster raster = image.getRaster();
-					raster.setSample(y, x, 0, MAX_CHAR - pixels[i]); // mnist
+					raster.setSample(y, x, BAND, MAX_CHAR - pixels[i]); // mnist
 																		// uses
 					// inverted standard
 					i++;
@@ -63,9 +63,10 @@ public class PERST_PNG_Converter extends AbstractConverter {
 			for (int x = 0; x < dim; x++) {
 				for (int y = 0; y < dim; y++) {
 					WritableRaster raster = image.getRaster();
-					raster.setSample(y, x, 0, 255 - pixels[i]); // mnist uses
-																// inverted
-																// standard
+					raster.setSample(y, x, BAND, MAX_CHAR - pixels[i]); // mnist
+																		// uses
+					// inverted
+					// standard
 					i++;
 				}
 			}
@@ -88,9 +89,10 @@ public class PERST_PNG_Converter extends AbstractConverter {
 			for (int x = 0; x < dim; x++) {
 				for (int y = 0; y < dim; y++) {
 					WritableRaster raster = image.getRaster();
-					raster.setSample(y, x, 0, 255 - pixels[i]); // mnist uses
-																// inverted
-																// standard
+					raster.setSample(y, x, BAND, MAX_CHAR - pixels[i]); // mnist
+																		// uses
+					// inverted
+					// standard
 					i++;
 				}
 			}
