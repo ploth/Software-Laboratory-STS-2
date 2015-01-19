@@ -27,7 +27,7 @@ public class KMean extends AbstractAlgorithm {
 	public double[][] getClusterMeans() {
 		return clusterMeans;
 	}
-	
+
 	public void setMaxIterations(int maxIterations) {
 		this.maxIterations = maxIterations;
 	}
@@ -36,18 +36,54 @@ public class KMean extends AbstractAlgorithm {
 		this.deviation = deviation;
 	}
 
-	public void classifyCluster(int clusterValue, char classification) {
+	public boolean classifyNewElements(int type) {
+		if (type == SQR_EUCLID) {
+			if (sETree != null) {
+				IterableIterator<DatabaseElement> iter = getDb_()
+						.getNonTrainingdataDatabaseIterator();
+				while (iter.hasNext()) {
+					DatabaseElement e = iter.next();
+					char algoClassification = sETree.nearestNeighbor(
+							e.getPixelsAsDouble(), LIST_SIZE, true).get(
+							FIRST_LIST_ELEMENT).value;
+					getDb_().updateAlgoClassification(e, algoClassification);
+				}
+				return true;
+			} else {
+				return false;
+			}
+		} else if (type == MANHATTAN) {
+			if (mTree != null) {
+				IterableIterator<DatabaseElement> iter = getDb_()
+						.getNonTrainingdataDatabaseIterator();
+				while (iter.hasNext()) {
+					DatabaseElement e = iter.next();
+					char algoClassification = mTree.nearestNeighbor(
+							e.getPixelsAsDouble(), LIST_SIZE, true).get(
+							FIRST_LIST_ELEMENT).value;
+					getDb_().updateAlgoClassification(e, algoClassification);
+				}
+				return true;
+			} else {
+				return false;
+			}
+		} else
+			return false;
+	}
+
+	public void classifyCluster(int clusterID, char classification) {
 		IterableIterator<DatabaseElement> iter = getDb_()
-				.getClusteredDatabaseIterator(clusterValue);
+				.getClusteredDatabaseIterator(clusterID);
 		while (iter.hasNext()) {
-			iter.next().setAlgoClassification(classification);
+			DatabaseElement e = iter.next();
+			getDb_().updateAlgoClassification(e, classification);
 		}
 	}
 
 	@Override
 	public void doSqrEuclid(int k) {
 		KdTreeHelper treeHelper = KdTreeHelper.getInstance();
-		char clusterValue = 0;
+		char clusterID = 0;
 		int dim = getDb_().getDim();
 		int iterations = 1;
 		int quantityOfThisCluster = 0;
@@ -79,11 +115,11 @@ public class KMean extends AbstractAlgorithm {
 			while (iter.hasNext()) {
 				DatabaseElement e = iter.next();
 				// check distance to each prototype
-				clusterValue = sETree.nearestNeighbor(e.getPixelsAsDouble(),
+				clusterID = sETree.nearestNeighbor(e.getPixelsAsDouble(),
 						LIST_SIZE, true).get(FIRST_LIST_ELEMENT).value;
 				// and set the cluster value.
 				// the cluster value is the value of the nearest prototype
-				e.setClusterValue(clusterValue);
+				getDb_().updateClusterID(e, clusterID);
 			}
 			// iterate through cluster value 0, 1, 2, ...
 			for (int i = 0; i < k; i++) {
@@ -156,7 +192,7 @@ public class KMean extends AbstractAlgorithm {
 	@Override
 	public void doManhattan(int k) {
 		KdTreeHelper treeHelper = KdTreeHelper.getInstance();
-		char clusterValue = 0;
+		char clusterID = 0;
 		int dim = getDb_().getDim();
 		int iterations = 1;
 		int quantityOfThisCluster = 0;
@@ -188,11 +224,11 @@ public class KMean extends AbstractAlgorithm {
 			while (iter.hasNext()) {
 				DatabaseElement e = iter.next();
 				// check distance to each prototype
-				clusterValue = mTree.nearestNeighbor(e.getPixelsAsDouble(),
+				clusterID = mTree.nearestNeighbor(e.getPixelsAsDouble(),
 						LIST_SIZE, true).get(FIRST_LIST_ELEMENT).value;
 				// and set the cluster value.
 				// the cluster value is the value of the nearest prototype
-				e.setClusterValue(clusterValue);
+				getDb_().updateClusterID(e, clusterID);
 			}
 			// iterate through cluster value 0, 1, 2, ...
 			for (int i = 0; i < k; i++) {

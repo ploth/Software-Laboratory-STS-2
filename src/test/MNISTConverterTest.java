@@ -5,7 +5,6 @@ import io.PERST_MNIST_Converter;
 import java.io.IOException;
 
 import data.PERSTDatabase;
-import data.PERSTDatabase.DatabaseElement;
 
 public class MNISTConverterTest {
 
@@ -28,9 +27,9 @@ public class MNISTConverterTest {
 		//
 		//
 		// get number of database entries
-		PERSTDatabase db = PERSTDatabase.getInstance();
-		PERST_MNIST_Converter.read("ImageData/train-labels.idx1-ubyte",
-				"ImageData/train-images.idx3-ubyte", 0, 60000, true);
+		// PERSTDatabase db = PERSTDatabase.getInstance();
+		// PERST_MNIST_Converter.read("ImageData/train-labels.idx1-ubyte",
+		// "ImageData/train-images.idx3-ubyte", 0, 10, true);
 		// System.out.println(db.getDatabaseInfos().getNumberOfDatabaseElements());
 		//
 		//
@@ -43,37 +42,49 @@ public class MNISTConverterTest {
 		// System.out.println();
 		// System.out.println();
 
-		int index = db.createUnclassifiedDatabaseElement(db.getDatabaseElement(
-				20000).getPixels());
-		System.out.println("unclassified element created");
-		System.out.println("index of unclassified element: " + index);
-		DatabaseElement e = db.getNonTrainingdataDatabaseIterator().first();
-		e.setAlgoClassification((char) 2);
-		System.out
-				.println("algo recognized a 2 and set it to the algo classification value");
-		System.out.println("number of database elements: "
+		// int index =
+		// db.createUnclassifiedDatabaseElement(db.getDatabaseElement(
+		// 20000).getPixels());
+		// System.out.println("unclassified element created");
+		// System.out.println("index of unclassified element: " + index);
+		// DatabaseElement e = db.getNonTrainingdataDatabaseIterator().first();
+		// e.setAlgoClassification((char) 2);
+		// System.out
+		// .println("algo recognized a 2 and set it to the algo classification value");
+		// System.out.println("number of database elements: "
+		// + db.getNumberOfDatabaseElements());
+		// System.out.println("number of correct database elements: "
+		// + db.getNumberOfCorrectDatabaseElements());
+		// System.out.println("number of unclassified database elements: "
+		// + (db.getNumberOfDatabaseElements() - db
+		// .getNumberOfCorrectDatabaseElements()));
+		// db.convertToCorrect(index, (char) 1);
+		// System.out
+		// .println("got uncorrect database element and we set the correct value to 1 by hand and converted it to a correct database element (trainingdata)");
+		// System.out.println("number of database elements: "
+		// + db.getNumberOfDatabaseElements());
+		// System.out.println("number of correct database elements: "
+		// + db.getNumberOfCorrectDatabaseElements());
+		// System.out.println("number of uncorrect database elements: "
+		// + (db.getNumberOfDatabaseElements() - db
+		// .getNumberOfCorrectDatabaseElements()));
+		// System.out
+		// .println("correct classification: "
+		// + (int) db.getDatabaseElement(index)
+		// .getCorrectClassification());
+		// System.out.println("algo classification: "
+		// + (int) db.getDatabaseElement(index).getAlgoClassification());
+		//
+		// db.closeDB();
+		//
+		//
+
+		PERSTDatabase db = PERSTDatabase.getInstance();
+		PERST_MNIST_Converter.read("ImageData/train-labels.idx1-ubyte",
+				"ImageData/train-images.idx3-ubyte", 0, 10, true);
+		System.out.println("numberOfDatabaseElements: "
 				+ db.getNumberOfDatabaseElements());
-		System.out.println("number of correct database elements: "
-				+ db.getNumberOfCorrectDatabaseElements());
-		System.out.println("number of unclassified database elements: "
-				+ (db.getNumberOfDatabaseElements() - db
-						.getNumberOfCorrectDatabaseElements()));
-		db.convertToCorrect(index, (char) 1);
-		System.out
-				.println("got uncorrect database element and we set the correct value to 1 by hand and converted it to a correct database element (trainingdata)");
-		System.out.println("number of database elements: "
-				+ db.getNumberOfDatabaseElements());
-		System.out.println("number of correct database elements: "
-				+ db.getNumberOfCorrectDatabaseElements());
-		System.out.println("number of uncorrect database elements: "
-				+ (db.getNumberOfDatabaseElements() - db
-						.getNumberOfCorrectDatabaseElements()));
-		System.out
-				.println("correct classification: "
-						+ (int) db.getDatabaseElement(index)
-								.getCorrectClassification());
-		System.out.println("algo classification: "
-				+ (int) db.getDatabaseElement(index).getAlgoClassification());
+		PERST_MNIST_Converter.write("bitchlabels", "bitchimages");
 
 		db.closeDB();
 	}

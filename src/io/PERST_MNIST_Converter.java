@@ -1,11 +1,18 @@
 package io;
 
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+
+import org.garret.perst.IterableIterator;
+
+import data.PERSTDatabase.DatabaseElement;
 
 public class PERST_MNIST_Converter extends AbstractConverter {
 
+	// TODO: Exceptions
 	public static int read(String readLabelPath, String readImagePath,
 			int rangeStart, int rangeEnd, boolean trainingdata)
 			throws IOException {
@@ -66,7 +73,22 @@ public class PERST_MNIST_Converter extends AbstractConverter {
 		return numberOfImages;
 	}
 
-	public static void write(String writeLabelPath, String writeImagePath) {
-
+	public static void write(String writeLabelPath, String writeImagePath)
+			throws IOException {
+		IterableIterator<DatabaseElement> iter = getDb_()
+				.getCorrectDatabaseIterator();
+		int dim = getDb_().getDim();
+		FileWriter fwLabel = new FileWriter(writeLabelPath);
+		FileWriter fwImage = new FileWriter(writeImagePath);
+		BufferedWriter bwLabel = new BufferedWriter(fwLabel);
+		BufferedWriter bwImage = new BufferedWriter(fwImage);
+		while (iter.hasNext()) {
+			DatabaseElement e = iter.next();
+			bwImage.write(e.getPixels());
+		}
+		bwLabel.close();
+		bwImage.close();
+		fwLabel.close();
+		fwImage.close();
 	}
 }
