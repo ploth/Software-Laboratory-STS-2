@@ -231,8 +231,8 @@ public class PERSTDatabase {
 		storage_.close();
 	}
 
+	// TODO: remove?
 	public void deleteDatabase() throws IOException {
 		db_.dropTable(DatabaseElement.class);
-		numberOfDatabaseElements_ = 0;
 	}
 }
