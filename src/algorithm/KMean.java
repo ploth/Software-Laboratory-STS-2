@@ -19,6 +19,7 @@ public class KMean extends AbstractAlgorithm {
 	private SqrEuclid<Character> sETree;
 	private Manhattan<Character> mTree;
 	private double[][] clusterMeans;
+	private char[] map;
 
 	public KMean() {
 
@@ -43,10 +44,10 @@ public class KMean extends AbstractAlgorithm {
 						.getNonTrainingdataDatabaseIterator();
 				while (iter.hasNext()) {
 					DatabaseElement e = iter.next();
-					char algoClassification = sETree.nearestNeighbor(
+					char clusterID = sETree.nearestNeighbor(
 							e.getPixelsAsDouble(), LIST_SIZE, true).get(
 							FIRST_LIST_ELEMENT).value;
-					getDb_().updateAlgoClassification(e, algoClassification);
+					getDb_().updateAlgoClassification(e, map[clusterID]);
 				}
 				return true;
 			} else {
@@ -58,10 +59,10 @@ public class KMean extends AbstractAlgorithm {
 						.getNonTrainingdataDatabaseIterator();
 				while (iter.hasNext()) {
 					DatabaseElement e = iter.next();
-					char algoClassification = mTree.nearestNeighbor(
+					char clusterID = mTree.nearestNeighbor(
 							e.getPixelsAsDouble(), LIST_SIZE, true).get(
 							FIRST_LIST_ELEMENT).value;
-					getDb_().updateAlgoClassification(e, algoClassification);
+					getDb_().updateAlgoClassification(e, map[clusterID]);
 				}
 				return true;
 			} else {
@@ -72,6 +73,7 @@ public class KMean extends AbstractAlgorithm {
 	}
 
 	public void classifyCluster(int clusterID, char classification) {
+		map[clusterID] = classification;
 		IterableIterator<DatabaseElement> iter = getDb_()
 				.getClusteredDatabaseIterator(clusterID);
 		while (iter.hasNext()) {
@@ -187,6 +189,7 @@ public class KMean extends AbstractAlgorithm {
 			// iterations++;
 		}
 		clusterMeans = prototypes.clone();
+		map = new char[clusterMeans.length];
 	}
 
 	@Override
@@ -296,5 +299,6 @@ public class KMean extends AbstractAlgorithm {
 			// iterations++;
 		}
 		clusterMeans = prototypes.clone();
+		map = new char[clusterMeans.length];
 	}
 }
