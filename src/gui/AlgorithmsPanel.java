@@ -90,7 +90,6 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 		case "startKMeansTest":
 			if (!launchKMean())
 				return;
-			// TODO Choose iterations and epsilon
 			double[][] clusterMeans = kMeanAlgorithm.getClusterMeans();
 			char[] clusterClassifications = new char[chosenParameterK];
 			new ClusterClassificationDialog(clusterMeans,
@@ -101,7 +100,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 			testAlgorithm(Algorithm.KMEAN);
 			break;
 		case "classifyByKMeans":
-			// TODO Write code for kMeans classifying
+			classifyByKMean();
 			break;
 		}
 	}
@@ -197,6 +196,25 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 			JOptionPane.showMessageDialog(new JFrame(),
 					"Invalid distance measurement method chosen");
 			return false;
+		}
+	}
+
+	private void classifyByKMean() {
+		String distanceMeasurement = inputDistanceMeasurement();
+		int type;
+		if (distanceMeasurement.equals("Euclid")) {
+			type = KMean.SQR_EUCLID;
+		} else if (distanceMeasurement.equals("Manhattan")) {
+			type = KMean.MANHATTAN;
+		} else {
+			return;
+		}
+		boolean success = kMeanAlgorithm.classifyNewElements(type);
+		if (success) {
+			IterableIterator<DatabaseElement> iter = db
+					.getNonTrainingdataDatabaseIterator();
+			ArrayList<DatabaseElement> classifiedElements = iter.toList();
+			new ResultDisplayDialog(classifiedElements);
 		}
 	}
 
