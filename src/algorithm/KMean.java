@@ -36,6 +36,41 @@ public class KMean extends AbstractAlgorithm {
 		this.deviation = deviation;
 	}
 
+	public boolean classifyNewElements(int type) {
+		if (type == SQR_EUCLID) {
+			if (sETree != null) {
+				IterableIterator<DatabaseElement> iter = getDb_()
+						.getNonTrainingdataDatabaseIterator();
+				while (iter.hasNext()) {
+					DatabaseElement e = iter.next();
+					char algoClassification = sETree.nearestNeighbor(
+							e.getPixelsAsDouble(), LIST_SIZE, true).get(
+							FIRST_LIST_ELEMENT).value;
+					getDb_().updateAlgoClassification(e, algoClassification);
+				}
+				return true;
+			} else {
+				return false;
+			}
+		} else if (type == MANHATTAN) {
+			if (mTree != null) {
+				IterableIterator<DatabaseElement> iter = getDb_()
+						.getNonTrainingdataDatabaseIterator();
+				while (iter.hasNext()) {
+					DatabaseElement e = iter.next();
+					char algoClassification = mTree.nearestNeighbor(
+							e.getPixelsAsDouble(), LIST_SIZE, true).get(
+							FIRST_LIST_ELEMENT).value;
+					getDb_().updateAlgoClassification(e, algoClassification);
+				}
+				return true;
+			} else {
+				return false;
+			}
+		} else
+			return false;
+	}
+
 	public void classifyCluster(int clusterID, char classification) {
 		IterableIterator<DatabaseElement> iter = getDb_()
 				.getClusteredDatabaseIterator(clusterID);

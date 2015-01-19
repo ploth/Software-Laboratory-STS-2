@@ -81,7 +81,7 @@ public class MNISTConverterTest {
 
 		PERSTDatabase db = PERSTDatabase.getInstance();
 		PERST_MNIST_Converter.read("ImageData/train-labels.idx1-ubyte",
-				"ImageData/train-images.idx3-ubyte", 1, 10, true);
+				"ImageData/train-images.idx3-ubyte", 0, 10, true);
 		System.out.println("numberOfDatabaseElements: "
 				+ db.getNumberOfDatabaseElements());
 		PERST_MNIST_Converter.write("bitchlabels", "bitchimages");

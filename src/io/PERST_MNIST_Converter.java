@@ -16,7 +16,7 @@ public class PERST_MNIST_Converter extends AbstractConverter {
 	public static int read(String readLabelPath, String readImagePath,
 			int rangeStart, int rangeEnd, boolean trainingdata)
 			throws IOException {
-		if (rangeStart <= 0) {
+		if (rangeStart < 0) {
 			rangeStart = 1;
 			System.err.println("Hey, what are you doing? (lower limit set to  "
 					+ rangeStart + ".");
