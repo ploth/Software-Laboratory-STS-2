@@ -237,10 +237,10 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 					i++;
 				}
 			}
-			BufferedImage scaledImage = new BufferedImage(145, 200,
+			BufferedImage scaledImage = new BufferedImage(145, 145,
 					BufferedImage.TYPE_BYTE_GRAY);
 			AffineTransform transform = new AffineTransform();
-			transform.scale(4.1, 4.1);
+			transform.scale(4.1, 3.9);
 			AffineTransformOp scaleOp = new AffineTransformOp(transform,
 					AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
 			scaledImage = scaleOp.filter(image, scaledImage);

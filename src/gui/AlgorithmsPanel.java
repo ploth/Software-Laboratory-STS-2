@@ -17,6 +17,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.garret.perst.IterableIterator;
 
+import algorithm.KMean;
 import algorithm.KNN;
 import data.PERSTDatabase;
 import data.PERSTDatabase.DatabaseElement;
@@ -27,6 +28,11 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 	private int chosenParameterK;
 	private static final long serialVersionUID = 1L;
 	private final PERSTDatabase db = PERSTDatabase.getInstance();
+	private KMean kMeanAlgorithm;
+
+	private enum Algorithm {
+		KMEAN, KNN
+	}
 
 	public AlgorithmsPanel() {
 		setLayout(new MigLayout("", "[grow]", "[][]"));
@@ -74,16 +80,27 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "startKNNTest":
-			testKNN();
+			if (!launchKNN())
+				return;
+			testAlgorithm(Algorithm.KNN);
 			break;
 		case "classifyByKNN":
 			classifyByKNN();
 			break;
 		case "startKMeansTest":
-			// TODO Write code for kMeans test run
+			if (!launchKMean())
+				return;
+			double[][] clusterMeans = kMeanAlgorithm.getClusterMeans();
+			char[] clusterClassifications = new char[chosenParameterK];
+			new ClusterClassificationDialog(clusterMeans,
+					clusterClassifications);
+			for (int i = 0; i < clusterClassifications.length; i++) {
+				kMeanAlgorithm.classifyCluster(i, clusterClassifications[i]);
+			}
+			testAlgorithm(Algorithm.KMEAN);
 			break;
 		case "classifyByKMeans":
-			// TODO Write code for kMeans classifying
+			classifyByKMean();
 			break;
 		}
 	}
@@ -128,15 +145,97 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 		return distanceMeasurement;
 	}
 
-	private void testKNN() {
-		if(!launchKNN())
+	private boolean launchKMean() {
+		if (isDatabaseEmpty())
+			return false;
+		chosenParameterK = inputK();
+		chosenDistaneMeasurementMethod = inputDistanceMeasurement();
+		if (chosenParameterK == 0 || chosenDistaneMeasurementMethod == null) {
+			JOptionPane.showMessageDialog(new JFrame(),
+					"Please set the algorithm parameters correctly");
+			return false;
+		}
+		int maxIterations = 0;
+		String maxIterations_str = JOptionPane.showInputDialog(new JFrame(),
+				"Enter the maximum iteration limit:");
+		if (maxIterations_str == null) {
+			return false;
+		}
+		maxIterations = Integer.valueOf(maxIterations_str);
+		if (maxIterations <= 0) {
+			JOptionPane.showMessageDialog(new JFrame(),
+					"Please choose a value above 0.");
+			return false;
+		}
+		double deviation = 0;
+		String deviation_str = JOptionPane.showInputDialog(new JFrame(),
+				"Enter the threshold for the cluster mean deviation.\n"
+						+ "The algorithm will stop when the cluster means\n"
+						+ "move less than this deviation threshold.\n"
+						+ "Values from 0.1 to 10 make sense,\n"
+						+ "but you can input any positive number");
+		if (deviation_str == null) {
+			return false;
+		}
+		deviation = Double.valueOf(deviation_str);
+		if (deviation <= 0) {
+			JOptionPane.showMessageDialog(new JFrame(),
+					"Please choose a value above 0.");
+			return false;
+		}
+		kMeanAlgorithm = new KMean();
+		kMeanAlgorithm.setMaxIterations(maxIterations);
+		kMeanAlgorithm.setDeviation(deviation);
+		if (chosenDistaneMeasurementMethod == "Euclid") {
+			kMeanAlgorithm.doAlgorithm(KNN.SQR_EUCLID, chosenParameterK);
+			return true;
+		} else if (chosenDistaneMeasurementMethod == "Manhattan") {
+			kMeanAlgorithm.doAlgorithm(KNN.MANHATTAN, chosenParameterK);
+			return true;
+		} else {
+			JOptionPane.showMessageDialog(new JFrame(),
+					"Invalid distance measurement method chosen");
+			return false;
+		}
+	}
+
+	private void classifyByKMean() {
+		String distanceMeasurement = inputDistanceMeasurement();
+		int type;
+		if (distanceMeasurement.equals("Euclid")) {
+			type = KMean.SQR_EUCLID;
+		} else if (distanceMeasurement.equals("Manhattan")) {
+			type = KMean.MANHATTAN;
+		} else {
 			return;
+		}
+		boolean success = kMeanAlgorithm.classifyNewElements(type);
+		if (success) {
+			IterableIterator<DatabaseElement> iter = db
+					.getNonTrainingdataDatabaseIterator();
+			ArrayList<DatabaseElement> classifiedElements = iter.toList();
+			new ResultDisplayDialog(classifiedElements);
+		}
+	}
+
+	private void testAlgorithm(Algorithm algorithm) {
 		int numTotalTestObjects = db
 				.getNumberOfNonTrainingdataDatabaseElements();
 		IterableIterator<DatabaseElement> iter_test = db
 				.getNonTrainingdataDatabaseIterator();
 		int[] testObjectsPerClass = new int[10];
 		Arrays.fill(testObjectsPerClass, 0);
+		int numTotalTrainingObjects = db.getNumberOfCorrectDatabaseElements();
+		int[] trainingObjectsPerClass = new int[10];
+		Arrays.fill(trainingObjectsPerClass, 0);
+		IterableIterator<DatabaseElement> iter_training = db
+				.getCorrectDatabaseIterator();
+		while (iter_training.hasNext()) {
+			DatabaseElement e = iter_training.next();
+			int classValue = e.getCorrectClassification();
+			trainingObjectsPerClass[classValue]++;
+		}
+
 		int meanSquaredError = 0;
 		ArrayList<DatabaseElement> falseClassifiedObjects = new ArrayList<DatabaseElement>();
 		while (iter_test.hasNext()) {
@@ -152,27 +251,26 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 			testObjectsPerClass[classValue]++;
 		}
 		meanSquaredError = meanSquaredError / numTotalTestObjects;
-		int numTotalTrainingObjects = db.getNumberOfCorrectDatabaseElements();
-		int[] trainingObjectsPerClass = new int[10];
-		Arrays.fill(trainingObjectsPerClass, 0);
-		IterableIterator<DatabaseElement> iter_training = db
-				.getCorrectDatabaseIterator();
-		while (iter_training.hasNext()) {
-			DatabaseElement e = iter_training.next();
-			int classValue = e.getCorrectClassification();
-			trainingObjectsPerClass[classValue]++;
-		}
 
-		new StatisticsDialog("k-Nearest-Neighbor",
-				chosenDistaneMeasurementMethod, chosenParameterK,
-				numTotalTestObjects, testObjectsPerClass,
-				numTotalTrainingObjects, trainingObjectsPerClass,
-				falseClassifiedObjects, meanSquaredError);
+		if (algorithm == Algorithm.KNN) {
+			new StatisticsDialog("k-Nearest-Neighbor",
+					chosenDistaneMeasurementMethod, chosenParameterK,
+					numTotalTestObjects, testObjectsPerClass,
+					numTotalTrainingObjects, trainingObjectsPerClass,
+					falseClassifiedObjects, meanSquaredError);
+		} else if (algorithm == Algorithm.KMEAN) {
+			new StatisticsDialog("k-Nearest-Neighbor",
+					chosenDistaneMeasurementMethod, chosenParameterK,
+					numTotalTestObjects, testObjectsPerClass,
+					numTotalTrainingObjects, trainingObjectsPerClass,
+					falseClassifiedObjects, meanSquaredError);
+		}
 	}
 
 	private void classifyByKNN() {
 		if (launchKNN()) {
-			IterableIterator<DatabaseElement> iter = db.getNonTrainingdataDatabaseIterator();
+			IterableIterator<DatabaseElement> iter = db
+					.getNonTrainingdataDatabaseIterator();
 			ArrayList<DatabaseElement> classifiedElements = iter.toList();
 			new ResultDisplayDialog(classifiedElements);
 		}
