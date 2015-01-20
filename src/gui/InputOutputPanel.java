@@ -184,64 +184,55 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 	}
 
 	private void loadCSVfile() {
-		JFileChooser fc = new JFileChooser();
-		FileNameExtensionFilter filterCSV = new FileNameExtensionFilter(
-				"CSV file", "csv");
-		fc.setFileFilter(filterCSV);
 
-		int returnVal = fc.showDialog(new JFrame(), "Load CSV file");
 	}
 
 	private void loadMNISTfiles(boolean isTrainingData) {
-		String imagesPath;
-		String labelsPath;
+		String imagesPath = loadFile("MNIST images", "idx3-ubyte");
+		if (!imagesPath.isEmpty()) {
+			String labelsPath = loadFile("MNIST labels", "idx1-ubyte");
 
-		JFileChooser fc = new JFileChooser("ImageData/");
-		FileNameExtensionFilter filterIDX3 = new FileNameExtensionFilter(
-				"MNIST images", "idx3-ubyte");
-		FileNameExtensionFilter filterIDX1 = new FileNameExtensionFilter(
-				"MNIST labels", "idx1-ubyte");
-		fc.setFileFilter(filterIDX3);
+			int startIndex = 0;
+			int endIndex = 0;
+			String startIndex_str = JOptionPane.showInputDialog(new JFrame(),
+					"Enter start index");
+			String endIndex_str = JOptionPane.showInputDialog(new JFrame(),
+					"Enter end index");
+			if (startIndex_str.isEmpty() || endIndex_str.isEmpty()) {
+				return;
+			} else {
+				startIndex = Integer.parseInt(startIndex_str);
+				endIndex = Integer.parseInt(endIndex_str);
+			}
 
-		int returnVal = fc.showDialog(new JFrame(), "Load MNIST images");
-
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			imagesPath = fc.getSelectedFile().getPath();
-
-			fc.setFileFilter(filterIDX1);
-			returnVal = fc.showDialog(new JFrame(), "Load MNIST labels");
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				labelsPath = fc.getSelectedFile().getPath();
-
-				int startIndex = 0;
-				int endIndex = 0;
-				String startIndex_str = JOptionPane.showInputDialog(
-						new JFrame(), "Enter start index");
-				String endIndex_str = JOptionPane.showInputDialog(new JFrame(),
-						"Enter end index");
-				if (startIndex_str.isEmpty() || endIndex_str.isEmpty()) {
-					return;
-				} else {
-					startIndex = Integer.parseInt(startIndex_str);
-					endIndex = Integer.parseInt(endIndex_str);
-				}
-
-				try {
-					PERST_MNIST_Converter.read(labelsPath, imagesPath,
-							startIndex, endIndex, isTrainingData);
-					updateDataCounters();
-				} catch (IOException e) {
-					JOptionPane.showMessageDialog(new JFrame(),
-							"An error ocurred while reading the files. Message:\n"
-									+ e.getMessage(), "Read error",
-							JOptionPane.ERROR_MESSAGE);
-				} catch (ConverterException e) {
-					JOptionPane.showMessageDialog(new JFrame(),
-							"An error ocurred while converting the files. Message:\n"
-									+ e.getMessage(), "Converter error",
-							JOptionPane.ERROR_MESSAGE);
-				}
+			try {
+				PERST_MNIST_Converter.read(labelsPath, imagesPath, startIndex,
+						endIndex, isTrainingData);
+				updateDataCounters();
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(new JFrame(),
+						"An error ocurred while reading the files. Message:\n"
+								+ e.getMessage(), "Read error",
+						JOptionPane.ERROR_MESSAGE);
+			} catch (ConverterException e) {
+				JOptionPane.showMessageDialog(new JFrame(),
+						"An error ocurred while converting the files. Message:\n"
+								+ e.getMessage(), "Converter error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		}
+	}
+
+	private String loadFile(String fileDescription, String fileSuffix) {
+		String filePath = null;
+		JFileChooser fc = new JFileChooser("./");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				fileDescription, fileSuffix);
+		fc.setFileFilter(filter);
+		int returnVal = fc.showDialog(new JFrame(), "Load " + fileDescription);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			filePath = fc.getSelectedFile().getPath();
+		}
+		return filePath;
 	}
 }
