@@ -1,5 +1,8 @@
 package io;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.File;
@@ -15,6 +18,7 @@ public class PERST_PNG_Converter extends AbstractConverter {
 
 	private static final int BAND = 0;
 	private static final int MAX_CHAR = 255;
+	private static final int FIRST_PIXEL = 0;
 
 	public static void read(String path) throws IOException, ConverterException {
 		if (path.endsWith("png")) {
@@ -61,6 +65,11 @@ public class PERST_PNG_Converter extends AbstractConverter {
 					i++;
 				}
 			}
+			Graphics g = image.getGraphics();
+			g.setFont(new Font("Arial", Font.BOLD, 12));
+			g.setColor(Color.black);
+			g.drawString(String.valueOf(classification), FIRST_PIXEL,
+					FIRST_PIXEL);
 			ImageIO.write(image, "png", file);
 		} else
 			throw new ConverterException("Please save as .png file.");
