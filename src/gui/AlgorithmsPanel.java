@@ -24,6 +24,8 @@ import data.PERSTDatabase.DatabaseElement;
 
 public class AlgorithmsPanel extends JPanel implements ActionListener {
 
+	// TODO Write comments
+
 	private String chosenDistaneMeasurementMethod;
 	private int chosenParameterK;
 	private static final long serialVersionUID = 1L;

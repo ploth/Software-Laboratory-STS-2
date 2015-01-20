@@ -32,6 +32,7 @@ import data.PERSTDatabase.DatabaseElement;
 public class ResultDisplayDialog extends JDialog implements ActionListener {
 
 	// TODO Refactor member variables with underscore
+	// TODO Write comments
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private final GraphicsPanel graphicsPanel;
