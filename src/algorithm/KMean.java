@@ -26,7 +26,23 @@ public class KMean extends AbstractAlgorithm {
 	}
 
 	public double[][] getClusterMeans() {
-		return clusterMeans;
+		ArrayList<double[]> nonEmptyMeans = new ArrayList<double[]>();
+		for (int i = 0; i < clusterMeans.length; i++) {
+			boolean empty = true;
+			for (int j = 0; j < clusterMeans[0].length; j++) {
+				if (clusterMeans[i][j] != 0.0) {
+					empty = false;
+					break;
+				}
+			}
+			if (!empty)
+				nonEmptyMeans.add(clusterMeans[i]);
+		}
+		double[][] returnMeans = new double[nonEmptyMeans.size()][clusterMeans[0].length];
+		for (int i = 0; i < nonEmptyMeans.size(); i++) {
+			returnMeans[i] = nonEmptyMeans.get(i);
+		}
+		return returnMeans;
 	}
 
 	public void setMaxIterations(int maxIterations) {
