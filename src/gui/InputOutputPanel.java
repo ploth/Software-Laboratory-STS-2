@@ -134,7 +134,8 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 		btnExportDataMNIST.setActionCommand("exportToMNIST");
 		pnlExport.add(btnExportDataMNIST, "cell 0 0,growx");
 
-		JButton btnExportDataCSV = new JButton("Export traing data to CSV file");
+		JButton btnExportDataCSV = new JButton(
+				"Export training data to CSV file");
 		btnExportDataCSV.addActionListener(this);
 		btnExportDataCSV.setActionCommand("exportToCSV");
 		pnlExport.add(btnExportDataCSV, "cell 0 1,growx");
@@ -353,7 +354,7 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			int returnVal = fc.showDialog(new JFrame(), "Export");
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				filePath = fc.getSelectedFile().getPath();
+				filePath = fc.getSelectedFile().getPath() + "\\";
 			}
 		}
 		return filePath;
