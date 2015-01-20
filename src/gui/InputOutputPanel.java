@@ -1,5 +1,6 @@
 package gui;
 
+import io.ConverterException;
 import io.PERST_MNIST_Converter;
 
 import java.awt.Color;
@@ -182,9 +183,18 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 		}
 	}
 
+	private void loadCSVfile() {
+		JFileChooser fc = new JFileChooser();
+		FileNameExtensionFilter filterCSV = new FileNameExtensionFilter(
+				"CSV file", "csv");
+		fc.setFileFilter(filterCSV);
+
+		int returnVal = fc.showDialog(new JFrame(), "Load CSV file");
+	}
+
 	private void loadMNISTfiles(boolean isTrainingData) {
-		String imagesPath = "";
-		String labelsPath = "";
+		String imagesPath;
+		String labelsPath;
 
 		JFileChooser fc = new JFileChooser("ImageData/");
 		FileNameExtensionFilter filterIDX3 = new FileNameExtensionFilter(
@@ -221,8 +231,15 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 							startIndex, endIndex, isTrainingData);
 					updateDataCounters();
 				} catch (IOException e) {
-					JOptionPane.showMessageDialog(new JFrame(), e.getMessage(),
-							"IOException", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(new JFrame(),
+							"An error ocurred while reading the files. Message:\n"
+									+ e.getMessage(), "Read error",
+							JOptionPane.ERROR_MESSAGE);
+				} catch (ConverterException e) {
+					JOptionPane.showMessageDialog(new JFrame(),
+							"An error ocurred while converting the files. Message:\n"
+									+ e.getMessage(), "Converter error",
+							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		}
