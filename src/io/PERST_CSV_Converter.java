@@ -13,20 +13,30 @@ import data.PERSTDatabase.DatabaseElement;
 
 public class PERST_CSV_Converter extends AbstractConverter {
 
-	public static void read(String path) throws IOException {
+	public static void read(String path, int rangeStart, int rangeEnd)
+			throws IOException, ConverterException {
 		FileReader fr = new FileReader(path);
 		BufferedReader br = new BufferedReader(fr);
 		String line;
+		if (rangeStart <= 0) {
+			br.close();
+			fr.close();
+			throw new ConverterException("Please enter a minimum value of 1");
+		}
+		int lineCounter = 1;
 		while ((line = br.readLine()) != null) {
-			StringTokenizer lineTokens = new StringTokenizer(line, ",");
-			char classification = (char) Integer.parseInt(lineTokens
-					.nextToken());
-			int numberOfPixels = lineTokens.countTokens();
-			char pixels[] = new char[numberOfPixels];
-			for (int i = 0; i < numberOfPixels; i++) {
-				pixels[i] = (char) Integer.parseInt(lineTokens.nextToken());
+			if (rangeStart <= lineCounter && lineCounter <= rangeEnd) {
+				StringTokenizer lineTokens = new StringTokenizer(line, ",");
+				char classification = (char) Integer.parseInt(lineTokens
+						.nextToken());
+				int numberOfPixels = lineTokens.countTokens();
+				char pixels[] = new char[numberOfPixels];
+				for (int i = 0; i < numberOfPixels; i++) {
+					pixels[i] = (char) Integer.parseInt(lineTokens.nextToken());
+				}
+				getDb_().createCorrectDatabaseElement(classification, pixels,
+						true);
 			}
-			getDb_().createCorrectDatabaseElement(classification, pixels, true);
 		}
 		br.close();
 		fr.close();
