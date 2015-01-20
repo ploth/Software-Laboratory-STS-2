@@ -50,7 +50,7 @@ public class PNGConverterTest {
 		System.out.println("numberOfNonTrainingdata: "
 				+ db.getNumberOfNonTrainingdataDatabaseElements());
 		DatabaseElement e = db.getNonTrainingdataDatabaseIterator().first();
-		PERST_PNG_Converter.write(e.getCorrectClassification(), e.getPixels(),
+		PERST_PNG_Converter.writeOneImage(e.getCorrectClassification(), e.getPixels(),
 				"snitch.png");
 		db.closeDB();
 	}

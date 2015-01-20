@@ -7,6 +7,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.garret.perst.IterableIterator;
+
+import data.PERSTDatabase.DatabaseElement;
+
 public class PERST_PNG_Converter extends AbstractConverter {
 
 	private static final int BAND = 0;
@@ -29,8 +33,19 @@ public class PERST_PNG_Converter extends AbstractConverter {
 			throw new ConverterException("Please select a .png file.");
 	}
 
-	public static void write(char classification, char[] pixels, String path)
-			throws IOException, ConverterException {
+	public static void write(String folderPath) throws IOException,
+			ConverterException {
+		IterableIterator<DatabaseElement> iter = getDb_()
+				.getCorrectDatabaseIterator();
+		while (iter.hasNext()) {
+			DatabaseElement e = iter.next();
+			writeOneImage(e.getCorrectClassification(), e.getPixels(),
+					folderPath + e.getIndex() + ".png");
+		}
+	}
+
+	public static void writeOneImage(char classification, char[] pixels,
+			String path) throws IOException, ConverterException {
 		if (path.endsWith("png")) {
 			File file = new File(path);
 			int i = 0;
