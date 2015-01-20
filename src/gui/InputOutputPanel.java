@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -47,7 +48,7 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		add(pnlTrainingData, "cell 0 0,grow");
 		pnlTrainingData.setLayout(new MigLayout("", "[230.00px][grow]",
-				"[19.00,grow][][]"));
+				"[19.00,grow][][][]"));
 
 		final JLabel lblNumberOfTrainingData = new JLabel(
 				"Number of data training data elements:");
@@ -66,13 +67,16 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 		JButton btnImportDataFromMNIST = new JButton(
 				"Import data from MNIST files");
 		btnImportDataFromMNIST.addActionListener(this);
+
+		JSeparator separator = new JSeparator();
+		pnlTrainingData.add(separator, "cell 0 1 2 1,growx");
 		btnImportDataFromMNIST.setActionCommand("importTrainingDataMNIST");
-		pnlTrainingData.add(btnImportDataFromMNIST, "cell 0 1 2 1,growx");
+		pnlTrainingData.add(btnImportDataFromMNIST, "cell 0 2 2 1,growx");
 
 		JButton btnImportDataFromCSV = new JButton("Import data from CSV");
 		btnImportDataFromCSV.addActionListener(this);
 		btnImportDataFromCSV.setActionCommand("importTrainingDataCSV");
-		pnlTrainingData.add(btnImportDataFromCSV, "flowy,cell 0 2 2 1,growx");
+		pnlTrainingData.add(btnImportDataFromCSV, "flowy,cell 0 3 2 1,growx");
 
 		JPanel pnlClassifyData = new JPanel();
 		pnlClassifyData.setBorder(new TitledBorder(new EtchedBorder(
@@ -80,7 +84,7 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		add(pnlClassifyData, "cell 0 1,grow");
 		pnlClassifyData.setLayout(new MigLayout("", "[230.00][grow]",
-				"[grow][]"));
+				"[grow][][]"));
 
 		JLabel lblNumberOfDataToClassify = new JLabel(
 				"Number of data to be classified:");
@@ -98,16 +102,15 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 		JButton btnClassifyDataFrom = new JButton(
 				"Add new data from MNIST files");
 		btnClassifyDataFrom.addActionListener(this);
-		btnClassifyDataFrom.setActionCommand("addDataToClassifyFromMNIST");
-		pnlClassifyData.add(btnClassifyDataFrom, "flowy,cell 0 1 2 1,growx");
 
-		JButton btnAddNewData = new JButton("Add new data from CSV");
-		btnAddNewData.setActionCommand("addDataToClassifyFromCSV");
-		pnlClassifyData.add(btnAddNewData, "cell 0 1 2 1,growx");
+		JSeparator separator_1 = new JSeparator();
+		pnlClassifyData.add(separator_1, "cell 0 1 2 1,growx");
+		btnClassifyDataFrom.setActionCommand("addDataToClassifyFromMNIST");
+		pnlClassifyData.add(btnClassifyDataFrom, "flowy,cell 0 2 2 1,growx");
 
 		JButton btnAddDataFromPNG = new JButton("Add new data from png");
 		btnAddDataFromPNG.setActionCommand("addDataToClassifyFromPNG");
-		pnlClassifyData.add(btnAddDataFromPNG, "cell 0 1 2 1,growx");
+		pnlClassifyData.add(btnAddDataFromPNG, "cell 0 2 2 1,growx");
 
 		JPanel pnlExport = new JPanel();
 		pnlExport.setBorder(new TitledBorder(new EtchedBorder(
@@ -191,6 +194,7 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 	}
 
 	@Override
+	// TODO Catch exceptions
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "importTrainingDataMNIST":
