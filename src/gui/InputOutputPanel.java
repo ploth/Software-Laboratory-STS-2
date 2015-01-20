@@ -193,12 +193,31 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 
 	private void loadCSVfile() {
 		String filePath = chooseFile("CSV file", "csv", LOAD_FILE);
+		if (filePath.isEmpty())
+			return;
+		int startIndex = 0;
+		int endIndex = 0;
+		String startIndex_str = JOptionPane.showInputDialog(new JFrame(),
+				"Enter start index");
+		String endIndex_str = JOptionPane.showInputDialog(new JFrame(),
+				"Enter end index");
+		if (startIndex_str.isEmpty() || endIndex_str.isEmpty()) {
+			return;
+		} else {
+			startIndex = Integer.parseInt(startIndex_str);
+			endIndex = Integer.parseInt(endIndex_str);
+		}
 		try {
-			PERST_CSV_Converter.read(filePath);
+			PERST_CSV_Converter.read(filePath, startIndex, endIndex);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(
 					new JFrame(),
 					"An error ocurred while reading the files. Message:\n"
+							+ e.getMessage(), "Converter error",
+					JOptionPane.ERROR_MESSAGE);
+		} catch (ConverterException e) {
+			JOptionPane.showMessageDialog(new JFrame(),
+					"An error ocurred while converting the files. Message:\n"
 							+ e.getMessage(), "Converter error",
 					JOptionPane.ERROR_MESSAGE);
 		}
