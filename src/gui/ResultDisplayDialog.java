@@ -169,7 +169,7 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 	private void enterCorrectClassification() {
 		String enteredClassification_str = JOptionPane
 				.showInputDialog("Enter correct classification");
-		if (enteredClassification_str == null) {
+		if (enteredClassification_str.isEmpty()) {
 			JOptionPane.showMessageDialog(new JFrame(),
 					"Please enter a number between 0 and 9.");
 			currentlyEnteredClassification = PERSTDatabase.NO_CORRECT_CLASSIFICATION;

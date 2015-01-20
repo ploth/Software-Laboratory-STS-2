@@ -58,10 +58,10 @@ public class ClusterClassificationDialog extends JDialog {
 		btnEnterValue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String class_str = null;
-				while (class_str == null || class_str.equals("")) {
+				while (class_str.isEmpty()) {
 					class_str = JOptionPane.showInputDialog(new JFrame(),
 							"Enter the cluster's class:");
-					if (class_str == null || class_str.equals("")) {
+					if (class_str.isEmpty()) {
 						JOptionPane.showMessageDialog(new JFrame(),
 								"You have to enter a class!");
 					}
@@ -112,6 +112,7 @@ public class ClusterClassificationDialog extends JDialog {
 					i++;
 				}
 			}
+			// TODO Scale numbers properly for this window
 			BufferedImage scaledImage = new BufferedImage(145, 145,
 					BufferedImage.TYPE_BYTE_GRAY);
 			AffineTransform transform = new AffineTransform();
