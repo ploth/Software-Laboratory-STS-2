@@ -137,7 +137,52 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 		updateDataCounters();
 	}
 
-	private void loadMNISTfiles(JLabel dataLabel, boolean isTrainingData) {
+	private void updateDataCounters() {
+		int numOfTrainingDataElements = db_
+				.getNumberOfCorrectDatabaseElements();
+		int numOfDataToClassify = db_
+				.getNumberOfNonTrainingdataDatabaseElements();
+		lblNumOfTrainingDataElements.setText(String
+				.valueOf(numOfTrainingDataElements));
+		lblNumOfDataToClassify.setText(String.valueOf(numOfDataToClassify));
+	}
+
+	@Override
+	// TODO Catch exceptions
+	public void actionPerformed(ActionEvent e) {
+		switch (e.getActionCommand()) {
+		case "importTrainingDataMNIST":
+			loadMNISTfiles(true);
+			updateDataCounters();
+			break;
+		case "importTrainingDataCSV":
+
+			updateDataCounters();
+			break;
+		case "addDataToClassifyFromMNIST":
+			loadMNISTfiles(false);
+			updateDataCounters();
+			break;
+		case "addDataToClassifyFromPNG":
+			// TODO add PNG code
+			updateDataCounters();
+			break;
+		case "exportToMNIST":
+			// TODO add MNIST export code
+			break;
+		case "exportToCSV":
+			// TODO add CSV export code
+			break;
+		case "exportToPNG":
+			// TODO add PNG export code
+			break;
+		default:
+			// TODO Throw exception?
+			System.err.println("Unknown action: " + e.getActionCommand());
+		}
+	}
+
+	private void loadMNISTfiles(boolean isTrainingData) {
 		String imagesPath = "";
 		String labelsPath = "";
 
@@ -180,56 +225,6 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 							"IOException", JOptionPane.ERROR_MESSAGE);
 				}
 			}
-		}
-	}
-
-	private void updateDataCounters() {
-		int numOfTrainingDataElements = db_
-				.getNumberOfCorrectDatabaseElements();
-		int numOfDataToClassify = db_
-				.getNumberOfNonTrainingdataDatabaseElements();
-		lblNumOfTrainingDataElements.setText(String
-				.valueOf(numOfTrainingDataElements));
-		lblNumOfDataToClassify.setText(String.valueOf(numOfDataToClassify));
-	}
-
-	@Override
-	// TODO Catch exceptions
-	public void actionPerformed(ActionEvent e) {
-		switch (e.getActionCommand()) {
-		case "importTrainingDataMNIST":
-			loadMNISTfiles(lblNumOfTrainingDataElements, true);
-			updateDataCounters();
-			break;
-		case "importTrainingDataCSV":
-			// TODO add CSV code
-			JOptionPane.showMessageDialog(new JFrame(), "Import CSV");
-			updateDataCounters();
-			break;
-		case "addDataToClassifyFromMNIST":
-			loadMNISTfiles(lblNumOfDataToClassify, false);
-			updateDataCounters();
-			break;
-		case "addDataToClassifyFromCSV":
-			// TODO add CSV code
-			updateDataCounters();
-			break;
-		case "addDataToClassifyFromPNG":
-			// TODO add PNG code
-			updateDataCounters();
-			break;
-		case "exportToMNIST":
-			// TODO add MNIST export code
-			break;
-		case "exportToCSV":
-			// TODO add CSV export code
-			break;
-		case "exportToPNG":
-			// TODO add PNG export code
-			break;
-		default:
-			// TODO Throw exception?
-			System.err.println("Unknown action: " + e.getActionCommand());
 		}
 	}
 }
