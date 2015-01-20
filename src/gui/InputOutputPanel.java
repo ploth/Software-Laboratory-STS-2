@@ -161,7 +161,7 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 						new JFrame(), "Enter start index");
 				String endIndex_str = JOptionPane.showInputDialog(new JFrame(),
 						"Enter end index");
-				if (startIndex_str == null || endIndex_str == null) {
+				if (startIndex_str.isEmpty() || endIndex_str.isEmpty()) {
 					return;
 				} else {
 					startIndex = Integer.parseInt(startIndex_str);

@@ -124,7 +124,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 		int k = 0;
 		String k_str = JOptionPane.showInputDialog(new JFrame(),
 				"Enter a value for k.");
-		if (k_str == null) {
+		if (k_str.isEmpty()) {
 			return 0;
 		}
 		k = Integer.valueOf(k_str);
@@ -150,7 +150,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 			return false;
 		chosenParameterK = inputK();
 		chosenDistaneMeasurementMethod = inputDistanceMeasurement();
-		if (chosenParameterK == 0 || chosenDistaneMeasurementMethod == null) {
+		if (chosenParameterK == 0 || chosenDistaneMeasurementMethod.isEmpty()) {
 			JOptionPane.showMessageDialog(new JFrame(),
 					"Please set the algorithm parameters correctly");
 			return false;
@@ -158,7 +158,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 		int maxIterations = 0;
 		String maxIterations_str = JOptionPane.showInputDialog(new JFrame(),
 				"Enter the maximum iteration limit:");
-		if (maxIterations_str == null) {
+		if (maxIterations_str.isEmpty()) {
 			return false;
 		}
 		maxIterations = Integer.valueOf(maxIterations_str);
@@ -174,7 +174,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 						+ "move less than this deviation threshold.\n"
 						+ "Values from 0.1 to 10 make sense,\n"
 						+ "but you can input any positive number");
-		if (deviation_str == null) {
+		if (deviation_str.isEmpty()) {
 			return false;
 		}
 		deviation = Double.valueOf(deviation_str);
@@ -281,7 +281,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 			return false;
 		chosenParameterK = inputK();
 		chosenDistaneMeasurementMethod = inputDistanceMeasurement();
-		if (chosenParameterK == 0 || chosenDistaneMeasurementMethod == null) {
+		if (chosenParameterK == 0 || chosenDistaneMeasurementMethod.isEmpty()) {
 			JOptionPane.showMessageDialog(new JFrame(),
 					"Please set the algorithm parameters correctly");
 			return false;
