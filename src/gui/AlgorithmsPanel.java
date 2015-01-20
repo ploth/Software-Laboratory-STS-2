@@ -30,6 +30,8 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 	private int chosenParameterK;
 	private static final long serialVersionUID = 1L;
 	private final PERSTDatabase db = PERSTDatabase.getInstance();
+	private final JButton btnStartTestRunKMean;
+	private final JButton btnClassifyByKMean;
 	private KMean kMeanAlgorithm;
 
 	private enum Algorithm {
@@ -64,18 +66,26 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 				TitledBorder.LEADING, TitledBorder.TOP, null,
 				new Color(0, 0, 0)));
 		add(pnlKMeans, "cell 0 1,grow");
-		pnlKMeans.setLayout(new MigLayout("", "[grow]", "[][]"));
+		pnlKMeans.setLayout(new MigLayout("", "[grow]", "[][][]"));
 
-		JButton btnStartTestRunKMeans = new JButton(
+		JButton btnPerformKmeansclustering = new JButton(
+				"Perform k-Means-clustering");
+		btnPerformKmeansclustering.addActionListener(this);
+		btnPerformKmeansclustering.setActionCommand("performClustering");
+		pnlKMeans.add(btnPerformKmeansclustering, "cell 0 0,growx");
+
+		btnStartTestRunKMean = new JButton(
 				"Start test run & Display statistics");
-		btnStartTestRunKMeans.addActionListener(this);
-		btnStartTestRunKMeans.setActionCommand("startKMeansTest");
-		pnlKMeans.add(btnStartTestRunKMeans, "cell 0 0,growx");
+		btnStartTestRunKMean.addActionListener(this);
+		btnStartTestRunKMean.setActionCommand("startKMeanTest");
+		btnStartTestRunKMean.setEnabled(false);
+		pnlKMeans.add(btnStartTestRunKMean, "cell 0 1,growx");
 
-		JButton btnClassifyByKMeans = new JButton("Classify data");
-		btnClassifyByKMeans.addActionListener(this);
-		btnClassifyByKMeans.setActionCommand("classifyByKMeans");
-		pnlKMeans.add(btnClassifyByKMeans, "cell 0 1,growx");
+		btnClassifyByKMean = new JButton("Classify data");
+		btnClassifyByKMean.addActionListener(this);
+		btnClassifyByKMean.setActionCommand("classifyByKMean");
+		btnClassifyByKMean.setEnabled(false);
+		pnlKMeans.add(btnClassifyByKMean, "cell 0 2,growx");
 	}
 
 	@Override
@@ -89,7 +99,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 		case "classifyByKNN":
 			classifyByKNN();
 			break;
-		case "startKMeansTest":
+		case "performClustering":
 			if (!launchKMean())
 				return;
 			double[][] clusterMeans = kMeanAlgorithm.getClusterMeans();
@@ -99,9 +109,21 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 			for (int i = 0; i < clusterClassifications.length; i++) {
 				kMeanAlgorithm.classifyCluster(i, clusterClassifications[i]);
 			}
-			testAlgorithm(Algorithm.KMEAN);
+			btnStartTestRunKMean.setEnabled(true);
+			btnClassifyByKMean.setEnabled(true);
+			JOptionPane
+					.showMessageDialog(new JFrame(),
+							"The k-Mean-cluster map was created, you can now classify new objects quickly.");
 			break;
-		case "classifyByKMeans":
+		case "startKMeanTest":
+			if (db.getNumberOfNonTrainingdataDatabaseElements() > 0) {
+				testAlgorithm(Algorithm.KMEAN);
+			} else {
+				JOptionPane.showMessageDialog(new JFrame(),
+						"Please load some test data to classify first!");
+			}
+			break;
+		case "classifyByKMean":
 			classifyByKMean();
 			break;
 		}
@@ -126,7 +148,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 		int k = 0;
 		String k_str = JOptionPane.showInputDialog(new JFrame(),
 				"Enter a value for k.");
-		if (k_str.isEmpty()) {
+		if (k_str == null || k_str.isEmpty()) {
 			return 0;
 		}
 		k = Integer.valueOf(k_str);
@@ -148,8 +170,12 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 	}
 
 	private boolean launchKMean() {
-		if (isDatabaseEmpty())
+		if (db.getNumberOfCorrectDatabaseElements() == 0
+				&& db.getNumberOfNonTrainingdataDatabaseElements() == 0) {
+			JOptionPane.showMessageDialog(new JFrame(),
+					"Please load some data first!");
 			return false;
+		}
 		chosenParameterK = inputK();
 		chosenDistaneMeasurementMethod = inputDistanceMeasurement();
 		if (chosenParameterK == 0 || chosenDistaneMeasurementMethod.isEmpty()) {
@@ -216,7 +242,12 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 			IterableIterator<DatabaseElement> iter = db
 					.getNonTrainingdataDatabaseIterator();
 			ArrayList<DatabaseElement> classifiedElements = iter.toList();
-			new ResultDisplayDialog(classifiedElements);
+			if (!classifiedElements.isEmpty()) {
+				new ResultDisplayDialog(classifiedElements);
+			} else {
+				JOptionPane.showMessageDialog(new JFrame(),
+						"Please load some data to classify first!");
+			}
 		}
 	}
 
@@ -244,6 +275,9 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 			DatabaseElement e = iter_test.next();
 			int classValue = e.getCorrectClassification();
 			int algoValue = e.getAlgoClassification();
+			if (classValue == PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
+				continue;
+			}
 			if (classValue != algoValue) {
 				falseClassifiedObjects.add(e);
 				int meanSquaredError_temp = classValue - algoValue;

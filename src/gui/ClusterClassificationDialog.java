@@ -34,13 +34,14 @@ public class ClusterClassificationDialog extends JDialog {
 
 	public ClusterClassificationDialog(final double[][] clusterMeans,
 			final char[] clusterClassifications) {
+		setUndecorated(true);
 		currentCluster = clusterMeans[index];
 		setModal(true);
 		setSize(new Dimension(WIDTH, HEIGHT));
 		setLocationRelativeTo(null);
 		setTitle("Classify Clusters");
 		setResizable(false);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		getContentPane().setLayout(
 				new MigLayout("", "[grow][150][grow]", "[150][grow]"));
 
@@ -57,11 +58,11 @@ public class ClusterClassificationDialog extends JDialog {
 		final JButton btnEnterValue = new JButton("Enter value & display next");
 		btnEnterValue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String class_str = null;
-				while (class_str.isEmpty()) {
+				String class_str = "";
+				while (class_str == null || class_str.isEmpty()) {
 					class_str = JOptionPane.showInputDialog(new JFrame(),
 							"Enter the cluster's class:");
-					if (class_str.isEmpty()) {
+					if (class_str == null || class_str.isEmpty()) {
 						JOptionPane.showMessageDialog(new JFrame(),
 								"You have to enter a class!");
 					}
@@ -116,7 +117,7 @@ public class ClusterClassificationDialog extends JDialog {
 			BufferedImage scaledImage = new BufferedImage(145, 145,
 					BufferedImage.TYPE_BYTE_GRAY);
 			AffineTransform transform = new AffineTransform();
-			transform.scale(4.1, 3.9);
+			transform.scale(5.0, 4.3);
 			AffineTransformOp scaleOp = new AffineTransformOp(transform,
 					AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
 			scaledImage = scaleOp.filter(image, scaledImage);

@@ -84,7 +84,7 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 
 		JPanel classifiedValuePanel = new JPanel();
 		classifiedValuePanel.setBorder(new TitledBorder(new EtchedBorder(
-				EtchedBorder.LOWERED, null, null), "Classified by k-NN",
+				EtchedBorder.LOWERED, null, null), "Classified by Algorithm",
 				TitledBorder.LEADING, TitledBorder.TOP, null,
 				new Color(0, 0, 0)));
 		panel_1.add(classifiedValuePanel, "cell 1 0,grow");

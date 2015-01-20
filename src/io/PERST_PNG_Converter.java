@@ -44,7 +44,7 @@ public class PERST_PNG_Converter extends AbstractConverter {
 					e.getCorrectClassification(),
 					e.getPixels(),
 					folderPath + "element" + e.getIndex() + "-class"
-							+ e.getCorrectClassification() + ".png");
+							+ (int) e.getCorrectClassification() + ".png");
 		}
 	}
 

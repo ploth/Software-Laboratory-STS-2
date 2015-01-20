@@ -196,7 +196,7 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 
 	private void loadCSVfile() {
 		String filePath = chooseFile("CSV file", "csv", LOAD_FILE);
-		if (filePath.isEmpty() || filePath == null)
+		if (filePath.isEmpty())
 			return;
 		int startIndex = 0;
 		int endIndex = 0;
@@ -204,8 +204,7 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 				"Enter start index");
 		String endIndex_str = JOptionPane.showInputDialog(new JFrame(),
 				"Enter end index");
-		if (startIndex_str.isEmpty() || startIndex_str == null
-				|| endIndex_str.isEmpty() || endIndex_str == null) {
+		if (startIndex_str.isEmpty() || endIndex_str.isEmpty()) {
 			return;
 		} else {
 			startIndex = Integer.parseInt(startIndex_str);
@@ -230,18 +229,17 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 
 	private void loadMNISTfiles(boolean isTrainingData) {
 		String imagesPath = chooseFile("MNIST images", "idx3-ubyte", LOAD_FILE);
-		if (!imagesPath.isEmpty() || imagesPath == null) {
+		if (!imagesPath.isEmpty()) {
 			String labelsPath = chooseFile("MNIST labels", "idx1-ubyte",
 					LOAD_FILE);
-			if (!labelsPath.isEmpty() || labelsPath == null) {
+			if (!labelsPath.isEmpty()) {
 				int startIndex = 0;
 				int endIndex = 0;
 				String startIndex_str = JOptionPane.showInputDialog(
 						new JFrame(), "Enter start index");
 				String endIndex_str = JOptionPane.showInputDialog(new JFrame(),
 						"Enter end index");
-				if (startIndex_str.isEmpty() || startIndex_str == null
-						|| endIndex_str.isEmpty() || endIndex_str == null) {
+				if (startIndex_str.isEmpty() || endIndex_str.isEmpty()) {
 					return;
 				} else {
 					startIndex = Integer.parseInt(startIndex_str);
@@ -268,12 +266,27 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 	}
 
 	private void loadPNGfile() {
-
+		String filePath = chooseFile("PNG file", "png", LOAD_FILE);
+		if (filePath.isEmpty())
+			return;
+		try {
+			PERST_PNG_Converter.read(filePath);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(new JFrame(),
+					"An error ocurred while reading the PNG image. Message:\n"
+							+ e.getMessage(), "Read error",
+					JOptionPane.ERROR_MESSAGE);
+		} catch (ConverterException e) {
+			JOptionPane.showMessageDialog(new JFrame(),
+					"An error ocurred while converting the PNG image. Message:\n"
+							+ e.getMessage(), "Converter error",
+					JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	private void exportToCSV() {
 		String filePath = chooseFile("CSV file", "csv", EXPORT_TO_FILE);
-		if (filePath.isEmpty() || filePath == null)
+		if (filePath.isEmpty())
 			return;
 		try {
 			PERST_CSV_Converter.write(filePath);
@@ -288,7 +301,7 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 
 	private void exportToPNG() {
 		String filePath = chooseFile("Output folder", null, EXPORT_TO_FOLDER);
-		if (filePath.isEmpty() || filePath == null)
+		if (filePath.isEmpty())
 			return;
 		try {
 			PERST_PNG_Converter.write(filePath);
@@ -310,11 +323,11 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 	private void exportToMNIST() {
 		String labelsFilePath = chooseFile("MNIST labels", "idx1-ubyte",
 				EXPORT_TO_FILE);
-		if (labelsFilePath.isEmpty() || labelsFilePath == null)
+		if (labelsFilePath.isEmpty())
 			return;
 		String imagesFilePath = chooseFile("MNIST images", "idx3-ubyte",
 				EXPORT_TO_FILE);
-		if (imagesFilePath.isEmpty() || imagesFilePath == null)
+		if (imagesFilePath.isEmpty())
 			return;
 		try {
 			PERST_MNIST_Converter.write(labelsFilePath, imagesFilePath);
@@ -329,7 +342,7 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 
 	private String chooseFile(String fileDescription, String fileSuffix,
 			int fileChooserMode) {
-		String filePath = null;
+		String filePath = "";
 		JFileChooser fc = new JFileChooser("./");
 		if (fileChooserMode == LOAD_FILE || fileChooserMode == EXPORT_TO_FILE) {
 			FileNameExtensionFilter filter = new FileNameExtensionFilter(
