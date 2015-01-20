@@ -1,7 +1,9 @@
 package gui;
 
 import io.ConverterException;
+import io.PERST_CSV_Converter;
 import io.PERST_MNIST_Converter;
+import io.PERST_PNG_Converter;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -29,6 +31,9 @@ import data.PERSTDatabase;
 public class InputOutputPanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
+	private static final int LOAD_FILE = 0;
+	private static final int EXPORT_TO_FILE = 1;
+	private static final int EXPORT_TO_FOLDER = 2;
 	private PERSTDatabase db_ = PERSTDatabase.getInstance();
 	private JLabel lblNumOfTrainingDataElements;
 	private JLabel lblNumOfDataToClassify;
@@ -100,16 +105,18 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 		lblNumOfDataToClassify = new JLabel("0");
 		pnlNumOfDataToClassify.add(lblNumOfDataToClassify);
 
-		JButton btnClassifyDataFrom = new JButton(
+		JButton btnClassifyDataFromMNIST = new JButton(
 				"Add new data from MNIST files");
-		btnClassifyDataFrom.addActionListener(this);
+		btnClassifyDataFromMNIST.addActionListener(this);
+		btnClassifyDataFromMNIST.setActionCommand("addDataToClassifyFromMNIST");
+		pnlClassifyData.add(btnClassifyDataFromMNIST,
+				"flowy,cell 0 2 2 1,growx");
 
 		JSeparator separator_1 = new JSeparator();
 		pnlClassifyData.add(separator_1, "cell 0 1 2 1,growx");
-		btnClassifyDataFrom.setActionCommand("addDataToClassifyFromMNIST");
-		pnlClassifyData.add(btnClassifyDataFrom, "flowy,cell 0 2 2 1,growx");
 
 		JButton btnAddDataFromPNG = new JButton("Add new data from png");
+		btnAddDataFromPNG.addActionListener(this);
 		btnAddDataFromPNG.setActionCommand("addDataToClassifyFromPNG");
 		pnlClassifyData.add(btnAddDataFromPNG, "cell 0 2 2 1,growx");
 
@@ -123,15 +130,18 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 
 		JButton btnExportDataMNIST = new JButton(
 				"Export training data to MNIST files");
+		btnExportDataMNIST.addActionListener(this);
 		btnExportDataMNIST.setActionCommand("exportToMNIST");
 		pnlExport.add(btnExportDataMNIST, "cell 0 0,growx");
 
 		JButton btnExportDataCSV = new JButton("Export traing data to CSV file");
+		btnExportDataCSV.addActionListener(this);
 		btnExportDataCSV.setActionCommand("exportToCSV");
 		pnlExport.add(btnExportDataCSV, "cell 0 1,growx");
 
 		JButton btnExportDataPNG = new JButton(
 				"Export training data to PNG files");
+		btnExportDataPNG.addActionListener(this);
 		btnExportDataPNG.setActionCommand("exportToPNG");
 		pnlExport.add(btnExportDataPNG, "cell 0 2,growx");
 
@@ -157,7 +167,7 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 			updateDataCounters();
 			break;
 		case "importTrainingDataCSV":
-
+			loadCSVfile();
 			updateDataCounters();
 			break;
 		case "addDataToClassifyFromMNIST":
@@ -165,17 +175,17 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 			updateDataCounters();
 			break;
 		case "addDataToClassifyFromPNG":
-			// TODO add PNG code
+			loadPNGfile();
 			updateDataCounters();
 			break;
 		case "exportToMNIST":
-			// TODO add MNIST export code
+			exportToMNIST();
 			break;
 		case "exportToCSV":
-			// TODO add CSV export code
+			exportToCSV();
 			break;
 		case "exportToPNG":
-			// TODO add PNG export code
+			exportToPNG();
 			break;
 		default:
 			// TODO Throw exception?
@@ -184,54 +194,167 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 	}
 
 	private void loadCSVfile() {
-
+		String filePath = chooseFile("CSV file", "csv", LOAD_FILE);
+		if (filePath.isEmpty() || filePath == null)
+			return;
+		int startIndex = 0;
+		int endIndex = 0;
+		String startIndex_str = JOptionPane.showInputDialog(new JFrame(),
+				"Enter start index");
+		String endIndex_str = JOptionPane.showInputDialog(new JFrame(),
+				"Enter end index");
+		if (startIndex_str.isEmpty() || startIndex_str == null
+				|| endIndex_str.isEmpty() || endIndex_str == null) {
+			return;
+		} else {
+			startIndex = Integer.parseInt(startIndex_str);
+			endIndex = Integer.parseInt(endIndex_str);
+		}
+		try {
+			PERST_CSV_Converter.read(filePath, startIndex, endIndex);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(
+					new JFrame(),
+					"An error ocurred while reading the files. Message:\n"
+							+ e.getMessage(), "Converter error",
+					JOptionPane.ERROR_MESSAGE);
+		} catch (ConverterException e) {
+			JOptionPane.showMessageDialog(new JFrame(),
+					"An error ocurred while converting the files. Message:\n"
+							+ e.getMessage(), "Converter error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+		updateDataCounters();
 	}
 
 	private void loadMNISTfiles(boolean isTrainingData) {
-		String imagesPath = loadFile("MNIST images", "idx3-ubyte");
-		if (!imagesPath.isEmpty()) {
-			String labelsPath = loadFile("MNIST labels", "idx1-ubyte");
+		String imagesPath = chooseFile("MNIST images", "idx3-ubyte", LOAD_FILE);
+		if (!imagesPath.isEmpty() || imagesPath == null) {
+			String labelsPath = chooseFile("MNIST labels", "idx1-ubyte",
+					LOAD_FILE);
+			if (!labelsPath.isEmpty() || labelsPath == null) {
+				int startIndex = 0;
+				int endIndex = 0;
+				String startIndex_str = JOptionPane.showInputDialog(
+						new JFrame(), "Enter start index");
+				String endIndex_str = JOptionPane.showInputDialog(new JFrame(),
+						"Enter end index");
+				if (startIndex_str.isEmpty() || startIndex_str == null
+						|| endIndex_str.isEmpty() || endIndex_str == null) {
+					return;
+				} else {
+					startIndex = Integer.parseInt(startIndex_str);
+					endIndex = Integer.parseInt(endIndex_str);
+				}
 
-			int startIndex = 0;
-			int endIndex = 0;
-			String startIndex_str = JOptionPane.showInputDialog(new JFrame(),
-					"Enter start index");
-			String endIndex_str = JOptionPane.showInputDialog(new JFrame(),
-					"Enter end index");
-			if (startIndex_str.isEmpty() || endIndex_str.isEmpty()) {
-				return;
-			} else {
-				startIndex = Integer.parseInt(startIndex_str);
-				endIndex = Integer.parseInt(endIndex_str);
-			}
-
-			try {
-				PERST_MNIST_Converter.read(labelsPath, imagesPath, startIndex,
-						endIndex, isTrainingData);
-				updateDataCounters();
-			} catch (IOException e) {
-				JOptionPane.showMessageDialog(new JFrame(),
-						"An error ocurred while reading the files. Message:\n"
-								+ e.getMessage(), "Read error",
-						JOptionPane.ERROR_MESSAGE);
-			} catch (ConverterException e) {
-				JOptionPane.showMessageDialog(new JFrame(),
-						"An error ocurred while converting the files. Message:\n"
-								+ e.getMessage(), "Converter error",
-						JOptionPane.ERROR_MESSAGE);
+				try {
+					PERST_MNIST_Converter.read(labelsPath, imagesPath,
+							startIndex, endIndex, isTrainingData);
+					updateDataCounters();
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(new JFrame(),
+							"An error ocurred while reading the files. Message:\n"
+									+ e.getMessage(), "Read error",
+							JOptionPane.ERROR_MESSAGE);
+				} catch (ConverterException e) {
+					JOptionPane.showMessageDialog(new JFrame(),
+							"An error ocurred while converting the files. Message:\n"
+									+ e.getMessage(), "Converter error",
+							JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		}
 	}
 
-	private String loadFile(String fileDescription, String fileSuffix) {
+	private void loadPNGfile() {
+
+	}
+
+	private void exportToCSV() {
+		String filePath = chooseFile("CSV file", "csv", EXPORT_TO_FILE);
+		if (filePath.isEmpty() || filePath == null)
+			return;
+		try {
+			PERST_CSV_Converter.write(filePath);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(
+					new JFrame(),
+					"An error ocurred while exporting the data. Message:\n"
+							+ e.getMessage(), "Export error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	private void exportToPNG() {
+		String filePath = chooseFile("Output folder", null, EXPORT_TO_FOLDER);
+		if (filePath.isEmpty() || filePath == null)
+			return;
+		try {
+			PERST_PNG_Converter.write(filePath);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(
+					new JFrame(),
+					"An error ocurred while exporting the data. Message:\n"
+							+ e.getMessage(), "Export error",
+					JOptionPane.ERROR_MESSAGE);
+		} catch (ConverterException e) {
+			JOptionPane.showMessageDialog(
+					new JFrame(),
+					"An error ocurred while exporting the data. Message:\n"
+							+ e.getMessage(), "Export error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	private void exportToMNIST() {
+		String labelsFilePath = chooseFile("MNIST labels", "idx1-ubyte",
+				EXPORT_TO_FILE);
+		if (labelsFilePath.isEmpty() || labelsFilePath == null)
+			return;
+		String imagesFilePath = chooseFile("MNIST images", "idx3-ubyte",
+				EXPORT_TO_FILE);
+		if (imagesFilePath.isEmpty() || imagesFilePath == null)
+			return;
+		try {
+			PERST_MNIST_Converter.write(labelsFilePath, imagesFilePath);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(
+					new JFrame(),
+					"An error ocurred while exporting the data. Message:\n"
+							+ e.getMessage(), "Export error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	private String chooseFile(String fileDescription, String fileSuffix,
+			int fileChooserMode) {
 		String filePath = null;
 		JFileChooser fc = new JFileChooser("./");
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-				fileDescription, fileSuffix);
-		fc.setFileFilter(filter);
-		int returnVal = fc.showDialog(new JFrame(), "Load " + fileDescription);
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			filePath = fc.getSelectedFile().getPath();
+		if (fileChooserMode == LOAD_FILE || fileChooserMode == EXPORT_TO_FILE) {
+			FileNameExtensionFilter filter = new FileNameExtensionFilter(
+					fileDescription, fileSuffix);
+			fc.setFileFilter(filter);
+			String mode;
+			if (fileChooserMode == LOAD_FILE) {
+				mode = "Load";
+			} else {
+				mode = "Export to ";
+			}
+			int returnVal = fc.showDialog(new JFrame(), mode + " "
+					+ fileDescription);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				filePath = fc.getSelectedFile().getPath();
+				if (fileChooserMode == EXPORT_TO_FILE
+						&& !filePath.endsWith(fileSuffix)) {
+					filePath += "." + fileSuffix;
+				}
+			}
+		} else if (fileChooserMode == EXPORT_TO_FOLDER) {
+			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			int returnVal = fc.showDialog(new JFrame(), "Export");
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				filePath = fc.getSelectedFile().getPath();
+			}
 		}
 		return filePath;
 	}
