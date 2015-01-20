@@ -1,8 +1,5 @@
 package io;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.File;
@@ -43,8 +40,11 @@ public class PERST_PNG_Converter extends AbstractConverter {
 				.getCorrectDatabaseIterator();
 		while (iter.hasNext()) {
 			DatabaseElement e = iter.next();
-			writeOneImage(e.getCorrectClassification(), e.getPixels(),
-					folderPath + e.getIndex() + ".png");
+			writeOneImage(
+					e.getCorrectClassification(),
+					e.getPixels(),
+					folderPath + "element" + e.getIndex() + "-class"
+							+ e.getCorrectClassification() + ".png");
 		}
 	}
 
@@ -65,11 +65,6 @@ public class PERST_PNG_Converter extends AbstractConverter {
 					i++;
 				}
 			}
-			Graphics g = image.getGraphics();
-			g.setFont(new Font("Arial", Font.BOLD, 12));
-			g.setColor(Color.black);
-			g.drawString(String.valueOf(classification), FIRST_PIXEL,
-					FIRST_PIXEL);
 			ImageIO.write(image, "png", file);
 		} else
 			throw new ConverterException("Please save as .png file.");
