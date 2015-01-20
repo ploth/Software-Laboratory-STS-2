@@ -1,5 +1,6 @@
 package test;
 
+import io.ConverterException;
 import io.PERST_MNIST_Converter;
 
 import java.io.IOException;
@@ -10,7 +11,8 @@ import data.PERSTDatabase;
 
 public class KNNTest {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException,
+			ConverterException {
 		PERSTDatabase db = PERSTDatabase.getInstance();
 		// init a database
 		PERST_MNIST_Converter.read("ImageData/train-labels.idx1-ubyte",

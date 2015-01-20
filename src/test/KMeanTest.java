@@ -1,5 +1,6 @@
 package test;
 
+import io.ConverterException;
 import io.PERST_MNIST_Converter;
 
 import java.io.IOException;
@@ -12,7 +13,8 @@ import data.PERSTDatabase;
 
 public class KMeanTest {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException,
+			ConverterException {
 		PERSTDatabase db = PERSTDatabase.getInstance();
 		// System.out.println("numberOfDatabaseElements: "
 		// + db.getNumberOfDatabaseElements());

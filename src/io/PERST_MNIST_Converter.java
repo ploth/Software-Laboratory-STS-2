@@ -1,9 +1,9 @@
 package io;
 
-import java.io.BufferedWriter;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.garret.perst.IterableIterator;
@@ -12,14 +12,16 @@ import data.PERSTDatabase.DatabaseElement;
 
 public class PERST_MNIST_Converter extends AbstractConverter {
 
+	private static final int IMAGE_DIM = 28;
+	private static final int MAGIC_NUMBER_LABELS = 2049;
+	private static final int MAGIC_NUMBER_IMAGES = 2051;
+
 	// TODO: Exceptions
 	public static int read(String readLabelPath, String readImagePath,
 			int rangeStart, int rangeEnd, boolean trainingdata)
-			throws IOException {
+			throws IOException, ConverterException {
 		if (rangeStart <= 0) {
-			rangeStart = 1;
-			System.err.println("Hey, what are you doing? (lower limit set to  "
-					+ rangeStart + ".");
+			throw new ConverterException("Please enter a minimum value of 1");
 		}
 		DataInputStream labels = new DataInputStream(new FileInputStream(
 				readLabelPath));
@@ -27,35 +29,36 @@ public class PERST_MNIST_Converter extends AbstractConverter {
 				readImagePath));
 		int magicNumber = labels.readInt();
 		if (magicNumber != 2049) {
-			System.err.println("Label file has wrong magic number: "
+			labels.close();
+			images.close();
+			throw new ConverterException("Label file has wrong magic number: "
 					+ magicNumber + " (should be 2049)");
-			System.exit(0);
 		}
 		magicNumber = images.readInt();
 		if (magicNumber != 2051) {
-			System.err.println("Image file has wrong magic number: "
+			labels.close();
+			images.close();
+			throw new ConverterException("Image file has wrong magic number: "
 					+ magicNumber + " (should be 2051)");
-			System.exit(0);
 		}
 		int numberOfLabels = labels.readInt();
 		int numberOfImages = images.readInt();
 		int numberOfRows = images.readInt();
 		int numberOfColumns = images.readInt();
 		if (numberOfLabels < rangeEnd) {
-			rangeEnd = numberOfLabels;
-			System.err
-					.println("Range is greater than MNIST database (upper limit set to "
-							+ rangeEnd + ".");
+			labels.close();
+			images.close();
+			throw new ConverterException(
+					"Please enter a maximum value of 60000");
 		}
 		if (numberOfLabels != numberOfImages) {
-			System.err
-					.println("Image file and label file do not contain the same number of entries.");
-			System.err.println("Label file contains: " + numberOfLabels);
-			System.err.println("Image file contains: " + numberOfImages);
-			System.exit(0);
+			labels.close();
+			images.close();
+			throw new ConverterException(
+					"Image file and label file do not contain the same number of entries.");
 		}
 		int numPixels = numberOfRows * numberOfColumns;
-		images.skipBytes(28 * 28 * (rangeStart - 1));
+		images.skipBytes(IMAGE_DIM * IMAGE_DIM * (rangeStart - 1));
 		labels.skipBytes((rangeStart - 1));
 		int dataCount = 0;
 		while ((labels.available() > 0) && dataCount <= (rangeEnd - rangeStart)) {
@@ -77,18 +80,29 @@ public class PERST_MNIST_Converter extends AbstractConverter {
 			throws IOException {
 		IterableIterator<DatabaseElement> iter = getDb_()
 				.getCorrectDatabaseIterator();
+		DataOutputStream labels = new DataOutputStream(new FileOutputStream(
+				writeLabelPath));
+		DataOutputStream images = new DataOutputStream(new FileOutputStream(
+				writeImagePath));
 		int dim = getDb_().getDim();
-		FileWriter fwLabel = new FileWriter(writeLabelPath);
-		FileWriter fwImage = new FileWriter(writeImagePath);
-		BufferedWriter bwLabel = new BufferedWriter(fwLabel);
-		BufferedWriter bwImage = new BufferedWriter(fwImage);
+		// magic numbers
+		images.writeInt(MAGIC_NUMBER_IMAGES);
+		labels.writeInt(MAGIC_NUMBER_LABELS);
+		// number of items
+		images.writeInt(getDb_().getNumberOfCorrectDatabaseElements());
+		labels.writeInt(getDb_().getNumberOfCorrectDatabaseElements());
+		// image dimensions (image file)
+		images.writeInt(dim);
+		images.writeInt(dim);
 		while (iter.hasNext()) {
+			// labels
 			DatabaseElement e = iter.next();
-			bwImage.write(e.getPixels());
+			labels.writeByte((int) e.getCorrectClassification());
+			// pixels
+			for (int i = 0; i < (dim * dim); i++) {
+				images.writeByte((int) e.getPixels()[i]);
+			}
 		}
-		bwLabel.close();
-		bwImage.close();
-		fwLabel.close();
-		fwImage.close();
+		labels.close();
 	}
 }
