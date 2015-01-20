@@ -1,5 +1,6 @@
 package test;
 
+import io.ConverterException;
 import io.PERST_CSV_Converter;
 
 import java.io.IOException;
@@ -8,7 +9,8 @@ import data.PERSTDatabase;
 
 public class CSVConverterTest {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException,
+			ConverterException {
 		PERSTDatabase db = PERSTDatabase.getInstance();
 		// write
 		// PERST_MNIST_Converter.read("ImageData/train-labels.idx1-ubyte",
@@ -19,7 +21,7 @@ public class CSVConverterTest {
 		// System.out.println((time2 - time1));
 		// read
 		long time1 = System.currentTimeMillis();
-		PERST_CSV_Converter.read("dick");
+		PERST_CSV_Converter.read("dick", 1, 60000);
 		long time2 = System.currentTimeMillis();
 		System.out.println((time2 - time1));
 		System.out.println(db.getNumberOfCorrectDatabaseElements());
