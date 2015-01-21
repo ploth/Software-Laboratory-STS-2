@@ -21,6 +21,9 @@ import javax.swing.border.TitledBorder;
 import net.miginfocom.swing.MigLayout;
 import data.PERSTDatabase;
 
+/*
+ * This dialog presents some cluster means to the user and requests a classification of the shown cluster
+ */
 public class ClusterClassificationDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
@@ -29,13 +32,13 @@ public class ClusterClassificationDialog extends JDialog {
 	private final int dim = PERSTDatabase.getInstance().getDim();
 	private final GraphicsPanel graphicsPanel;
 	private double[] currentCluster = new double[dim * dim];
+	// Stores the classification input for the current cluster
 	private int currentClassification = PERSTDatabase.NO_CORRECT_CLASSIFICATION;
 	private int index = 0;
 
 	public ClusterClassificationDialog(final double[][] clusterMeans,
 			final char[] clusterClassifications) {
 		setUndecorated(true);
-		currentCluster = clusterMeans[index];
 		setModal(true);
 		setSize(new Dimension(WIDTH, HEIGHT));
 		setLocationRelativeTo(null);
@@ -44,6 +47,13 @@ public class ClusterClassificationDialog extends JDialog {
 		setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		getContentPane().setLayout(
 				new MigLayout("", "[grow][150][grow]", "[150][grow]"));
+
+		// Get current cluster
+		currentCluster = clusterMeans[index];
+
+		// /////////////////////////////////////////////
+		// Cluster mean image display
+		// /////////////////////////////////////////////
 
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED,
@@ -54,6 +64,10 @@ public class ClusterClassificationDialog extends JDialog {
 
 		graphicsPanel = new GraphicsPanel();
 		panel.add(graphicsPanel, "cell 0 0,grow");
+
+		// /////////////////////////////////////////////
+		// Classification button
+		// /////////////////////////////////////////////
 
 		final JButton btnEnterValue = new JButton("Enter value & display next");
 		btnEnterValue.addActionListener(new ActionListener() {
@@ -88,6 +102,7 @@ public class ClusterClassificationDialog extends JDialog {
 		setVisible(true);
 	}
 
+	// Panel for drawing the current element
 	class GraphicsPanel extends JPanel {
 
 		private static final long serialVersionUID = 1L;
@@ -113,6 +128,8 @@ public class ClusterClassificationDialog extends JDialog {
 					i++;
 				}
 			}
+
+			// Scale the current element to fit in the panel properly
 			BufferedImage scaledImage = new BufferedImage(145, 145,
 					BufferedImage.TYPE_BYTE_GRAY);
 			AffineTransform transform = new AffineTransform();
