@@ -22,16 +22,25 @@ import algorithm.KNN;
 import data.PERSTDatabase;
 import data.PERSTDatabase.DatabaseElement;
 
+/*
+ * This class implements a panel which allows choosing of an algorithm to process data.
+ * The algorithm test runs and the data classifying can be started from here.
+ */
 public class AlgorithmsPanel extends JPanel implements ActionListener {
 
-	// TODO Write comments
-
+	// Stores the user-chosen distance measurement method for the next algorithm
 	private String chosenDistaneMeasurementMethod;
+	// Stores the user-chosen parameter k for the next algorithm.
 	private int chosenParameterK;
 	private static final long serialVersionUID = 1L;
 	private final PERSTDatabase db = PERSTDatabase.getInstance();
+	// These buttons have to be members of the class because they get disabled
+	// and enabled by actions.
 	private final JButton btnStartTestRunKMean;
 	private final JButton btnClassifyByKMean;
+	// It is necessary to keep a reference to the k-Mean-algorithm,
+	// because it works in two steps. Create the class map first,
+	// then use it to classify new elements.
 	private KMean kMeanAlgorithm;
 
 	private enum Algorithm {
@@ -40,6 +49,10 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 
 	public AlgorithmsPanel() {
 		setLayout(new MigLayout("", "[grow]", "[][]"));
+
+		// /////////////////////////////////////////////
+		// KNN GUI elements
+		// /////////////////////////////////////////////
 
 		JPanel pnlKNN = new JPanel();
 		pnlKNN.setBorder(new TitledBorder(new EtchedBorder(
@@ -59,6 +72,10 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 		btnClassifyByKNN.addActionListener(this);
 		btnClassifyByKNN.setActionCommand("classifyByKNN");
 		pnlKNN.add(btnClassifyByKNN, "cell 0 1,growx");
+
+		// /////////////////////////////////////////////
+		// KMean GUI elements
+		// /////////////////////////////////////////////
 
 		JPanel pnlKMeans = new JPanel();
 		pnlKMeans.setBorder(new TitledBorder(new EtchedBorder(
@@ -100,13 +117,18 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 			classifyByKNN();
 			break;
 		case "performClustering":
+			// Create a new class map by clustering the data
 			if (!launchKMean())
 				return;
+			// Get the cluster means calculated by the algorithm and display
+			// them in the classification dialog
 			double[][] clusterMeans = kMeanAlgorithm.getClusterMeans();
+			// Store the user-classifications
 			char[] clusterClassifications = new char[chosenParameterK];
 			new ClusterClassificationDialog(clusterMeans,
 					clusterClassifications);
 			for (int i = 0; i < clusterClassifications.length; i++) {
+				// Pass user-classifications to algorithm
 				kMeanAlgorithm.classifyCluster(i, clusterClassifications[i]);
 			}
 			btnStartTestRunKMean.setEnabled(true);
@@ -116,6 +138,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 							"The k-Mean-cluster map was created, you can now classify new objects quickly.");
 			break;
 		case "startKMeanTest":
+			// Check if there is data to be classified
 			if (db.getNumberOfNonTrainingdataDatabaseElements() > 0) {
 				testAlgorithm(Algorithm.KMEAN);
 			} else {
@@ -131,6 +154,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 
 	private boolean isDatabaseEmpty() {
 
+		// TODO Correct or training data?
 		if (db.getNumberOfCorrectDatabaseElements() == 0) {
 			JOptionPane.showMessageDialog(new JFrame(),
 					"Please load some training data first!");
@@ -144,6 +168,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 		return false;
 	}
 
+	// Method for choosing parameter k by GUI
 	private int inputK() {
 		int k = 0;
 		String k_str = JOptionPane.showInputDialog(new JFrame(),
@@ -160,6 +185,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 		return k;
 	}
 
+	// Method for choosing distance measurement by GUI
 	private String inputDistanceMeasurement() {
 		String[] distanceCalculationMethods = { "Euclid", "Manhattan" };
 		String distanceMeasurement = (String) JOptionPane.showInputDialog(
@@ -170,12 +196,15 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 	}
 
 	private boolean launchKMean() {
+		// Only perform KMean if database is not empty
 		if (db.getNumberOfCorrectDatabaseElements() == 0
 				&& db.getNumberOfNonTrainingdataDatabaseElements() == 0) {
 			JOptionPane.showMessageDialog(new JFrame(),
 					"Please load some data first!");
 			return false;
 		}
+
+		// Choose parameters
 		chosenParameterK = inputK();
 		chosenDistaneMeasurementMethod = inputDistanceMeasurement();
 		if (chosenParameterK == 0 || chosenDistaneMeasurementMethod.isEmpty()) {
@@ -211,9 +240,14 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 					"Please choose a value above 0.");
 			return false;
 		}
+
 		kMeanAlgorithm = new KMean();
+		// Set parameters
 		kMeanAlgorithm.setMaxIterations(maxIterations);
 		kMeanAlgorithm.setDeviation(deviation);
+		// Start the k-Means-clustering algorithm with the appropriate distance
+		// measurement method. This first step only classifies the cluster means
+		// and creates a class map for classifying new data.
 		if (chosenDistaneMeasurementMethod == "Euclid") {
 			kMeanAlgorithm.doAlgorithm(KNN.SQR_EUCLID, chosenParameterK);
 			return true;
@@ -237,8 +271,11 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 		} else {
 			return;
 		}
+		// Classify all data, which is stil to be classified
 		boolean success = kMeanAlgorithm.classifyNewElements(type);
 		if (success) {
+			// Collect all the new classified elements and display them in the
+			// results panel
 			IterableIterator<DatabaseElement> iter = db
 					.getNonTrainingdataDatabaseIterator();
 			ArrayList<DatabaseElement> classifiedElements = iter.toList();
@@ -251,6 +288,8 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 		}
 	}
 
+	// Runs a test of an algorithm and displays statistics about the run
+	// afterwards
 	private void testAlgorithm(Algorithm algorithm) {
 		int numTotalTestObjects = db
 				.getNumberOfNonTrainingdataDatabaseElements();
@@ -263,6 +302,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 		Arrays.fill(trainingObjectsPerClass, 0);
 		IterableIterator<DatabaseElement> iter_training = db
 				.getCorrectDatabaseIterator();
+		// Count the number of training objects per class
 		while (iter_training.hasNext()) {
 			DatabaseElement e = iter_training.next();
 			int classValue = e.getCorrectClassification();
@@ -271,13 +311,18 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 
 		int meanSquaredError = 0;
 		ArrayList<DatabaseElement> falseClassifiedObjects = new ArrayList<DatabaseElement>();
+		// Count the number of false classified objects
 		while (iter_test.hasNext()) {
 			DatabaseElement e = iter_test.next();
 			int classValue = e.getCorrectClassification();
 			int algoValue = e.getAlgoClassification();
+			// Continue processing of current element only if it has a known
+			// classification
 			if (classValue == PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
 				continue;
 			}
+			// Check if current element has false classification and calculate
+			// error
 			if (classValue != algoValue) {
 				falseClassifiedObjects.add(e);
 				int meanSquaredError_temp = classValue - algoValue;
@@ -286,8 +331,10 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 			}
 			testObjectsPerClass[classValue]++;
 		}
+		// Calculate the final mean error using previously calculated values
 		meanSquaredError = meanSquaredError / numTotalTestObjects;
 
+		// Display the statistics window for the chosen algorithm
 		if (algorithm == Algorithm.KNN) {
 			new StatisticsDialog("k-Nearest-Neighbor",
 					chosenDistaneMeasurementMethod, chosenParameterK,
@@ -303,6 +350,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 		}
 	}
 
+	// Launches the KNN algorithm and displays it's results in a new window
 	private void classifyByKNN() {
 		if (launchKNN()) {
 			IterableIterator<DatabaseElement> iter = db
@@ -312,9 +360,12 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 		}
 	}
 
+	// Launches the KNN algorithm
 	private boolean launchKNN() {
 		if (isDatabaseEmpty())
 			return false;
+
+		// Choose parameters
 		chosenParameterK = inputK();
 		chosenDistaneMeasurementMethod = inputDistanceMeasurement();
 		if (chosenParameterK == 0 || chosenDistaneMeasurementMethod.isEmpty()) {
@@ -322,7 +373,10 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 					"Please set the algorithm parameters correctly");
 			return false;
 		}
+
 		KNN kNearestNeighborAlgorithm = new KNN();
+
+		// Start algorithm with chosen distance measurement method
 		if (chosenDistaneMeasurementMethod == "Euclid") {
 			kNearestNeighborAlgorithm.doAlgorithm(KNN.SQR_EUCLID,
 					chosenParameterK);
