@@ -18,10 +18,12 @@ import javax.swing.border.TitledBorder;
 import net.miginfocom.swing.MigLayout;
 import data.PERSTDatabase.DatabaseElement;
 
+/*
+ * This class implements a dialog for showing statistics about a previously performed algorithm test run.
+ * Additionally, it provides a button for displaying the wrong classified objects.
+ * The statistics values get calculated outside of this class. It takes the information as constructor parameters.
+ */
 public class StatisticsDialog extends JDialog implements ActionListener {
-
-	// TODO Write comments
-
 	private static final long serialVersionUID = 1L;
 	private static final int WIDTH = 480;
 	private static final int HEIGHT = 400;
@@ -43,6 +45,10 @@ public class StatisticsDialog extends JDialog implements ActionListener {
 		getContentPane().setLayout(new MigLayout("", "[grow][]", "[grow][]"));
 
 		this.falseClassifiedObjects = falseClassifiedObjects;
+
+		// /////////////////////////////////////////////
+		// General information panel
+		// /////////////////////////////////////////////
 
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED,
@@ -75,12 +81,20 @@ public class StatisticsDialog extends JDialog implements ActionListener {
 		JSeparator separator = new JSeparator();
 		panel.add(separator, "cell 0 3 2 1,growx");
 
+		// /////////////////////////////////////////////
+		// Test object information panel
+		// /////////////////////////////////////////////
+
 		JLabel lblNumberOfTotal = new JLabel("Number of total test objects:");
 		panel.add(lblNumberOfTotal, "flowx,cell 0 4");
 
 		JLabel lblNumTotalTestObjects = new JLabel(
 				String.valueOf(numTotalTestObjects));
 		panel.add(lblNumTotalTestObjects, "cell 1 4");
+
+		// /////////////////////////////////////////////
+		// Test object per class table
+		// /////////////////////////////////////////////
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)),
@@ -201,6 +215,10 @@ public class StatisticsDialog extends JDialog implements ActionListener {
 		JSeparator separator_1 = new JSeparator();
 		panel.add(separator_1, "cell 0 6 2 1,growx");
 
+		// /////////////////////////////////////////////
+		// Training data information panel
+		// /////////////////////////////////////////////
+
 		JLabel lblTotalNumberOf = new JLabel(
 				"Total number of training data elements:");
 		panel.add(lblTotalNumberOf, "cell 0 7");
@@ -208,6 +226,10 @@ public class StatisticsDialog extends JDialog implements ActionListener {
 		JLabel lblNumtrainingelements = new JLabel(
 				String.valueOf(numTrainingElements));
 		panel.add(lblNumtrainingelements, "cell 1 7");
+
+		// /////////////////////////////////////////////
+		// Training data per class table
+		// /////////////////////////////////////////////
 
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)),
@@ -334,6 +356,10 @@ public class StatisticsDialog extends JDialog implements ActionListener {
 		JSeparator separator_2 = new JSeparator();
 		panel.add(separator_2, "cell 0 9 2 1,growx");
 
+		// /////////////////////////////////////////////
+		// Error information panel
+		// /////////////////////////////////////////////
+
 		JLabel lblNumberOfFalse = new JLabel("Number of false classifications:");
 		panel.add(lblNumberOfFalse, "cell 0 10");
 
@@ -369,6 +395,7 @@ public class StatisticsDialog extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "displayWrongElements":
+			// Display the false classified elements in a result dialog
 			btnDisplayFalseClassified.setEnabled(false);
 			new ResultDisplayDialog(falseClassifiedObjects);
 			break;
