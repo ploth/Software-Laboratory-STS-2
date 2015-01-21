@@ -89,7 +89,6 @@ public class Workbench extends JFrame implements ActionListener {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				PERSTDatabase.getInstance().closeDB();
-				System.out.println("Closing DB...\nDisposing window.");
 				e.getWindow().dispose();
 			}
 		});
@@ -109,8 +108,6 @@ public class Workbench extends JFrame implements ActionListener {
 			Path dbPath = FileSystems.getDefault().getPath(
 					PERSTDatabase.getDBName());
 			try {
-				// TODO Don't allow deletion of database when number of elements
-				// == 0!
 				PERSTDatabase.getInstance().closeDB();
 				Files.deleteIfExists(dbPath);
 			} catch (IOException e1) {
