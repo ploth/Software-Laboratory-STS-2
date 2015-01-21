@@ -15,6 +15,10 @@ import javax.swing.JTabbedPane;
 
 import data.PERSTDatabase;
 
+/*
+ * This workbench window provides the different data handling panels for loading/exporting, viewing, 
+ * and recognizing data within the different tabs of the tabbed pane.
+ */
 public class Workbench extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
@@ -33,9 +37,9 @@ public class Workbench extends JFrame implements ActionListener {
 										// screen
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		// -----------------------
-		// TABS
-		// -----------------------
+		// /////////////////////////////////////////////
+		// Menu bar
+		// /////////////////////////////////////////////
 
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menu_help = new JMenu("Help");
@@ -46,14 +50,15 @@ public class Workbench extends JFrame implements ActionListener {
 		menuBar.add(menu_help);
 
 		setJMenuBar(menuBar);
+
+		// /////////////////////////////////////////////
+		// Tabs
+		// /////////////////////////////////////////////
+
 		databasePanel_ = new DatabasePanel();
 		algorithmsPanel_ = new AlgorithmsPanel();
 
 		JTabbedPane tabbedPane = new JTabbedPane();
-
-		// -----------------------
-		// TABS
-		// -----------------------
 
 		dataLoadingPanel_ = new InputOutputPanel();
 		tabbedPane.addTab("Input/Output Data", dataLoadingPanel_);
@@ -81,7 +86,9 @@ public class Workbench extends JFrame implements ActionListener {
 							"Programmed: by\nPascal Loth\nThomas Schattschneider\n\n2015");
 			break;
 		default:
-			System.err.println("Unknown action: " + e.getActionCommand());
+			JOptionPane.showMessageDialog(new JFrame(),
+					"Error: Unknown GUI command", "GUI error",
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }
