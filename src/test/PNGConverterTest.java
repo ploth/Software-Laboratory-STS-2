@@ -46,12 +46,11 @@ public class PNGConverterTest {
 		// PERST_PNG_Converter.write(e.getCorrectClassification(),
 		// e.getPixels(),
 		// "bitch.png");
-		PERST_PNG_Converter.read("bitch.png");
+		PERST_PNG_Converter.read("read.png");
 		System.out.println("numberOfNonTrainingdata: "
 				+ db.getNumberOfNonTrainingdataDatabaseElements());
 		DatabaseElement e = db.getNonTrainingdataDatabaseIterator().first();
-		PERST_PNG_Converter.writeOneImage(e.getCorrectClassification(), e.getPixels(),
-				"snitch.png");
+		PERST_PNG_Converter.writeOneImage(e.getPixels(), "write.png");
 		db.closeDB();
 	}
 }
