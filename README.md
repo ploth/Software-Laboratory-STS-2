@@ -1,12 +1,12 @@
 # Software-Laboratory-STS-2
 
-Info:
+##Info
 Dieses Programm bietet zurzeit zwei Möglichkeiten Ziffern zwischen 0-9 automatisch zu erkennen. 
 Die Möglichkeiten unterscheiden sich in den verwendeten Algorithmen. Zur Auswahl steht der KNN (k-nearest-neighbor) und der KMean (k-means clustering) Algorithmus.
 
 
 
-Daten importieren:
+##Daten importieren
 Zur Klassifikation von Ziffern mit dem KNN Algorithmus sind Trainingsdaten notwenig, die nach dem Start des Programmes im Tab "Input/Output Data" im Abschnitt "Training data" geladen werden können.
 Im Abschnitt "Classify data" sind die Daten zu importieren, die man klassifizieren möchte.
 Jeweils ist es möglich nicht den kompletten Inhalt zu laden, sondern nur Bereiche.
@@ -17,12 +17,12 @@ Zudem besteht immer die Möglichkeit die komplette Datenbank aller korrekt Klass
 
 
 
-Datenbankverwaltung:
+##Datenbankverwaltung
 Ansehen lässt sich der komplette Inhalt der Datenbank im Tab "Database". Zwei Pfeile oder das Eintragen einer Indexnummer zeigen das gewünschte Element.
 
 
 
-Algorithmen:
+##Algorithmen
 Die Algorithmen lassen sich im Tab "Algorithms" starten.
 
 Mit dem KNN Algorithmus kann sofort losgelegt werden, sofern Trainingsdaten und zu klassifizierende Daten vorhanden sind.
