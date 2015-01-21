@@ -350,7 +350,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 					numTotalTrainingObjects, trainingObjectsPerClass,
 					falseClassifiedObjects, meanSquaredError);
 		} else if (algorithm == Algorithm.KMEAN) {
-			new StatisticsDialog("k-Nearest-Neighbor",
+			new StatisticsDialog("k-Means clustering",
 					chosenDistaneMeasurementMethod, chosenParameterK,
 					numTotalTestObjects, testObjectsPerClass,
 					numTotalTrainingObjects, trainingObjectsPerClass,
