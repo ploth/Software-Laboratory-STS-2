@@ -53,6 +53,9 @@ public class OCRApp {
 		// Start workbench
 		// /////////////////////////////////////////////
 
+		JOptionPane.showMessageDialog(new JFrame(),
+				"Please read the README-File before using the program.",
+				"Info", JOptionPane.INFORMATION_MESSAGE);
 		new Workbench("OCR Workbench");
 	}
 }
