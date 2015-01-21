@@ -113,7 +113,6 @@ public class ClusterClassificationDialog extends JDialog {
 					i++;
 				}
 			}
-			// TODO Scale numbers properly for this window
 			BufferedImage scaledImage = new BufferedImage(145, 145,
 					BufferedImage.TYPE_BYTE_GRAY);
 			AffineTransform transform = new AffineTransform();
