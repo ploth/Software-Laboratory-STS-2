@@ -43,11 +43,11 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 	private final JLabel lblcorrectValue;
 	private final JLabel lblIndexNumber;
 	private final PERSTDatabase db_ = PERSTDatabase.getInstance();
-	private Iterator<DatabaseElement> iter_;
-	private DatabaseElement currentElement_;
+	private Iterator<DatabaseElement> iter;
+	private DatabaseElement currentElement;
 	private int currentlyEnteredClassification = PERSTDatabase.NO_CORRECT_CLASSIFICATION;
-	private int confirmedCounter_ = 0;
-	private final int numOElements_;
+	private int confirmedCounter = 0;
+	private final int numOElements;
 	private static final int MIN_LABEL = 0;
 	private static final int MAX_LABEL = 9;
 
@@ -59,9 +59,9 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-		iter_ = elements.iterator();
-		currentElement_ = iter_.next();
-		numOElements_ = elements.size();
+		iter = elements.iterator();
+		currentElement = iter.next();
+		numOElements = elements.size();
 
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -143,13 +143,13 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 
 	private void updateGUIState() {
 		graphicsPanel.update();
-		int algoClassification = (int) currentElement_.getAlgoClassification();
+		int algoClassification = (int) currentElement.getAlgoClassification();
 		if (algoClassification == PERSTDatabase.NO_ALGORITHM_CLASSIFICATION) {
 			lblclassifiedValue.setText("-");
 		} else {
 			lblclassifiedValue.setText(String.valueOf(algoClassification));
 		}
-		int correctClassfication = (int) currentElement_
+		int correctClassfication = (int) currentElement
 				.getCorrectClassification();
 		if (correctClassfication == PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
 			lblcorrectValue.setText("-");
@@ -160,8 +160,8 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 			btnEnterCorrectValue.setEnabled(false);
 			currentlyEnteredClassification = correctClassfication;
 		}
-		lblIndexNumber.setText((confirmedCounter_ + 1) + "/" + numOElements_);
-		if (!iter_.hasNext()) {
+		lblIndexNumber.setText((confirmedCounter + 1) + "/" + numOElements);
+		if (!iter.hasNext()) {
 			btnNext.setEnabled(false);
 			btnDone.setEnabled(true);
 		}
@@ -192,18 +192,18 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 		switch (e.getActionCommand()) {
 		case "done":
 			if (currentlyEnteredClassification != PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
-				db_.convertToCorrect(currentElement_.getIndex(),
+				db_.convertToCorrect(currentElement.getIndex(),
 						(char) currentlyEnteredClassification);
 			}
 			dispose();
 			break;
 		case "next":
 			if (currentlyEnteredClassification != PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
-				db_.convertToCorrect(currentElement_.getIndex(),
+				db_.convertToCorrect(currentElement.getIndex(),
 						(char) currentlyEnteredClassification);
 			}
-			currentElement_ = iter_.next();
-			confirmedCounter_++;
+			currentElement = iter.next();
+			confirmedCounter++;
 			currentlyEnteredClassification = PERSTDatabase.NO_CORRECT_CLASSIFICATION;
 			updateGUIState();
 			break;
@@ -226,7 +226,7 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 		}
 
 		private void paintNumber(Graphics g) {
-			char[] pixels = currentElement_.getPixels();
+			char[] pixels = currentElement.getPixels();
 
 			BufferedImage image = new BufferedImage(28, 28,
 					BufferedImage.TYPE_BYTE_GRAY);
