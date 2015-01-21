@@ -8,45 +8,49 @@ import org.garret.perst.StorageFactory;
 
 public class PERSTDatabase {
 
-	private Storage storage_;
-	private Database db_;
-	private Integer numberOfDatabaseElements_ = 0;
-	private Integer numberOfCorrectDatabaseElements_ = 0; // Trainingdata
-	private int dim_ = 0;
-	private static PERSTDatabase instance_;
-	private static String defaultDatabaseName_ = "perstdatabase.dbs";
+	private Storage storage;
+	private Database db;
+	private Integer numberOfDatabaseElements = 0;
+	private Integer numberOfCorrectDatabaseElements = 0; // Trainingdata
+	private int dim = 0;
+	private static PERSTDatabase instance;
+	private static final String defaultDatabaseName = "perstdatabase.dbs";
 	public static final char NO_CORRECT_CLASSIFICATION = 43;
 	public static final char NO_ALGORITHM_CLASSIFICATION = 42;
 	private static final int DEBUG_9000 = 9000;
 	private static final char MAX_CHAR = 255;
 
 	private PERSTDatabase(String databaseName) {
-		storage_ = StorageFactory.getInstance().createStorage();
+		storage = StorageFactory.getInstance().createStorage();
 		// 1GB
-		storage_.open(databaseName, 1024000000); // minimum 40000 bytes
+		storage.open(databaseName, 1024000000); // minimum 40000 bytes
 													// (40kbytes)
-		db_ = new Database(storage_, false);
-		instance_ = this;
+		db = new Database(storage, false);
+		instance = this;
 		IterableIterator<DatabaseElement> iter = getDatabaseIterator();
 		while (iter.hasNext()) {
 			DatabaseElement e = iter.next();
 			if (e.isTrainingdata()) {
-				numberOfCorrectDatabaseElements_++;
+				numberOfCorrectDatabaseElements++;
 			}
-			numberOfDatabaseElements_++;
+			numberOfDatabaseElements++;
 		}
 	}
 
 	private Database getDB() {
-		return db_;
+		return db;
+	}
+
+	public static String getDBName() {
+		return defaultDatabaseName;
 	}
 
 	public Integer getNumberOfDatabaseElements() {
-		return numberOfDatabaseElements_;
+		return numberOfDatabaseElements;
 	}
 
 	public Integer getNumberOfTrainingdataDatabaseElements() {
-		return numberOfCorrectDatabaseElements_;
+		return numberOfCorrectDatabaseElements;
 	}
 
 	public Integer getNumberOfNonTrainingdataDatabaseElements() {
@@ -55,12 +59,12 @@ public class PERSTDatabase {
 
 	public int getDim() {
 		// 28! not 28*28!
-		if (dim_ == 0) {
-			dim_ = (int) Math.sqrt(this.getDatabaseIterator().first()
+		if (dim == 0) {
+			dim = (int) Math.sqrt(this.getDatabaseIterator().first()
 					.getPixels().length);
-			return dim_;
+			return dim;
 		} else
-			return dim_;
+			return dim;
 	}
 
 	public class DatabaseElement extends Persistent {
@@ -130,21 +134,21 @@ public class PERSTDatabase {
 	}
 
 	public void updateTrainingdata(DatabaseElement e, boolean trainingdata) {
-		db_.updateKey(e, "trainingdata", trainingdata);
+		db.updateKey(e, "trainingdata", trainingdata);
 	}
 
 	public void updateCorrectClassification(DatabaseElement e,
 			char correctClassification) {
-		db_.updateKey(e, "correctClassification", correctClassification);
+		db.updateKey(e, "correctClassification", correctClassification);
 	}
 
 	public void updateAlgoClassification(DatabaseElement e,
 			char algoClassification) {
-		db_.updateKey(e, "algoClassification", algoClassification);
+		db.updateKey(e, "algoClassification", algoClassification);
 	}
 
 	public void updateClusterID(DatabaseElement e, int clusterID) {
-		db_.updateKey(e, "clusterID", clusterID);
+		db.updateKey(e, "clusterID", clusterID);
 	}
 
 	public void convertToCorrect(int index, char correctClassification) {
@@ -152,69 +156,69 @@ public class PERSTDatabase {
 		if (e.isTrainingdata() == false) {
 			updateTrainingdata(e, true);
 			updateCorrectClassification(e, correctClassification);
-			numberOfCorrectDatabaseElements_++;
+			numberOfCorrectDatabaseElements++;
 		}
 	}
 
 	public static PERSTDatabase getInstance() {
-		if (instance_ == null) {
-			instance_ = new PERSTDatabase(defaultDatabaseName_);
+		if (instance == null) {
+			instance = new PERSTDatabase(defaultDatabaseName);
 		}
-		return instance_;
+		return instance;
 	}
 
 	// returns index
 	public int createCorrectDatabaseElement(char correctClassification,
 			char[] pixels, boolean trainingdata) {
-		numberOfDatabaseElements_++;
+		numberOfDatabaseElements++;
 		if (trainingdata) {
-			numberOfCorrectDatabaseElements_++;
+			numberOfCorrectDatabaseElements++;
 		}
 		DatabaseElement DatabaseElement = new DatabaseElement(pixels,
-				numberOfDatabaseElements_, trainingdata);
+				numberOfDatabaseElements, trainingdata);
 		updateCorrectClassification(DatabaseElement, correctClassification);
-		return numberOfDatabaseElements_;
+		return numberOfDatabaseElements;
 	}
 
 	// return index
 	public int createUnclassifiedDatabaseElement(char[] pixels) {
-		numberOfDatabaseElements_++;
+		numberOfDatabaseElements++;
 		DatabaseElement DatabaseElement = new DatabaseElement(pixels,
-				numberOfDatabaseElements_, false);
-		return numberOfDatabaseElements_;
+				numberOfDatabaseElements, false);
+		return numberOfDatabaseElements;
 	}
 
 	public IterableIterator<DatabaseElement> getDatabaseIterator() {
-		return db_.<DatabaseElement> getRecords(DatabaseElement.class);
+		return db.<DatabaseElement> getRecords(DatabaseElement.class);
 	}
 
 	public IterableIterator<DatabaseElement> getCorrectDatabaseIterator() {
-		return db_.<DatabaseElement> select(DatabaseElement.class,
+		return db.<DatabaseElement> select(DatabaseElement.class,
 				"trainingdata = true");
 	}
 
 	public IterableIterator<DatabaseElement> getNonTrainingdataDatabaseIterator() {
-		return db_.<DatabaseElement> select(DatabaseElement.class,
+		return db.<DatabaseElement> select(DatabaseElement.class,
 				"trainingdata = false");
 	}
 
 	public IterableIterator<DatabaseElement> getClusteredDatabaseIterator(
 			int clusterID) {
 		String query = "clusterID = " + String.valueOf(clusterID);
-		IterableIterator<DatabaseElement> iterator = db_
+		IterableIterator<DatabaseElement> iterator = db
 				.<DatabaseElement> select(DatabaseElement.class, query);
 		return iterator;
 	}
 
 	public DatabaseElement getDatabaseElement(int index) {
 		String indexString = "index = " + String.valueOf(index);
-		return db_.<DatabaseElement> select(DatabaseElement.class, indexString)
+		return db.<DatabaseElement> select(DatabaseElement.class, indexString)
 				.first();
 	}
 
 	public void closeDB() {
-		db_.commitTransaction();
-		storage_.close();
+		db.commitTransaction();
+		storage.close();
 	}
 
 }
