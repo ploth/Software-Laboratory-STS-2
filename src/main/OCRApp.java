@@ -9,6 +9,11 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 public class OCRApp {
 	public static void main(String[] args) {
+
+		// /////////////////////////////////////////////
+		// Set GUI design
+		// /////////////////////////////////////////////
+
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (UnsupportedLookAndFeelException e) {
@@ -43,6 +48,11 @@ public class OCRApp {
 							JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
 		}
+
+		// /////////////////////////////////////////////
+		// Start workbench
+		// /////////////////////////////////////////////
+
 		new Workbench("OCR Workbench");
 	}
 }
