@@ -29,13 +29,18 @@ import net.miginfocom.swing.MigLayout;
 import data.PERSTDatabase;
 import data.PERSTDatabase.DatabaseElement;
 
+/*
+ * This class takes an array of data elements and displays them in a window.
+ * Each element can be classified by the user if it wasn't classified yet.
+ * Pushing the "Next" or "Done" button approves the currently shown element
+ * and adds it to the training data together with the correct class value.
+ */
 public class ResultDisplayDialog extends JDialog implements ActionListener {
-
-	// TODO Refactor member variables with underscore
-	// TODO Write comments
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private final GraphicsPanel graphicsPanel;
+	// Some GUI elements have to be stored as members because they get
+	// referenced by some actions
 	private final JButton btnNext;
 	private final JButton btnEnterCorrectValue;
 	private final JButton btnDone;
@@ -68,15 +73,20 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new MigLayout("", "[grow]", "[154.00][grow]"));
 
-		JPanel panel_1 = new JPanel();
-		contentPanel.add(panel_1, "cell 0 0,grow");
-		panel_1.setLayout(new MigLayout("", "[grow][grow][grow]", "[grow]"));
+		// /////////////////////////////////////////////
+		// Element display panel
+		// /////////////////////////////////////////////
+
+		JPanel elementDisplayPanel = new JPanel();
+		contentPanel.add(elementDisplayPanel, "cell 0 0,grow");
+		elementDisplayPanel.setLayout(new MigLayout("", "[grow][grow][grow]",
+				"[grow]"));
 
 		JPanel imageBorderPanel = new JPanel();
 		imageBorderPanel.setBorder(new TitledBorder(new EtchedBorder(
 				EtchedBorder.LOWERED, null, null), "Image",
 				TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_1.add(imageBorderPanel, "cell 0 0,grow");
+		elementDisplayPanel.add(imageBorderPanel, "cell 0 0,grow");
 		imageBorderPanel.setLayout(new MigLayout("", "[grow]", "[grow]"));
 
 		graphicsPanel = new GraphicsPanel();
@@ -87,7 +97,7 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 				EtchedBorder.LOWERED, null, null), "Classified by Algorithm",
 				TitledBorder.LEADING, TitledBorder.TOP, null,
 				new Color(0, 0, 0)));
-		panel_1.add(classifiedValuePanel, "cell 1 0,grow");
+		elementDisplayPanel.add(classifiedValuePanel, "cell 1 0,grow");
 		classifiedValuePanel.setLayout(new MigLayout("", "[grow]", "[grow]"));
 
 		lblclassifiedValue = new JLabel("-");
@@ -99,7 +109,7 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 		correctValueBorderPanel.setBorder(new TitledBorder(new EtchedBorder(
 				EtchedBorder.LOWERED, null, null), "Correct value",
 				TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_1.add(correctValueBorderPanel, "cell 2 0,grow");
+		elementDisplayPanel.add(correctValueBorderPanel, "cell 2 0,grow");
 		correctValueBorderPanel
 				.setLayout(new MigLayout("", "[grow]", "[grow]"));
 
@@ -108,39 +118,47 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 		lblcorrectValue.setHorizontalAlignment(SwingConstants.CENTER);
 		correctValueBorderPanel.add(lblcorrectValue, "cell 0 0,grow");
 
-		JPanel panel = new JPanel();
-		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		contentPanel.add(panel, "cell 0 1,growx,aligny bottom");
-		panel.setLayout(new MigLayout("", "[][][135.00][116.00][50.00,grow]",
-				"[]"));
+		// /////////////////////////////////////////////
+		// Buttons panel
+		// /////////////////////////////////////////////
+
+		JPanel buttonPanel = new JPanel();
+		buttonPanel
+				.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		contentPanel.add(buttonPanel, "cell 0 1,growx,aligny bottom");
+		buttonPanel.setLayout(new MigLayout("",
+				"[][][135.00][116.00][50.00,grow]", "[]"));
 
 		btnNext = new JButton("Next");
 		btnNext.addActionListener(this);
 		btnNext.setActionCommand("next");
-		panel.add(btnNext, "cell 0 0");
+		buttonPanel.add(btnNext, "cell 0 0");
 
 		JLabel lblIndex = new JLabel("Index:");
-		panel.add(lblIndex, "cell 1 0,alignx right");
+		buttonPanel.add(lblIndex, "cell 1 0,alignx right");
 
 		lblIndexNumber = new JLabel("-/-");
-		panel.add(lblIndexNumber, "cell 2 0");
+		buttonPanel.add(lblIndexNumber, "cell 2 0");
 
 		btnEnterCorrectValue = new JButton("Enter correct classification");
 		btnEnterCorrectValue.addActionListener(this);
 		btnEnterCorrectValue.setActionCommand("enterCorrectValue");
-		panel.add(btnEnterCorrectValue, "cell 3 0");
+		buttonPanel.add(btnEnterCorrectValue, "cell 3 0");
 
 		btnDone = new JButton("Done");
 		btnDone.addActionListener(this);
 		btnDone.setActionCommand("done");
 		btnDone.setEnabled(false);
-		panel.add(btnDone, "cell 4 0");
+		buttonPanel.add(btnDone, "cell 4 0");
 
 		updateGUIState();
 
 		setVisible(true);
 	}
 
+	// Update all GUI elements according to the currently displayed elements.
+	// Redraw the element graphics, set the algorithm classification and correct
+	// classification
 	private void updateGUIState() {
 		graphicsPanel.update();
 		int algoClassification = (int) currentElement.getAlgoClassification();
@@ -167,6 +185,8 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 		}
 	}
 
+	// Prompt the user to enter the correct classification for the current
+	// element
 	private void enterCorrectClassification() {
 		String enteredClassification_str = JOptionPane
 				.showInputDialog("Enter correct classification");
@@ -188,6 +208,9 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 	}
 
 	@Override
+	// When pressing the "Done" or "Next" button, the currently displayed
+	// element gets added to the training data if it has received a correct
+	// classification
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "done":
@@ -213,6 +236,7 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 		}
 	}
 
+	// Panel for drawing the current element
 	class GraphicsPanel extends JPanel {
 
 		private static final long serialVersionUID = 1L;
@@ -238,6 +262,8 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 					i++;
 				}
 			}
+
+			// Scale the current element to fit in the panel properly
 			BufferedImage scaledImage = new BufferedImage(145, 145,
 					BufferedImage.TYPE_BYTE_GRAY);
 			AffineTransform transform = new AffineTransform();
