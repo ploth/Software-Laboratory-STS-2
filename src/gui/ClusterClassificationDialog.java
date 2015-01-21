@@ -38,7 +38,6 @@ public class ClusterClassificationDialog extends JDialog {
 
 	public ClusterClassificationDialog(final double[][] clusterMeans,
 			final char[] clusterClassifications) {
-		setUndecorated(true);
 		setModal(true);
 		setSize(new Dimension(WIDTH, HEIGHT));
 		setLocationRelativeTo(null);
