@@ -15,7 +15,8 @@ public class OCRApp {
 		// /////////////////////////////////////////////
 
 		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			UIManager.setLookAndFeel(UIManager
+					.getCrossPlatformLookAndFeelClassName());
 		} catch (UnsupportedLookAndFeelException e) {
 			JOptionPane
 					.showMessageDialog(

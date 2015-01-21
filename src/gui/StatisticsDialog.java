@@ -26,7 +26,7 @@ import data.PERSTDatabase.DatabaseElement;
 public class StatisticsDialog extends JDialog implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private static final int WIDTH = 480;
-	private static final int HEIGHT = 400;
+	private static final int HEIGHT = 430;
 	private final JButton btnDisplayFalseClassified;
 	private final ArrayList<DatabaseElement> falseClassifiedObjects;
 
