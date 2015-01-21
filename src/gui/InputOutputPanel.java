@@ -160,7 +160,6 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 	}
 
 	@Override
-	// TODO Catch exceptions
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "importTrainingDataMNIST":
@@ -189,8 +188,9 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 			exportToPNG();
 			break;
 		default:
-			// TODO Throw exception?
-			System.err.println("Unknown action: " + e.getActionCommand());
+			JOptionPane.showMessageDialog(new JFrame(),
+					"Error: Unknown GUI command", "GUI error",
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
