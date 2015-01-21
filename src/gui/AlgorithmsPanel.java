@@ -86,7 +86,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 		pnlKMeans.setLayout(new MigLayout("", "[grow]", "[][][]"));
 
 		JButton btnPerformKmeansclustering = new JButton(
-				"Perform k-Means-clustering");
+				"Perform k-Means clustering");
 		btnPerformKmeansclustering.addActionListener(this);
 		btnPerformKmeansclustering.setActionCommand("performClustering");
 		pnlKMeans.add(btnPerformKmeansclustering, "cell 0 0,growx");
@@ -135,7 +135,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 			btnClassifyByKMean.setEnabled(true);
 			JOptionPane
 					.showMessageDialog(new JFrame(),
-							"The k-Mean-cluster map was created, you can now classify new objects quickly.");
+							"The k-Mean cluster map was created, you can now classify new objects quickly.");
 			break;
 		case "startKMeanTest":
 			// Check if there is data to be classified
