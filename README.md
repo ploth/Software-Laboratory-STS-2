@@ -36,3 +36,14 @@ Nun ist es möglich schnell neue unbekannte Elemente zu erkennen, nachdem das Cl
 Beide Algorithmen bieten die Möglichkeit Testläufe durchzuführen, welche im Nachhinein eine Statistik anzeigt. Dafür sind Trainingsdaten und zu klassifizierende Daten mit korrekter Klassifikation notwenig, um selbstständig zu entscheiden, ob die vom Algorithmus gewähle Klassifikation richtig oder falsch ist.
 Als Trainingsdaten können bereits vorhandene aus der Datenbank verwendet werden oder es sind welche aus dem MNIST Datensatz oder aus csv Dateien zu importieren.
 Zu klassifzierende Objekte müssen von dem MNIST Datensatz oder aus csv Dateien kommen, da zwingend die korrekte Klassifizierung notwendig ist.
+
+
+
+##Datenstruktur
+Intern werden in der Datenbank nur Objekte vom Typ DatabaseElement gespeichert, welche alle nötigen Information für die Algorithmen enthalten und speichern.
+
+
+
+##Kontakt
+Thomas Schattschneider
+Pascal Loth
