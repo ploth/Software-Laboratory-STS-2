@@ -17,6 +17,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.garret.perst.IterableIterator;
 
+import algorithm.AlgorithmException;
 import algorithm.KMean;
 import algorithm.KNN;
 import data.PERSTDatabase;
@@ -248,15 +249,23 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 		// Start the k-Means-clustering algorithm with the appropriate distance
 		// measurement method. This first step only classifies the cluster means
 		// and creates a class map for classifying new data.
-		if (chosenDistaneMeasurementMethod == "Euclid") {
-			kMeanAlgorithm.doAlgorithm(KNN.SQR_EUCLID, chosenParameterK);
-			return true;
-		} else if (chosenDistaneMeasurementMethod == "Manhattan") {
-			kMeanAlgorithm.doAlgorithm(KNN.MANHATTAN, chosenParameterK);
-			return true;
-		} else {
+		try {
+			if (chosenDistaneMeasurementMethod == "Euclid") {
+				kMeanAlgorithm.doAlgorithm(KNN.SQR_EUCLID, chosenParameterK);
+				return true;
+			} else if (chosenDistaneMeasurementMethod == "Manhattan") {
+				kMeanAlgorithm.doAlgorithm(KNN.MANHATTAN, chosenParameterK);
+				return true;
+			} else {
+				JOptionPane.showMessageDialog(new JFrame(),
+						"Invalid distance measurement method chosen");
+				return false;
+			}
+		} catch (AlgorithmException e) {
 			JOptionPane.showMessageDialog(new JFrame(),
-					"Invalid distance measurement method chosen");
+					"An error ocurred while performing the k-Means algorithm. Message:\n"
+							+ e.getMessage(), "Algorithm error",
+					JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 	}
@@ -377,17 +386,25 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 		KNN kNearestNeighborAlgorithm = new KNN();
 
 		// Start algorithm with chosen distance measurement method
-		if (chosenDistaneMeasurementMethod == "Euclid") {
-			kNearestNeighborAlgorithm.doAlgorithm(KNN.SQR_EUCLID,
-					chosenParameterK);
-			return true;
-		} else if (chosenDistaneMeasurementMethod == "Manhattan") {
-			kNearestNeighborAlgorithm.doAlgorithm(KNN.MANHATTAN,
-					chosenParameterK);
-			return true;
-		} else {
+		try {
+			if (chosenDistaneMeasurementMethod == "Euclid") {
+				kNearestNeighborAlgorithm.doAlgorithm(KNN.SQR_EUCLID,
+						chosenParameterK);
+				return true;
+			} else if (chosenDistaneMeasurementMethod == "Manhattan") {
+				kNearestNeighborAlgorithm.doAlgorithm(KNN.MANHATTAN,
+						chosenParameterK);
+				return true;
+			} else {
+				JOptionPane.showMessageDialog(new JFrame(),
+						"Invalid distance measurement method chosen");
+				return false;
+			}
+		} catch (AlgorithmException e) {
 			JOptionPane.showMessageDialog(new JFrame(),
-					"Invalid distance measurement method chosen");
+					"An error ocurred while performing the k-NN algorithm. Message:\n"
+							+ e.getMessage(), "Algorithm error",
+					JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 	}
