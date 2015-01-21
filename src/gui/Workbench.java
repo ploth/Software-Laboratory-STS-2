@@ -4,6 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -45,6 +49,19 @@ public class Workbench extends JFrame implements ActionListener {
 		JMenu menu_help = new JMenu("Help");
 		JMenuItem item_about = new JMenuItem("About...");
 		item_about.addActionListener(this);
+
+		JMenu mnFile = new JMenu("File");
+		menuBar.add(mnFile);
+
+		JMenuItem mntmDeleteDatabase = new JMenuItem("Delete database & Exit");
+		mntmDeleteDatabase.addActionListener(this);
+		mntmDeleteDatabase.setActionCommand("deleteAndExit");
+		mnFile.add(mntmDeleteDatabase);
+
+		JMenuItem mntmExit = new JMenuItem("Exit");
+		mntmExit.addActionListener(this);
+		mntmExit.setActionCommand("exit");
+		mnFile.add(mntmExit);
 		item_about.setActionCommand("about");
 		menu_help.add(item_about);
 		menuBar.add(menu_help);
@@ -70,6 +87,7 @@ public class Workbench extends JFrame implements ActionListener {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				PERSTDatabase.getInstance().closeDB();
+				System.out.println("Closing DB...\nDisposing window.");
 				e.getWindow().dispose();
 			}
 		});
@@ -84,6 +102,26 @@ public class Workbench extends JFrame implements ActionListener {
 			JOptionPane
 					.showMessageDialog(this,
 							"Programmed: by\nPascal Loth\nThomas Schattschneider\n\n2015");
+			break;
+		case "deleteAndExit":
+			Path dbPath = FileSystems.getDefault().getPath(
+					PERSTDatabase.getDBName());
+			try {
+				// TODO Don't allow deletion of database when number of elements
+				// == 0!
+				PERSTDatabase.getInstance().closeDB();
+				Files.deleteIfExists(dbPath);
+			} catch (IOException e1) {
+				JOptionPane.showMessageDialog(new JFrame(),
+						"An error ocurred while trying to delete the database file:\n"
+								+ e1.getMessage(), "IOException",
+						JOptionPane.ERROR_MESSAGE);
+			}
+			dispose();
+			dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+			break;
+		case "exit":
+			dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 			break;
 		default:
 			JOptionPane.showMessageDialog(new JFrame(),
