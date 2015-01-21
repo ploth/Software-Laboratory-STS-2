@@ -32,22 +32,32 @@ import net.miginfocom.swing.MigLayout;
 import data.PERSTDatabase;
 import data.PERSTDatabase.DatabaseElement;
 
+/*
+ * This panel acts as a data viewer for the database.
+ * Database elements without a known classification can be classified by the user using this panel.
+ */
 public class DatabasePanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private GraphicsPanel graphicsPanel;
 	private final JButton btnEnterClassification;
+	// Some GUI elements have to be members because they are being referenced by
+	// some actions
 	private JLabel lblClassification;
 	private JLabel lblDatacounter;
 	private JSpinner spnIndex;
 	private PERSTDatabase db_;
+	// Stores the current total number of database elements
 	private int numOfDatabaseElements_;
+	// Stores the database index of the current element to be displayed
 	private int currentIndex;
 
 	public DatabasePanel() {
 		db_ = PERSTDatabase.getInstance();
 		setLayout(new MigLayout("", "[332.00,grow]", "[335.00,grow]"));
 
+		// Update the total number of database-elements and always show the
+		// first element after switching to this panel
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent arg0) {
@@ -64,29 +74,37 @@ public class DatabasePanel extends JPanel {
 			}
 		});
 
-		JPanel panelLeft = new JPanel();
-		panelLeft.setBorder(BorderFactory.createTitledBorder(
+		// /////////////////////////////////////////////
+		// Database element counter
+		// /////////////////////////////////////////////
+
+		JPanel panelTop = new JPanel();
+		panelTop.setBorder(BorderFactory.createTitledBorder(
 				BorderFactory.createEtchedBorder(EtchedBorder.LOWERED),
 				"Controls"));
-		add(panelLeft, "cell 0 0,grow");
-		panelLeft.setLayout(new MigLayout("", "[184.00,grow][grow]",
+		add(panelTop, "cell 0 0,grow");
+		panelTop.setLayout(new MigLayout("", "[184.00,grow][grow]",
 				"[][][][grow]"));
 
 		JLabel lblNumberOfDataelements = new JLabel(
 				"Number of data elements in database:");
-		panelLeft.add(lblNumberOfDataelements, "cell 0 0");
+		panelTop.add(lblNumberOfDataelements, "cell 0 0");
 
 		lblDatacounter = new JLabel("-");
-		panelLeft.add(lblDatacounter, "cell 1 0,alignx center");
+		panelTop.add(lblDatacounter, "cell 1 0,alignx center");
 
 		JSeparator separator = new JSeparator();
-		panelLeft.add(separator, "cell 0 1 2 1,growx");
+		panelTop.add(separator, "cell 0 1 2 1,growx");
+
+		// /////////////////////////////////////////////
+		// Index number spinner
+		// /////////////////////////////////////////////
 
 		JPanel indexChooserPanel = new JPanel();
 		indexChooserPanel.setBorder(new TitledBorder(new EtchedBorder(
 				EtchedBorder.LOWERED, null, null), "Display data",
 				TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelLeft.add(indexChooserPanel, "cell 0 2 2 1,grow");
+		panelTop.add(indexChooserPanel, "cell 0 2 2 1,grow");
 		indexChooserPanel.setLayout(new MigLayout("", "[][grow]", "[]"));
 
 		JLabel lblIndex = new JLabel("Index:");
@@ -109,15 +127,19 @@ public class DatabasePanel extends JPanel {
 		});
 		indexChooserPanel.add(spnIndex, "cell 1 0,growx");
 
-		JPanel panelRight = new JPanel();
-		panelLeft.add(panelRight, "cell 0 3 2 1,grow");
-		panelRight
+		// /////////////////////////////////////////////
+		// Element display panel
+		// /////////////////////////////////////////////
+
+		JPanel panelBottom = new JPanel();
+		panelTop.add(panelBottom, "cell 0 3 2 1,grow");
+		panelBottom
 				.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panelRight.setLayout(new MigLayout("", "[grow][152.00][grow]",
+		panelBottom.setLayout(new MigLayout("", "[grow][152.00][grow]",
 				"[167.00][][]"));
 
 		JPanel panelImageOuter = new JPanel();
-		panelRight.add(panelImageOuter, "cell 1 0,growx,aligny top");
+		panelBottom.add(panelImageOuter, "cell 1 0,growx,aligny top");
 		panelImageOuter.setLayout(new MigLayout("", "[140px,grow]", "[150px]"));
 
 		JPanel panelImageInner = new JPanel();
@@ -129,7 +151,7 @@ public class DatabasePanel extends JPanel {
 		panelImageInner.setLayout(new MigLayout("", "[grow]", "[grow]"));
 
 		JPanel panelClassificationOuter = new JPanel();
-		panelRight.add(panelClassificationOuter, "cell 1 1,growx,aligny top");
+		panelBottom.add(panelClassificationOuter, "cell 1 1,growx,aligny top");
 		panelClassificationOuter.setLayout(new MigLayout("", "[150px,grow]",
 				"[150px]"));
 
@@ -161,9 +183,11 @@ public class DatabasePanel extends JPanel {
 		});
 		btnEnterClassification.setActionCommand("");
 		btnEnterClassification.setEnabled(false);
-		panelRight.add(btnEnterClassification, "cell 1 2,growx");
+		panelBottom.add(btnEnterClassification, "cell 1 2,growx");
 	}
 
+	// Display the classification corresponding to the currently chosen database
+	// element
 	private void updateClassificationLabel(int index) {
 		int classification = db_.getDatabaseElement(index)
 				.getCorrectClassification();
@@ -176,6 +200,7 @@ public class DatabasePanel extends JPanel {
 		}
 	}
 
+	// Update the GUI based on the number of objects in the database
 	private void updateDatabaseState() {
 		numOfDatabaseElements_ = db_.getNumberOfDatabaseElements();
 		lblDatacounter.setText(String.valueOf(numOfDatabaseElements_));
@@ -187,6 +212,7 @@ public class DatabasePanel extends JPanel {
 		}
 	}
 
+	// Manually enter the classification for a database element
 	private void enterCorrectClassification() {
 		String enteredClassification_str = JOptionPane
 				.showInputDialog("Enter correct classification");
@@ -206,6 +232,7 @@ public class DatabasePanel extends JPanel {
 		lblClassification.setText(enteredClassification_str);
 	}
 
+	// Panel for drawing the current element
 	class GraphicsPanel extends JPanel {
 
 		private static final long serialVersionUID = 1L;
@@ -238,6 +265,8 @@ public class DatabasePanel extends JPanel {
 					i++;
 				}
 			}
+
+			// Scale the current element to fit in the panel properly
 			BufferedImage scaledImage = new BufferedImage(145, 145,
 					BufferedImage.TYPE_BYTE_GRAY);
 			AffineTransform transform = new AffineTransform();
