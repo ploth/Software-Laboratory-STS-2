@@ -1,11 +1,8 @@
 package test;
 
-import java.io.IOException;
 import java.util.Iterator;
 
 import org.garret.perst.Database;
-import org.garret.perst.IPersistentSet;
-import org.garret.perst.IterableIterator;
 import org.garret.perst.Link;
 import org.garret.perst.Persistent;
 import org.garret.perst.Storage;
@@ -136,9 +133,12 @@ public class PerstExample {
 	}
 
 	private void retrieveData() {
-	// navigational access after selection. Printout all  subCategories (level 1) of Rock
-		System.out.println("Get all sub Category of 'Spielzeug' by programmatic navigation.");
-		for (Category g : db.<Category> select(Category.class, "name ='Spielzeug'")) {
+		// navigational access after selection. Printout all subCategories
+		// (level 1) of Rock
+		System.out
+				.println("Get all sub Category of 'Spielzeug' by programmatic navigation.");
+		for (Category g : db.<Category> select(Category.class,
+				"name ='Spielzeug'")) {
 			Iterator<Category> gIterator = g.getSubCategories();
 			while (gIterator.hasNext()) {
 				Category gs = (Category) gIterator.next();
@@ -148,8 +148,10 @@ public class PerstExample {
 		}
 		System.out.println("\n");
 
-		System.out.println("Get all super Category of sub Categories that contain 'Spielzeug' in their name.");
-	// Query Link data and return parent. Get all subCategories where the name is like *zeug* and return the parent
+		System.out
+				.println("Get all super Category of sub Categories that contain 'Spielzeug' in their name.");
+		// Query Link data and return parent. Get all subCategories where the
+		// name is like *zeug* and return the parent
 		for (Category g : db.<Category> select(Category.class,
 				"contains subCategories with name like '%zeug%'")) {
 			System.out.println("SuperCategory is: " + g.getName());
@@ -157,10 +159,14 @@ public class PerstExample {
 		}
 		System.out.println("\n");
 
-		System.out.println("Get all sub Category of super Categories that contain 'Spielzeug' in their name.");
-		// Query navigational path return child. Get all subCategories that have a parent   where the name is like *Spielzeug* and return the parent subCategory.
-		for (Category g : db.<Category> select(Category.class,
-				"superCategory != null and superCategory.name like '%Spielzeug%'")) {
+		System.out
+				.println("Get all sub Category of super Categories that contain 'Spielzeug' in their name.");
+		// Query navigational path return child. Get all subCategories that have
+		// a parent where the name is like *Spielzeug* and return the parent
+		// subCategory.
+		for (Category g : db
+				.<Category> select(Category.class,
+						"superCategory != null and superCategory.name like '%Spielzeug%'")) {
 			System.out.println("SubCategory is:  " + g.getName());
 
 		}
