@@ -103,5 +103,6 @@ public class PERST_MNIST_Converter extends AbstractConverter {
 			}
 		}
 		labels.close();
+		images.close();
 	}
 }
