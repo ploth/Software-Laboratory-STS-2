@@ -2,6 +2,7 @@ package algorithm;
 
 import data.PERSTDatabase;
 
+// This is the AbstractAlgorithm class which every Algorithm extend.
 public abstract class AbstractAlgorithm {
 
 	private static PERSTDatabase db_ = PERSTDatabase.getInstance();
@@ -13,6 +14,8 @@ public abstract class AbstractAlgorithm {
 	public final static int SQR_EUCLID = 0;
 	public final static int MANHATTAN = 1;
 
+	// It is possbile to call doAlgorithm with corresponding parameters to call
+	// the right function
 	public void doAlgorithm(int type, int k) throws AlgorithmException {
 		if (type == SQR_EUCLID)
 			doSqrEuclid(k);

@@ -1,5 +1,6 @@
 package algorithm;
 
+//This is a algorithm exception which got thrown when algorithm errors occurs.
 public class AlgorithmException extends Exception {
 
 	private static final long serialVersionUID = 1L;

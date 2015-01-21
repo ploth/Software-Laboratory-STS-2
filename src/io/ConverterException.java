@@ -1,5 +1,6 @@
 package io;
 
+// This is an exception class which get thrown on converter errors.
 public class ConverterException extends Exception {
 
 	private static final long serialVersionUID = 1L;

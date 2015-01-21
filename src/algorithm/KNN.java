@@ -11,6 +11,7 @@ import data.KdTree.SqrEuclid;
 import data.KdTreeHelper;
 import data.PERSTDatabase.DatabaseElement;
 
+// This function provides the KNN algorithm with two different distance functions.
 public class KNN extends AbstractAlgorithm {
 
 	private static final int NUMBER_OF_POSSIBLE_CLASSIFICATIONS = 10; // 0-9

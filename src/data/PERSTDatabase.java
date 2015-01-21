@@ -6,6 +6,8 @@ import org.garret.perst.Persistent;
 import org.garret.perst.Storage;
 import org.garret.perst.StorageFactory;
 
+// This is the database class. It is a wrapper class following the singleton pattern sitting around PERST.
+// It provides functionalities to create, update or search elements in the database.
 public class PERSTDatabase {
 
 	private Storage storage_;
@@ -63,6 +65,9 @@ public class PERSTDatabase {
 			return dim_;
 	}
 
+	// DatabaseElement objects are the objects which can be saved in the
+	// database.
+	// It holds all necessary informations fo the algorithms.
 	public class DatabaseElement extends Persistent {
 		// values have to be int to make a query seach possible
 		private int correctClassification = NO_CORRECT_CLASSIFICATION;
@@ -98,14 +103,6 @@ public class PERSTDatabase {
 
 		public char[] getPixels() {
 			return pixels;
-		}
-
-		public char[] getPixelsInverted() {
-			char[] pixelsInverted = new char[pixels.length];
-			for (int i = 0; i < pixels.length; i++) {
-				pixelsInverted[i] = (char) (MAX_CHAR - pixels[i]);
-			}
-			return pixelsInverted;
 		}
 
 		public double[] getPixelsAsDouble() {
@@ -212,6 +209,7 @@ public class PERSTDatabase {
 				.first();
 	}
 
+	// All database transactions were saved.
 	public void closeDB() {
 		db_.commitTransaction();
 		storage_.close();
