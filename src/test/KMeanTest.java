@@ -8,13 +8,14 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import algorithm.AlgorithmException;
 import algorithm.KMean;
 import data.PERSTDatabase;
 
 public class KMeanTest {
 
 	public static void main(String[] args) throws IOException,
-			ConverterException {
+			ConverterException, AlgorithmException {
 		PERSTDatabase db = PERSTDatabase.getInstance();
 		// System.out.println("numberOfDatabaseElements: "
 		// + db.getNumberOfDatabaseElements());

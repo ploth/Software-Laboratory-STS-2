@@ -1,7 +1,5 @@
 package data;
 
-import java.io.IOException;
-
 import org.garret.perst.Database;
 import org.garret.perst.IterableIterator;
 import org.garret.perst.Persistent;
@@ -219,8 +217,4 @@ public class PERSTDatabase {
 		storage_.close();
 	}
 
-	// TODO: remove?
-	public void deleteDatabase() throws IOException {
-		db_.dropTable(DatabaseElement.class);
-	}
 }

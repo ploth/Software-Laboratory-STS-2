@@ -15,7 +15,6 @@ public class PERST_PNG_Converter extends AbstractConverter {
 
 	private static final int BAND = 0;
 	private static final int MAX_CHAR = 255;
-	private static final int FIRST_PIXEL = 0;
 
 	public static void read(String path) throws IOException, ConverterException {
 		if (path.endsWith("png")) {

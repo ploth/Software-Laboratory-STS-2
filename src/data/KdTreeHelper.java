@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.garret.perst.IterableIterator;
 
+import algorithm.AlgorithmException;
 import data.KdTree.Manhattan;
 import data.KdTree.SqrEuclid;
 import data.PERSTDatabase.DatabaseElement;
@@ -39,13 +40,11 @@ public class KdTreeHelper {
 	}
 
 	public SqrEuclid<Character> createSqrEuclidKdTreeWithRandomElementsFromDatabase(
-			int k, int[] indexes) {
+			int k, int[] indexes) throws AlgorithmException {
 		int numberOfDatabaseElements = db_.getNumberOfDatabaseElements();
 		if (k > numberOfDatabaseElements) {
-			// TODO throw exception
-			// the k is greater than the number of database elements
-			System.err
-					.println("HELLO I AM THE CREATESQREUCLIDKDTREEWITHRANDOMELEMENTSFROMDATABASE FUNCTION IN KDTREEHELPER. WE NEED A EXCEPTION HERE");
+			throw new AlgorithmException(
+					"The choosen k is smaler than the number of database elements");
 		}
 		SqrEuclid<Character> seTree = new SqrEuclid<Character>(db_.getDim()
 				* db_.getDim(), sizeLimit_);
@@ -81,13 +80,11 @@ public class KdTreeHelper {
 	}
 
 	public Manhattan<Character> createManhattanKdTreeWithRandomElementsFromDatabase(
-			int k, int[] indexes) {
+			int k, int[] indexes) throws AlgorithmException {
 		int numberOfDatabaseElements = db_.getNumberOfDatabaseElements();
 		if (k > numberOfDatabaseElements) {
-			// TODO throw exception
-			// the k is greater than the number of database elements
-			System.err
-					.println("HELLO I AM THE CREATESQREUCLIDKDTREEWITHRANDOMELEMENTSFROMDATABASE FUNCTION IN KDTREEHELPER. WE NEED A EXCEPTION HERE");
+			throw new AlgorithmException(
+					"The choosen k is smaler than the number of database elements");
 		}
 		Manhattan<Character> mTree = new Manhattan<Character>(db_.getDim()
 				* db_.getDim(), sizeLimit_);

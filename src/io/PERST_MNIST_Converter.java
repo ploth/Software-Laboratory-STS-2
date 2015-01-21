@@ -16,7 +16,6 @@ public class PERST_MNIST_Converter extends AbstractConverter {
 	private static final int MAGIC_NUMBER_LABELS = 2049;
 	private static final int MAGIC_NUMBER_IMAGES = 2051;
 
-	// TODO: Exceptions
 	public static int read(String readLabelPath, String readImagePath,
 			int rangeStart, int rangeEnd, boolean trainingdata)
 			throws IOException, ConverterException {
@@ -104,5 +103,6 @@ public class PERST_MNIST_Converter extends AbstractConverter {
 			}
 		}
 		labels.close();
+		images.close();
 	}
 }
