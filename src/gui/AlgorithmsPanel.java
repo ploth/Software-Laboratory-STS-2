@@ -154,8 +154,6 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 	}
 
 	private boolean isDatabaseEmpty() {
-
-		// TODO Correct or training data?
 		if (db.getNumberOfTrainingdataDatabaseElements() == 0) {
 			JOptionPane.showMessageDialog(new JFrame(),
 					"Please load some training data first!");
@@ -306,7 +304,8 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 				.getNonTrainingdataDatabaseIterator();
 		int[] testObjectsPerClass = new int[10];
 		Arrays.fill(testObjectsPerClass, 0);
-		int numTotalTrainingObjects = db.getNumberOfTrainingdataDatabaseElements();
+		int numTotalTrainingObjects = db
+				.getNumberOfTrainingdataDatabaseElements();
 		int[] trainingObjectsPerClass = new int[10];
 		Arrays.fill(trainingObjectsPerClass, 0);
 		IterableIterator<DatabaseElement> iter_training = db
