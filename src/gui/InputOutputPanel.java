@@ -28,6 +28,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import net.miginfocom.swing.MigLayout;
 import data.PERSTDatabase;
 
+/*
+ * This panel is the main port for loading and exporting data of the program.
+ * It supports the loading of different file format and informs the user about the current state,
+ * i. e. it shows the number of database elements.
+ */
 public class InputOutputPanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
@@ -41,12 +46,17 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 	public InputOutputPanel() {
 		setLayout(new MigLayout("", "[grow]", "[][][]"));
 
+		// Update data counters each time this panel gets shown
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent arg0) {
 				updateDataCounters();
 			}
 		});
+
+		// /////////////////////////////////////////////
+		// Training data panel
+		// /////////////////////////////////////////////
 
 		JPanel pnlTrainingData = new JPanel();
 		pnlTrainingData.setBorder(new TitledBorder(new EtchedBorder(
@@ -84,6 +94,10 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 		btnImportDataFromCSV.setActionCommand("importTrainingDataCSV");
 		pnlTrainingData.add(btnImportDataFromCSV, "flowy,cell 0 3 2 1,growx");
 
+		// /////////////////////////////////////////////
+		// Classifying data panel
+		// /////////////////////////////////////////////
+
 		JPanel pnlClassifyData = new JPanel();
 		pnlClassifyData.setBorder(new TitledBorder(new EtchedBorder(
 				EtchedBorder.LOWERED, null, null), "Classify data",
@@ -120,6 +134,10 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 		btnAddDataFromPNG.setActionCommand("addDataToClassifyFromPNG");
 		pnlClassifyData.add(btnAddDataFromPNG, "cell 0 2 2 1,growx");
 
+		// /////////////////////////////////////////////
+		// Export data panel
+		// /////////////////////////////////////////////
+
 		JPanel pnlExport = new JPanel();
 		pnlExport.setBorder(new TitledBorder(new EtchedBorder(
 				EtchedBorder.LOWERED, null, null), "Export database",
@@ -149,6 +167,7 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 		updateDataCounters();
 	}
 
+	// Updates the two GUI database counters
 	private void updateDataCounters() {
 		int numOfTrainingDataElements = db_
 				.getNumberOfCorrectDatabaseElements();
@@ -194,6 +213,7 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 		}
 	}
 
+	// Load a CSV file and add it's elements to the training data
 	private void loadCSVfile() {
 		String filePath = chooseFile("CSV file", "csv", LOAD_FILE);
 		if (filePath.isEmpty())
@@ -227,6 +247,8 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 		updateDataCounters();
 	}
 
+	// Load MNIST files. The boolean specifies if the loaded data should be
+	// added to training data or to data to be classified by algorithms.
 	private void loadMNISTfiles(boolean isTrainingData) {
 		String imagesPath = chooseFile("MNIST images", "idx3-ubyte", LOAD_FILE);
 		if (!imagesPath.isEmpty()) {
@@ -265,6 +287,7 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 		}
 	}
 
+	// Load a PNG file and add it to the data to be classified.
 	private void loadPNGfile() {
 		String filePath = chooseFile("PNG file", "png", LOAD_FILE);
 		if (filePath.isEmpty())
@@ -284,6 +307,7 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 		}
 	}
 
+	// Export training data to a CSV file.
 	private void exportToCSV() {
 		String filePath = chooseFile("CSV file", "csv", EXPORT_TO_FILE);
 		if (filePath.isEmpty())
@@ -299,6 +323,7 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 		}
 	}
 
+	// Export all training data elements, each to a PNG file
 	private void exportToPNG() {
 		String filePath = chooseFile("Output folder", null, EXPORT_TO_FOLDER);
 		if (filePath.isEmpty())
@@ -320,6 +345,7 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 		}
 	}
 
+	// Export training data to MNIST label and images files.
 	private void exportToMNIST() {
 		String labelsFilePath = chooseFile("MNIST labels", "idx1-ubyte",
 				EXPORT_TO_FILE);
@@ -340,6 +366,7 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 		}
 	}
 
+	// Provides a file chooser for the input/output methods
 	private String chooseFile(String fileDescription, String fileSuffix,
 			int fileChooserMode) {
 		String filePath = "";
