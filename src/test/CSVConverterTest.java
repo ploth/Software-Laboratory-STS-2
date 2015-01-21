@@ -24,7 +24,7 @@ public class CSVConverterTest {
 		PERST_CSV_Converter.read("dick", 1, 60000);
 		long time2 = System.currentTimeMillis();
 		System.out.println((time2 - time1));
-		System.out.println(db.getNumberOfCorrectDatabaseElements());
+		System.out.println(db.getNumberOfTrainingdataDatabaseElements());
 		System.out.println((int) db.getCorrectDatabaseIterator().first()
 				.getCorrectClassification());
 		db.closeDB();

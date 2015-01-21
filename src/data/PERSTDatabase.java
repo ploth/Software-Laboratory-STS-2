@@ -45,12 +45,12 @@ public class PERSTDatabase {
 		return numberOfDatabaseElements_;
 	}
 
-	public Integer getNumberOfCorrectDatabaseElements() {
+	public Integer getNumberOfTrainingdataDatabaseElements() {
 		return numberOfCorrectDatabaseElements_;
 	}
 
 	public Integer getNumberOfNonTrainingdataDatabaseElements() {
-		return (getNumberOfDatabaseElements() - getNumberOfCorrectDatabaseElements());
+		return (getNumberOfDatabaseElements() - getNumberOfTrainingdataDatabaseElements());
 	}
 
 	public int getDim() {

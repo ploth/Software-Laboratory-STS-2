@@ -88,8 +88,8 @@ public class PERST_MNIST_Converter extends AbstractConverter {
 		images.writeInt(MAGIC_NUMBER_IMAGES);
 		labels.writeInt(MAGIC_NUMBER_LABELS);
 		// number of items
-		images.writeInt(getDb_().getNumberOfCorrectDatabaseElements());
-		labels.writeInt(getDb_().getNumberOfCorrectDatabaseElements());
+		images.writeInt(getDb_().getNumberOfTrainingdataDatabaseElements());
+		labels.writeInt(getDb_().getNumberOfTrainingdataDatabaseElements());
 		// image dimensions (image file)
 		images.writeInt(dim);
 		images.writeInt(dim);

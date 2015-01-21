@@ -170,7 +170,7 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 	// Updates the two GUI database counters
 	private void updateDataCounters() {
 		int numOfTrainingDataElements = db_
-				.getNumberOfCorrectDatabaseElements();
+				.getNumberOfTrainingdataDatabaseElements();
 		int numOfDataToClassify = db_
 				.getNumberOfNonTrainingdataDatabaseElements();
 		lblNumOfTrainingDataElements.setText(String
