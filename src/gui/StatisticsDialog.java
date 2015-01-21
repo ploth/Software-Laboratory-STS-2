@@ -401,7 +401,7 @@ public class StatisticsDialog extends JDialog implements ActionListener {
 		case "displayWrongElements":
 			// Display the false classified elements in a result dialog
 			btnDisplayFalseClassified.setEnabled(false);
-			new ResultDisplayDialog(falseClassifiedObjects);
+			new ResultDisplayDialog(falseClassifiedObjects, false);
 			break;
 		case "done":
 			dispose();

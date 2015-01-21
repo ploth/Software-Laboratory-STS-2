@@ -287,7 +287,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 					.getNonTrainingdataDatabaseIterator();
 			ArrayList<DatabaseElement> classifiedElements = iter.toList();
 			if (!classifiedElements.isEmpty()) {
-				new ResultDisplayDialog(classifiedElements);
+				new ResultDisplayDialog(classifiedElements, true);
 			} else {
 				JOptionPane.showMessageDialog(new JFrame(),
 						"Please load some data to classify first!");
@@ -364,7 +364,7 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 			IterableIterator<DatabaseElement> iter = db
 					.getNonTrainingdataDatabaseIterator();
 			ArrayList<DatabaseElement> classifiedElements = iter.toList();
-			new ResultDisplayDialog(classifiedElements);
+			new ResultDisplayDialog(classifiedElements, true);
 		}
 	}
 

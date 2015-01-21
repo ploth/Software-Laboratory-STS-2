@@ -53,16 +53,20 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 	private int currentlyEnteredClassification = PERSTDatabase.NO_CORRECT_CLASSIFICATION;
 	private int confirmedCounter = 0;
 	private final int numOElements;
+	private final boolean enableLearning;
 	private static final int MIN_LABEL = 0;
 	private static final int MAX_LABEL = 9;
 
-	public ResultDisplayDialog(ArrayList<DatabaseElement> elements) {
+	public ResultDisplayDialog(ArrayList<DatabaseElement> elements,
+			boolean enableLearning) {
 		setModal(true);
 		setSize(new Dimension(450, 250));
 		setLocationRelativeTo(null);
 		setTitle("Results");
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+		this.enableLearning = enableLearning;
 
 		iter = elements.iterator();
 		currentElement = iter.next();
@@ -215,14 +219,16 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 		case "done":
-			if (currentlyEnteredClassification != PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
+			if (currentlyEnteredClassification != PERSTDatabase.NO_CORRECT_CLASSIFICATION
+					&& enableLearning) {
 				db_.convertToCorrect(currentElement.getIndex(),
 						(char) currentlyEnteredClassification);
 			}
 			dispose();
 			break;
 		case "next":
-			if (currentlyEnteredClassification != PERSTDatabase.NO_CORRECT_CLASSIFICATION) {
+			if (currentlyEnteredClassification != PERSTDatabase.NO_CORRECT_CLASSIFICATION
+					&& enableLearning) {
 				db_.convertToCorrect(currentElement.getIndex(),
 						(char) currentlyEnteredClassification);
 			}
