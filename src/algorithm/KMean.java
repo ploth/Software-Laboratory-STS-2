@@ -99,7 +99,7 @@ public class KMean extends AbstractAlgorithm {
 	}
 
 	@Override
-	public void doSqrEuclid(int k) {
+	public void doSqrEuclid(int k) throws AlgorithmException {
 		KdTreeHelper treeHelper = KdTreeHelper.getInstance();
 		char clusterID = 0;
 		int dim = getDb_().getDim();
@@ -147,8 +147,7 @@ public class KMean extends AbstractAlgorithm {
 						.toList();
 				quantityOfThisCluster = specificClusterAsList.size();
 				if (quantityOfThisCluster == 0)
-					break; // TODO: This could be a problem? It is a prevention
-							// to not to divide by zero
+					break;
 				// and calculate the arithmetic mean of each cluster
 				// iterate through each db element of current cluster
 				for (int m = 0; m < quantityOfThisCluster; m++) {
@@ -199,17 +198,13 @@ public class KMean extends AbstractAlgorithm {
 					prototypes[i][j] = prototypesNew[i][j];
 				}
 			}
-			// TODO debug
-			// System.out.println("iteration: " + iterations + " adjustment: "
-			// + adjustment);
-			// iterations++;
 		}
 		clusterMeans = prototypes.clone();
 		map = new char[clusterMeans.length];
 	}
 
 	@Override
-	public void doManhattan(int k) {
+	public void doManhattan(int k) throws AlgorithmException {
 		KdTreeHelper treeHelper = KdTreeHelper.getInstance();
 		char clusterID = 0;
 		int dim = getDb_().getDim();
@@ -257,8 +252,7 @@ public class KMean extends AbstractAlgorithm {
 						.toList();
 				quantityOfThisCluster = specificClusterAsList.size();
 				if (quantityOfThisCluster == 0)
-					break; // TODO: This could be a problem? It is a prevention
-							// to not to divide by zero
+					break;
 				// and calculate the arithmetic mean of each cluster
 				// iterate through each db element of current cluster
 				for (int m = 0; m < quantityOfThisCluster; m++) {
@@ -309,10 +303,6 @@ public class KMean extends AbstractAlgorithm {
 					prototypes[i][j] = prototypesNew[i][j];
 				}
 			}
-			// TODO debug
-			// System.out.println("iteration: " + iterations + " adjustment: "
-			// + adjustment);
-			// iterations++;
 		}
 		clusterMeans = prototypes.clone();
 		map = new char[clusterMeans.length];
