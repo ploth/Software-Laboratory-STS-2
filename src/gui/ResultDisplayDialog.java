@@ -201,8 +201,15 @@ public class ResultDisplayDialog extends JDialog implements ActionListener {
 			currentlyEnteredClassification = PERSTDatabase.NO_CORRECT_CLASSIFICATION;
 			return;
 		}
-		currentlyEnteredClassification = Integer
-				.valueOf(enteredClassification_str);
+		try {
+			currentlyEnteredClassification = Integer
+					.valueOf(enteredClassification_str);
+		} catch (NumberFormatException exception) {
+			JOptionPane.showMessageDialog(new JFrame(),
+					"Please enter a valid number!", "Wrong number format",
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
 		if (currentlyEnteredClassification < MIN_LABEL
 				|| currentlyEnteredClassification > MAX_LABEL) {
 			JOptionPane.showMessageDialog(new JFrame(),

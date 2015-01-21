@@ -227,8 +227,15 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 		if (startIndex_str.isEmpty() || endIndex_str.isEmpty()) {
 			return;
 		} else {
-			startIndex = Integer.parseInt(startIndex_str);
-			endIndex = Integer.parseInt(endIndex_str);
+			try {
+				startIndex = Integer.parseInt(startIndex_str);
+				endIndex = Integer.parseInt(endIndex_str);
+			} catch (NumberFormatException exception) {
+				JOptionPane.showMessageDialog(new JFrame(),
+						"Please enter a valid number!", "Wrong number format",
+						JOptionPane.WARNING_MESSAGE);
+				return;
+			}
 		}
 		try {
 			PERST_CSV_Converter.read(filePath, startIndex, endIndex);
@@ -264,8 +271,16 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 				if (startIndex_str.isEmpty() || endIndex_str.isEmpty()) {
 					return;
 				} else {
-					startIndex = Integer.parseInt(startIndex_str);
-					endIndex = Integer.parseInt(endIndex_str);
+					try {
+						startIndex = Integer.parseInt(startIndex_str);
+						endIndex = Integer.parseInt(endIndex_str);
+					} catch (NumberFormatException exception) {
+						JOptionPane.showMessageDialog(new JFrame(),
+								"Please enter a valid number!",
+								"Wrong number format",
+								JOptionPane.WARNING_MESSAGE);
+						return;
+					}
 				}
 
 				try {

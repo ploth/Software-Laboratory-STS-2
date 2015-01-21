@@ -80,7 +80,14 @@ public class ClusterClassificationDialog extends JDialog {
 								"You have to enter a class!");
 					}
 				}
-				currentClassification = (int) Integer.valueOf(class_str);
+				try {
+					currentClassification = (int) Integer.valueOf(class_str);
+				} catch (NumberFormatException exception) {
+					JOptionPane.showMessageDialog(new JFrame(),
+							"Please enter a valid number!",
+							"Wrong number format", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
 				if (currentClassification < 0 || currentClassification > 9) {
 					JOptionPane.showMessageDialog(new JFrame(),
 							"Please enter a valid value!");

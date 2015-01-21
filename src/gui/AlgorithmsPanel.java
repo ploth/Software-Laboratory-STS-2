@@ -175,7 +175,14 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 		if (k_str == null || k_str.isEmpty()) {
 			return 0;
 		}
-		k = Integer.valueOf(k_str);
+		try {
+			k = Integer.valueOf(k_str);
+		} catch (NumberFormatException exception) {
+			JOptionPane.showMessageDialog(new JFrame(),
+					"Please enter a valid number!", "Wrong number format",
+					JOptionPane.WARNING_MESSAGE);
+			return 0;
+		}
 		if (k < 0) {
 			JOptionPane.showMessageDialog(new JFrame(),
 					"Please choose a value above 0.");
@@ -217,7 +224,14 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 		if (maxIterations_str.isEmpty()) {
 			return false;
 		}
-		maxIterations = Integer.valueOf(maxIterations_str);
+		try {
+			maxIterations = Integer.valueOf(maxIterations_str);
+		} catch (NumberFormatException exception) {
+			JOptionPane.showMessageDialog(new JFrame(),
+					"Please enter a valid number!", "Wrong number format",
+					JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
 		if (maxIterations <= 0) {
 			JOptionPane.showMessageDialog(new JFrame(),
 					"Please choose a value above 0.");
@@ -233,7 +247,14 @@ public class AlgorithmsPanel extends JPanel implements ActionListener {
 		if (deviation_str.isEmpty()) {
 			return false;
 		}
-		deviation = Double.valueOf(deviation_str);
+		try {
+			deviation = Double.valueOf(deviation_str);
+		} catch (NumberFormatException exception) {
+			JOptionPane.showMessageDialog(new JFrame(),
+					"Please enter a valid number!", "Wrong number format",
+					JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
 		if (deviation <= 0) {
 			JOptionPane.showMessageDialog(new JFrame(),
 					"Please choose a value above 0.");

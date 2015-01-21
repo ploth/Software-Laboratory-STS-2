@@ -222,13 +222,21 @@ public class DatabasePanel extends JPanel {
 					"Please enter a number between 0 and 9.");
 			return;
 		}
-		int enteredClassfication = Integer.valueOf(enteredClassification_str);
-		if (enteredClassfication < 0 || enteredClassfication > 9) {
+		try {
+			int enteredClassfication = Integer
+					.valueOf(enteredClassification_str);
+			if (enteredClassfication < 0 || enteredClassfication > 9) {
+				JOptionPane.showMessageDialog(new JFrame(),
+						"Please enter a number between 0 and 9!");
+				return;
+			}
+			db_.convertToCorrect(currentIndex, (char) enteredClassfication);
+		} catch (NumberFormatException exception) {
 			JOptionPane.showMessageDialog(new JFrame(),
-					"Please enter a number between 0 and 9!");
+					"Please enter a valid number!", "Wrong number format",
+					JOptionPane.WARNING_MESSAGE);
 			return;
 		}
-		db_.convertToCorrect(currentIndex, (char) enteredClassfication);
 		lblClassification.setText(enteredClassification_str);
 	}
 
