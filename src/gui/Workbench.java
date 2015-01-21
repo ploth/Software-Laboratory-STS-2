@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import org.garret.perst.StorageError;
+
 import data.PERSTDatabase;
 
 /*
@@ -116,9 +118,13 @@ public class Workbench extends JFrame implements ActionListener {
 						"An error ocurred while trying to delete the database file:\n"
 								+ e1.getMessage(), "IOException",
 						JOptionPane.ERROR_MESSAGE);
+			} catch (StorageError e2) {
+				JOptionPane.showMessageDialog(new JFrame(),
+						"An error ocurred while trying to delete the database file:\n"
+								+ e2.getMessage(), "Storage error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 			dispose();
-			dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 			break;
 		case "exit":
 			dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
