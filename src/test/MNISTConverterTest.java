@@ -84,7 +84,7 @@ public class MNISTConverterTest {
 		// "ImageData/train-images.idx3-ubyte", 1, 60000, true);
 		System.out.println("numberOfDatabaseElements: "
 				+ db.getNumberOfDatabaseElements());
-		PERST_MNIST_Converter.write("bitchlabels", "bitchimages");
+		PERST_MNIST_Converter.write("writelabels", "writeimages");
 
 		db.closeDB();
 	}

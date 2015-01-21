@@ -10,6 +10,7 @@ import org.garret.perst.IterableIterator;
 
 import data.PERSTDatabase.DatabaseElement;
 
+// This is a converter to convert from our databae to the MNIST fil format and from MNIST files to our database.
 public class PERST_MNIST_Converter extends AbstractConverter {
 
 	private static final int IMAGE_DIM = 28;

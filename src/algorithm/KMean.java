@@ -10,6 +10,7 @@ import data.KdTree.SqrEuclid;
 import data.KdTreeHelper;
 import data.PERSTDatabase.DatabaseElement;
 
+// This is the KMean Algorithm which provides the functionality to do the algorithm with two different distance functions.
 public class KMean extends AbstractAlgorithm {
 
 	private static final int FIRST_LIST_ELEMENT = 0;
@@ -25,6 +26,9 @@ public class KMean extends AbstractAlgorithm {
 
 	}
 
+	// This is the getter functions for a filtered array of the means after
+	// doing the KMean algorithm.
+	// It filters the empty clusters.
 	public double[][] getClusterMeans() {
 		ArrayList<double[]> nonEmptyMeans = new ArrayList<double[]>();
 		for (int i = 0; i < clusterMeans.length; i++) {
@@ -53,6 +57,8 @@ public class KMean extends AbstractAlgorithm {
 		this.deviation = deviation;
 	}
 
+	// This function is to call if you want to classify a new Element with an
+	// existing KDTree of the means from doing the algorithm.
 	public boolean classifyNewElements(int type) {
 		if (type == SQR_EUCLID) {
 			if (sETree != null) {
@@ -88,6 +94,7 @@ public class KMean extends AbstractAlgorithm {
 			return false;
 	}
 
+	// This function is to call to classify a whole cluster.
 	public void classifyCluster(int clusterID, char classification) {
 		map[clusterID] = classification;
 		IterableIterator<DatabaseElement> iter = getDb_()

@@ -9,6 +9,7 @@ import data.KdTree.Manhattan;
 import data.KdTree.SqrEuclid;
 import data.PERSTDatabase.DatabaseElement;
 
+// Singleton class to provide functionalities to create KDTrees (with different distance functions) from parts of the database or from arrays of vectors.
 public class KdTreeHelper {
 
 	private Integer sizeLimit_ = 1000000;

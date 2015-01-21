@@ -11,6 +11,8 @@ import org.garret.perst.IterableIterator;
 
 import data.PERSTDatabase.DatabaseElement;
 
+// This is the converter to convert from our PERST database to csv files and from csv files to our PERST database.
+// First value is the classification and the following are the pixels from left to right and from top to bottom.
 public class PERST_CSV_Converter extends AbstractConverter {
 
 	public static void read(String path, int rangeStart, int rangeEnd)

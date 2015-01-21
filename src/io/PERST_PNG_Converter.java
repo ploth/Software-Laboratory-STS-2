@@ -11,6 +11,7 @@ import org.garret.perst.IterableIterator;
 
 import data.PERSTDatabase.DatabaseElement;
 
+// This is a converter to convert from our PERST Database to png files and from PNG files to our database.
 public class PERST_PNG_Converter extends AbstractConverter {
 
 	private static final int BAND = 0;
@@ -39,16 +40,14 @@ public class PERST_PNG_Converter extends AbstractConverter {
 				.getCorrectDatabaseIterator();
 		while (iter.hasNext()) {
 			DatabaseElement e = iter.next();
-			writeOneImage(
-					e.getCorrectClassification(),
-					e.getPixels(),
-					folderPath + "element" + e.getIndex() + "-class"
-							+ (int) e.getCorrectClassification() + ".png");
+			writeOneImage(e.getPixels(), folderPath + "element" + e.getIndex()
+					+ "-class" + (int) e.getCorrectClassification() + ".png");
 		}
 	}
 
-	public static void writeOneImage(char classification, char[] pixels,
-			String path) throws IOException, ConverterException {
+	// Method to generate a single png file from pixels
+	public static void writeOneImage(char[] pixels, String path)
+			throws IOException, ConverterException {
 		if (path.endsWith("png")) {
 			File file = new File(path);
 			int i = 0;
