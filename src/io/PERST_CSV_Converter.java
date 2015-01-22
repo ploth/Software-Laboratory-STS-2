@@ -15,8 +15,8 @@ import data.PERSTDatabase.DatabaseElement;
 // First value is the classification and the following are the pixels from left to right and from top to bottom.
 public class PERST_CSV_Converter extends AbstractConverter {
 
-	public static void read(String path, int rangeStart, int rangeEnd)
-			throws IOException, ConverterException {
+	public static void read(String path, int rangeStart, int rangeEnd,
+			boolean trainingdata) throws IOException, ConverterException {
 		FileReader fr = new FileReader(path);
 		BufferedReader br = new BufferedReader(fr);
 		String line;
@@ -37,7 +37,7 @@ public class PERST_CSV_Converter extends AbstractConverter {
 					pixels[i] = (char) Integer.parseInt(lineTokens.nextToken());
 				}
 				getDb_().createCorrectDatabaseElement(classification, pixels,
-						true);
+						trainingdata);
 			}
 		}
 		br.close();
