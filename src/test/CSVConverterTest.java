@@ -21,7 +21,7 @@ public class CSVConverterTest {
 		// System.out.println((time2 - time1));
 		// read
 		long time1 = System.currentTimeMillis();
-		PERST_CSV_Converter.read("test", 1, 60000);
+		PERST_CSV_Converter.read("test", 1, 60000, true);
 		long time2 = System.currentTimeMillis();
 		System.out.println((time2 - time1));
 		System.out.println(db.getNumberOfTrainingdataDatabaseElements());

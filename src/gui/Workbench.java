@@ -35,6 +35,8 @@ public class Workbench extends JFrame implements ActionListener {
 	private JPanel databasePanel_;
 	private JPanel algorithmsPanel_;
 
+	// This variable is being used on application termination to determine if
+	// the database storage was already closed
 	private boolean isDBclosed = false;
 
 	public Workbench(String title) {

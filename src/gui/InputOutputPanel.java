@@ -134,6 +134,11 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 		btnAddDataFromPNG.setActionCommand("addDataToClassifyFromPNG");
 		pnlClassifyData.add(btnAddDataFromPNG, "cell 0 2 2 1,growx");
 
+		JButton btnAddDataFromCSV = new JButton("Add new data from CSV");
+		btnAddDataFromCSV.addActionListener(this);
+		btnAddDataFromCSV.setActionCommand("addDataToClassifyFromCSV");
+		pnlClassifyData.add(btnAddDataFromCSV, "cell 0 2,growx");
+
 		// /////////////////////////////////////////////
 		// Export data panel
 		// /////////////////////////////////////////////
@@ -186,7 +191,7 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 			updateDataCounters();
 			break;
 		case "importTrainingDataCSV":
-			loadCSVfile();
+			loadCSVfile(true);
 			updateDataCounters();
 			break;
 		case "addDataToClassifyFromMNIST":
@@ -195,6 +200,10 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 			break;
 		case "addDataToClassifyFromPNG":
 			loadPNGfile();
+			updateDataCounters();
+			break;
+		case "addDataToClassifyFromCSV":
+			loadCSVfile(false);
 			updateDataCounters();
 			break;
 		case "exportToMNIST":
@@ -214,7 +223,7 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 	}
 
 	// Load a CSV file and add it's elements to the training data
-	private void loadCSVfile() {
+	private void loadCSVfile(boolean isTrainingdata) {
 		String filePath = chooseFile("CSV file", "csv", LOAD_FILE);
 		if (filePath.isEmpty())
 			return;
@@ -238,7 +247,8 @@ public class InputOutputPanel extends JPanel implements ActionListener {
 			}
 		}
 		try {
-			PERST_CSV_Converter.read(filePath, startIndex, endIndex);
+			PERST_CSV_Converter.read(filePath, startIndex, endIndex,
+					isTrainingdata);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(
 					new JFrame(),
