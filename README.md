@@ -1,6 +1,8 @@
 # Software-Laboratory-STS-2
 
 ##Info
+Dieses Projekt kann in eclipse importiert werden.
+
 Dieses Programm bietet zurzeit zwei Möglichkeiten Ziffern zwischen 0-9 automatisch zu erkennen. 
 Die Möglichkeiten unterscheiden sich in den verwendeten Algorithmen. Zur Auswahl steht der KNN (k-nearest-neighbor) und der KMean (k-means clustering) Algorithmus.
 
