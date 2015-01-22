@@ -35,6 +35,8 @@ public class Workbench extends JFrame implements ActionListener {
 	private JPanel databasePanel_;
 	private JPanel algorithmsPanel_;
 
+	private boolean isDBclosed = false;
+
 	public Workbench(String title) {
 		setResizable(false);
 		setTitle(title);
@@ -88,7 +90,9 @@ public class Workbench extends JFrame implements ActionListener {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				PERSTDatabase.getInstance().closeDB();
+				if (!isDBclosed) {
+					PERSTDatabase.getInstance().closeDB();
+				}
 				e.getWindow().dispose();
 			}
 		});
@@ -109,6 +113,7 @@ public class Workbench extends JFrame implements ActionListener {
 					PERSTDatabase.getDBName());
 			try {
 				PERSTDatabase.getInstance().closeDB();
+				isDBclosed = true;
 				Files.deleteIfExists(dbPath);
 			} catch (IOException e1) {
 				JOptionPane.showMessageDialog(new JFrame(),
@@ -121,7 +126,8 @@ public class Workbench extends JFrame implements ActionListener {
 								+ e2.getMessage(), "Storage error",
 						JOptionPane.ERROR_MESSAGE);
 			}
-			dispose();
+			// dispose();
+			dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 			break;
 		case "exit":
 			dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
