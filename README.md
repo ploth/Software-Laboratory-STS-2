@@ -1,14 +1,14 @@
-# Software-Laboratory-STS-2
+# digit-recognition
 
-##Info
+## Info
+
 Dieses Projekt kann in eclipse importiert werden.
 
 Dieses Programm bietet zurzeit zwei Möglichkeiten Ziffern zwischen 0-9 automatisch zu erkennen. 
 Die Möglichkeiten unterscheiden sich in den verwendeten Algorithmen. Zur Auswahl steht der KNN (k-nearest-neighbor) und der KMean (k-means clustering) Algorithmus.
 
+## Daten importieren
 
-
-##Daten importieren
 Zur Klassifikation von Ziffern mit dem KNN Algorithmus sind Trainingsdaten notwenig, die nach dem Start des Programmes im Tab "Input/Output Data" im Abschnitt "Training data" geladen werden können.
 Im Abschnitt "Classify data" sind die Daten zu importieren, die man klassifizieren möchte.
 Jeweils ist es möglich nicht den kompletten Inhalt zu laden, sondern nur Bereiche.
@@ -17,14 +17,12 @@ Zur Klassifikaton von Ziffern mit dem KMean Algorithmus sind keine Trainingsdate
 
 Zudem besteht immer die Möglichkeit die komplette Datenbank aller korrekt Klassifizierten - sprich Trainingsdaten zu exportieren.
 
+## Datenbankverwaltung
 
-
-##Datenbankverwaltung
 Ansehen lässt sich der komplette Inhalt der Datenbank im Tab "Database". Zwei Pfeile oder das Eintragen einer Indexnummer zeigen das gewünschte Element.
 
+## Algorithmen
 
-
-##Algorithmen
 Die Algorithmen lassen sich im Tab "Algorithms" starten.
 
 Mit dem KNN Algorithmus kann sofort losgelegt werden, sofern Trainingsdaten und zu klassifizierende Daten vorhanden sind.
@@ -39,13 +37,10 @@ Beide Algorithmen bieten die Möglichkeit Testläufe durchzuführen, welche im N
 Als Trainingsdaten können bereits vorhandene aus der Datenbank verwendet werden oder es sind welche aus dem MNIST Datensatz oder aus csv Dateien zu importieren.
 Zu klassifzierende Objekte müssen von dem MNIST Datensatz oder aus csv Dateien kommen, da zwingend die korrekte Klassifizierung notwendig ist.
 
+## Datenstruktur
 
-
-##Datenstruktur
 Intern werden in der Datenbank nur Objekte vom Typ DatabaseElement gespeichert, welche alle nötigen Information für die Algorithmen enthalten und speichern.
 
+## Kontakt
 
-
-##Kontakt
-Thomas Schattschneider
-Pascal Loth
+[tschattschneider](https://github.com/tschattschneider), [ploth](https://github.com/ploth)
